@@ -1,0 +1,38 @@
+# Archivos y carpetas generados por Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Archivos de soluciones de Visual Studio / Rider / IDEs
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Compilaciones de Unity
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Archivos temporales de SO
+.DS_Store
+Thumbs.db

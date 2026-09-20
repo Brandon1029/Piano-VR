@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: WetHands_Melodia
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Wet Hands (Melodia Principal)
+  bpm: 60
+  notes:
+  - time: 1.50
+    key: A3
+  - time: 2.50
+    key: B3
+  - time: 3.50
+    key: C#4
+  - time: 5.00
+    key: B3
+  - time: 6.50
+    key: A3
+  - time: 8.00
+    key: E3
+  - time: 10.50
+    key: F#3
+  - time: 12.00
+    key: A3
+  - time: 13.50
+    key: C#4
+  - time: 15.00
+    key: E4
+  - time: 17.00
+    key: C#4
+  - time: 19.50
+    key: A3
+  - time: 21.00
+    key: B3
+  - time: 22.50
+    key: C#4
+  - time: 24.00
+    key: B3
+  - time: 25.50
+    key: A3
+  - time: 27.00
+    key: E3
+  - time: 29.50
+    key: F#3
+  - time: 31.00
+    key: A3
+  - time: 32.50
+    key: C#4
+  - time: 34.00
+    key: G#4
+  - time: 36.00
+    key: C#4
+  - time: 38.00
+    key: A3
+  - time: 40.50
+    key: B3
+  - time: 42.00
+    key: C#4
+  - time: 43.50
+    key: B3
+  - time: 45.00
+    key: A3
+  - time: 46.50
+    key: E3
+  - time: 49.00
+    key: F#3
+  - time: 50.50
+    key: C#4
+  - time: 52.00
+    key: E4
+  - time: 54.00
+    key: C#4
+  - time: 56.50
+    key: E4
+  - time: 58.00
+    key: F#4
+  - time: 59.50
+    key: G#4
+  - time: 61.50
+    key: C#4
+  - time: 63.50
+    key: B3
+  - time: 65.50
+    key: A3
