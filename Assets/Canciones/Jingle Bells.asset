@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Jingle Bells
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Jingle Bells (Estribillo)
+  composer: James Lord Pierpont
+  difficulty: 0
+  bpm: 110
+  technicalFocus: "Pr\xE1ctica de notas repetidas continuas con el mismo dedo (E4),
+    control de ritmo constante y desplazamiento b\xE1sico dentro de la posici\xF3n
+    de cinco notas (Do-Sol)."
+  notes:
+  - time: 1
+    key: E4
+  - time: 1.6
+    key: E4
+  - time: 2.2
+    key: E4
+  - time: 3.4
+    key: E4
+  - time: 4
+    key: E4
+  - time: 4.6
+    key: E4
+  - time: 5.8
+    key: E4
+  - time: 6.4
+    key: G4
+  - time: 7
+    key: C4
+  - time: 7.6
+    key: D4
+  - time: 8.2
+    key: E4
+  - time: 10
+    key: F4
+  - time: 10.6
+    key: F4
+  - time: 11.2
+    key: F4
+  - time: 11.8
+    key: F4
+  - time: 12.4
+    key: F4
+  - time: 13
+    key: E4
+  - time: 13.6
+    key: E4
+  - time: 14.2
+    key: E4
+  - time: 14.8
+    key: E4
+  - time: 15.4
+    key: D4
+  - time: 16
+    key: D4
+  - time: 16.6
+    key: E4
+  - time: 17.2
+    key: D4
+  - time: 18.4
+    key: G4

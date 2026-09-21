@@ -11,17 +11,47 @@ public class NoteSpawner : MonoBehaviour
 
     private Dictionary<string, Transform> keyMap = new Dictionary<string, Transform>();
     private float startTime;
+    private Coroutine spawnCoroutine;
+    private List<GameObject> activeNotes = new List<GameObject>();
 
-    void Start()
+    void Awake()
     {
+        // Mapeamos las teclas al inicio para tenerlas listas
         foreach (var key in keyPositions)
         {
             if (key != null && !keyMap.ContainsKey(key.name))
                 keyMap[key.name] = key;
         }
+    }
 
+    // Metodo publico que llama nuestro menu de canciones
+    public void StartSong(SongData newSong)
+    {
+        if (newSong == null) return;
+
+        // Si habia una cancion corriendo, la detenemos y limpiamos notas
+        StopCurrentSong();
+
+        song = newSong;
         startTime = Time.time;
-        StartCoroutine(SpawnNotes());
+        spawnCoroutine = StartCoroutine(SpawnNotes());
+    }
+
+    public void StopCurrentSong()
+    {
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
+
+        // Destruir cualquier nota que haya quedado a medio camino
+        foreach (var note in activeNotes)
+        {
+            if (note != null)
+                Destroy(note);
+        }
+        activeNotes.Clear();
     }
 
     IEnumerator SpawnNotes()
@@ -40,10 +70,11 @@ public class NoteSpawner : MonoBehaviour
                 );
 
                 GameObject nota = Instantiate(notePrefab, spawnPos, keyTransform.rotation);
+                activeNotes.Add(nota); // La registramos para poder limpiarla si cambia la cancion
+
                 NotaMovimiento mov = nota.GetComponent<NotaMovimiento>();
                 if (mov != null)
                 {
-                    // Obtenemos la tecla y se la asignamos al movimiento
                     PianoKey pianoKey = keyTransform.GetComponent<PianoKey>();
                     mov.SetTarget(keyTransform.position.y, spawnPos.y, pianoKey);
                 }

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: HappyBirthday
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: "Cumplea\xF1os Feliz (Happy Birthday)"
+  composer: Patty Hill & Mildred J. Hill
+  difficulty: 0
+  bpm: 96
+  technicalFocus: "Ritmo con puntillo (corchea-negra), precisi\xF3n en saltos mel\xF3dicos
+    de intervalo ascendente (G4 a C5) y resoluci\xF3n tonal en Do mayor (F4, E4,
+    D4, C4)."
+  notes:
+  - time: 1
+    key: G4
+  - time: 1.45
+    key: G4
+  - time: 2
+    key: A4
+  - time: 3.1
+    key: G4
+  - time: 4.2
+    key: C5
+  - time: 5.3
+    key: B4
+  - time: 7.2
+    key: G4
+  - time: 7.65
+    key: G4
+  - time: 8.2
+    key: A4
+  - time: 9.3
+    key: G4
+  - time: 10.4
+    key: D5
+  - time: 11.5
+    key: C5
+  - time: 13.5
+    key: G4
+  - time: 13.95
+    key: G4
+  - time: 14.5
+    key: G5
+  - time: 15.6
+    key: E5
+  - time: 16.7
+    key: C5
+  - time: 17.8
+    key: B4
+  - time: 18.9
+    key: A4
+  - time: 20.8
+    key: F5
+  - time: 21.25
+    key: F5
+  - time: 21.8
+    key: E5
+  - time: 22.9
+    key: C5
+  - time: 24
+    key: D5
+  - time: 25.1
+    key: C5
+  - time: 27.5
+    key: G4
+  - time: 27.95
+    key: G4
+  - time: 28.5
+    key: A4
+  - time: 29.6
+    key: G4
+  - time: 30.7
+    key: C5
+  - time: 31.8
+    key: B4
+  - time: 33.5
+    key: C5

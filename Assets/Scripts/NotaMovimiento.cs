@@ -5,15 +5,18 @@ public class NotaMovimiento : MonoBehaviour
     public GameObject explosionPrefab;
     public float velocidadMaxima = 1.5f;
 
+    [HideInInspector] public PianoKey targetKey;
     private float targetY;
     private float spawnY;
     private bool targetSet = false;
     private Rigidbody rb;
-    private PianoKey targetKey;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (!PianoKey.notasEnEscena.Contains(this))
+            PianoKey.notasEnEscena.Add(this);
     }
 
     public void SetTarget(float y, float startY, PianoKey key)
@@ -24,7 +27,6 @@ public class NotaMovimiento : MonoBehaviour
         targetSet = true;
     }
 
-    // Sobrecarga de compatibilidad si alguna llamada antigua solo enviaba 'y'
     public void SetTarget(float y)
     {
         targetY = y;
@@ -32,9 +34,28 @@ public class NotaMovimiento : MonoBehaviour
         targetSet = true;
     }
 
+    [Tooltip("Curvatura del brillo: 2 = cuadrática (sube al final), 3 = cúbica (más pronunciada)")]
+    public float curvaGlow = 2.5f;
+
+    [Tooltip("Compensación de altura por el tamaño del prefab de la nota")]
+    public float offsetImpactoVisual = 0.15f;
+
+    public float ObtenerProgreso()
+    {
+    if (!targetSet) return 0f;
+
+    // Se ajusta el punto de llegada considerando el grosor de la nota
+    float puntoFinalReal = targetY + offsetImpactoVisual;
+
+    // Calcula el porcentaje lineal (0 = arriba, 1 = punto de impacto)
+    float progresoLineal = Mathf.InverseLerp(spawnY, puntoFinalReal, transform.position.y);
+
+    // Curva exponencial: retrasa el brillo para que el pico ocurra justo al impactar
+    return Mathf.Pow(Mathf.Clamp01(progresoLineal), curvaGlow);
+    }
+
     void FixedUpdate()
     {
-        // Limitar velocidad de caida
         if (rb != null && rb.linearVelocity.y < -velocidadMaxima)
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, -velocidadMaxima, rb.linearVelocity.z);
     }
@@ -42,13 +63,6 @@ public class NotaMovimiento : MonoBehaviour
     void Update()
     {
         if (!targetSet) return;
-
-        // Actualizar intensidad de brillo según la distancia recorrida (0 = arriba, 1 = tecla)
-        if (targetKey != null)
-        {
-            float progress = Mathf.InverseLerp(spawnY, targetY, transform.position.y);
-            targetKey.SetGlowProgress(progress);
-        }
 
         if (transform.position.y <= targetY)
         {
@@ -58,14 +72,13 @@ public class NotaMovimiento : MonoBehaviour
 
         if (transform.position.y < -20f)
         {
-            ApagarBrillo();
             Destroy(gameObject);
         }
     }
 
     void Explotar()
     {
-        ApagarBrillo();
+        PianoKey.notasEnEscena.Remove(this);
 
         if (explosionPrefab != null)
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
@@ -73,16 +86,8 @@ public class NotaMovimiento : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void ApagarBrillo()
-    {
-        if (targetKey != null)
-        {
-            targetKey.SetGlowProgress(0f);
-        }
-    }
-
     void OnDestroy()
     {
-        ApagarBrillo();
+        PianoKey.notasEnEscena.Remove(this);
     }
 }

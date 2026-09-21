@@ -10,23 +10,30 @@ public class PianoKey : MonoBehaviour
     public float pressSpeed  = 20f;
     public float returnSpeed = 8f;
 
-    [Header("Key Glow")]
-    [Tooltip("Color del brillo al acercarse la nota")]
+    [Header("Colores de Turno")]
+    [Tooltip("Color de la tecla que debe tocarse ya")]
     [ColorUsage(true, true)]
-    public Color glowColor = new Color(0f, 0.7f, 1f, 1f); // Cian/Azul suave HDR
-    [Tooltip("Intensidad máxima de emisión")]
-    public float maxGlowIntensity = 2.0f;
+    public Color colorTurnoActual = new Color(1f, 0.92f, 0.016f, 1f); // Amarillo neón
+
+    [Tooltip("Color de las teclas que tienen notas en camino")]
+    [ColorUsage(true, true)]
+    public Color colorEnEspera = new Color(0f, 0.6f, 1f, 1f);        // Azul cian
+
+    [Tooltip("Intensidad máxima del brillo HDR")]
+    public float maxGlowIntensity = 2.5f;
 
     AudioSource audioSource;
     Rigidbody   rb;
     Vector3     restLocalPosition;
     Vector3     pressedLocalPosition;
-    bool        isPressed = false;
+    public bool isPressed = false;
 
-    // Componentes para el brillo
     Renderer keyRenderer;
     MaterialPropertyBlock propBlock;
     static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
+
+    public static List<PianoKey> todasLasTeclas = new List<PianoKey>();
+    public static List<NotaMovimiento> notasEnEscena = new List<NotaMovimiento>();
 
     static Dictionary<string, string> notaES = new Dictionary<string, string>()
     {
@@ -38,6 +45,13 @@ public class PianoKey : MonoBehaviour
     {
         keyRenderer = GetComponent<Renderer>();
         propBlock = new MaterialPropertyBlock();
+        if (!todasLasTeclas.Contains(this))
+            todasLasTeclas.Add(this);
+    }
+
+    void OnDestroy()
+    {
+        todasLasTeclas.Remove(this);
     }
 
     void Start()
@@ -50,88 +64,137 @@ public class PianoKey : MonoBehaviour
     }
 
     void ConfigurarNota()
-{
-    string nombre = gameObject.name.Trim();
-
-    // 1. Extraer la primera letra válida de nota (A, B, C, D, E, F, G)
-    string notaEN = "";
-    for (int i = 0; i < nombre.Length; i++)
     {
-        string c = nombre[i].ToString().ToUpper();
-        if (notaES.ContainsKey(c))
+        string nombre = gameObject.name.Trim();
+        string notaEN = "";
+        for (int i = 0; i < nombre.Length; i++)
         {
-            notaEN = c;
-            break;
+            string c = nombre[i].ToString().ToUpper();
+            if (notaES.ContainsKey(c))
+            {
+                notaEN = c;
+                break;
+            }
+        }
+
+        if (string.IsNullOrEmpty(notaEN)) return;
+
+        bool sostenido = nombre.Contains("#");
+
+        int octava = 4;
+        for (int i = nombre.Length - 1; i >= 0; i--)
+        {
+            if (char.IsDigit(nombre[i]))
+            {
+                octava = int.Parse(nombre[i].ToString());
+                break;
+            }
+        }
+
+        string nombreArchivo = notaES[notaEN] + (sostenido ? "#" : "") + octava;
+        AudioClip clip = Resources.Load<AudioClip>(nombreArchivo);
+
+        if (clip != null)
+        {
+            audioSource.clip  = clip;
+            audioSource.pitch = 1f;
+            return;
+        }
+
+        string nombreBase = notaES[notaEN] + octava;
+        AudioClip clipBase = Resources.Load<AudioClip>(nombreBase);
+
+        if (clipBase != null)
+        {
+            audioSource.clip  = clipBase;
+            audioSource.pitch = sostenido ? 1.0595f : 1f;
+            return;
+        }
+
+        string nombreRespaldoOctava4 = notaES[notaEN] + "4";
+        AudioClip clipOctava4 = Resources.Load<AudioClip>(nombreRespaldoOctava4);
+
+        if (clipOctava4 != null)
+        {
+            audioSource.clip = clipOctava4;
+            float multiplicadorOctava = (octava == 3) ? 0.5f : 1f;
+            audioSource.pitch = multiplicadorOctava * (sostenido ? 1.0595f : 1f);
         }
     }
 
-    if (string.IsNullOrEmpty(notaEN)) return;
-
-    // 2. Comprobar si es sostenida (#)
-    bool sostenido = nombre.Contains("#");
-
-    // 3. Extraer la octava deseada
-    int octava = 4;
-    for (int i = nombre.Length - 1; i >= 0; i--)
+    void LateUpdate()
     {
-        if (char.IsDigit(nombre[i]))
+        if (todasLasTeclas.Count > 0 && this == todasLasTeclas[0])
         {
-            octava = int.Parse(nombre[i].ToString());
-            break;
+            ActualizarColoresGlobales();
         }
     }
 
-    // Factor multiplicador según la distancia con la octava 4 (base)
-    // Octava 3 = 0.5f | Octava 4 = 1.0f | Octava 5 = 2.0f
-    float factorOctava = Mathf.Pow(2f, octava - 4);
-    float factorSostenido = sostenido ? 1.0595f : 1.0f;
-
-    // 4. Intentar cargar el archivo exacto (ej. Sol#3 o Sol3)
-    string nombreExacto = notaES[notaEN] + (sostenido ? "#" : "") + octava;
-    AudioClip clip = Resources.Load<AudioClip>(nombreExacto);
-
-    if (clip != null)
+    private static void ActualizarColoresGlobales()
     {
-        audioSource.clip = clip;
-        audioSource.pitch = 1f;
-        return;
+        notasEnEscena.RemoveAll(n => n == null);
+
+        // Apagar teclas por defecto
+        foreach (var key in todasLasTeclas)
+        {
+            key.ApplyEmission(Color.black, 0f);
+        }
+
+        if (notasEnEscena.Count == 0) return;
+
+        // 1. Para cada tecla, conservar únicamente la nota más baja que vaya hacia ella
+        Dictionary<PianoKey, NotaMovimiento> notaMasBajaPorTecla = new Dictionary<PianoKey, NotaMovimiento>();
+        float menorYGlobal = float.MaxValue;
+
+        foreach (var nota in notasEnEscena)
+        {
+            if (nota.targetKey == null || nota.targetKey.isPressed) continue;
+
+            float yActual = nota.transform.position.y;
+
+            if (yActual < menorYGlobal)
+                menorYGlobal = yActual;
+
+            if (!notaMasBajaPorTecla.ContainsKey(nota.targetKey))
+            {
+                notaMasBajaPorTecla[nota.targetKey] = nota;
+            }
+            else
+            {
+                // Si ya había una nota hacia esta tecla, nos quedamos con la que esté más abajo
+                if (yActual < notaMasBajaPorTecla[nota.targetKey].transform.position.y)
+                {
+                    notaMasBajaPorTecla[nota.targetKey] = nota;
+                }
+            }
+        }
+
+        // 2. Aplicar color e intensidad gradual a cada tecla activa
+        foreach (var par in notaMasBajaPorTecla)
+        {
+            PianoKey key = par.Key;
+            NotaMovimiento nota = par.Value;
+
+            // Tolerancia de 0.08m para acordes que caen a la par
+            bool esTurnoActual = Mathf.Abs(nota.transform.position.y - menorYGlobal) <= 0.08f;
+            Color baseColor = esTurnoActual ? key.colorTurnoActual : key.colorEnEspera;
+
+            // Calcula el porcentaje gradual de caída (0 = arriba, 1 = abajo)
+            float progreso = nota.ObtenerProgreso();
+
+            key.ApplyEmission(baseColor, progreso);
+        }
     }
 
-    // 5. Si no existe, intentar cargar la nota base con la misma octava (ej. Sol3)
-    string nombreBaseMismaOctava = notaES[notaEN] + octava;
-    clip = Resources.Load<AudioClip>(nombreBaseMismaOctava);
-
-    if (clip != null)
-    {
-        audioSource.clip = clip;
-        audioSource.pitch = factorSostenido;
-        return;
-    }
-
-    // 6. Respaldo universal: usar el sample de la Octava 4 y modular el pitch
-    string nombreBaseOctava4 = notaES[notaEN] + "4";
-    clip = Resources.Load<AudioClip>(nombreBaseOctava4);
-
-    if (clip != null)
-    {
-        audioSource.clip = clip;
-        audioSource.pitch = factorOctava * factorSostenido;
-    }
-    else
-    {
-        Debug.LogWarning($"[PianoKey] No se encontró ningún sample base para: {nombreBaseOctava4}");
-    }
-}
-    // Control de brillo según la cercanía de la nota (0 = apagado, 1 = brillo total)
-    public void SetGlowProgress(float progress)
+    public void ApplyEmission(Color color, float progress)
     {
         if (keyRenderer == null) return;
 
         progress = Mathf.Clamp01(progress);
-        Color currentEmission = glowColor * (progress * maxGlowIntensity);
+        Color finalEmission = color * (progress * maxGlowIntensity);
 
         keyRenderer.GetPropertyBlock(propBlock);
-        propBlock.SetColor(EmissionColorProp, currentEmission);
+        propBlock.SetColor(EmissionColorProp, finalEmission);
         keyRenderer.SetPropertyBlock(propBlock);
     }
 
@@ -140,7 +203,7 @@ public class PianoKey : MonoBehaviour
         isPressed = true;
         audioSource.Stop();
         audioSource.Play();
-        SetGlowProgress(0f); // Apaga el brillo al ser tocada
+        ApplyEmission(Color.black, 0f);
     }
 
     public void OnPokeExit()

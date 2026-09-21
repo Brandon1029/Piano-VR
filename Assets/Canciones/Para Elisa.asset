@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Para Elisa
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Para Elisa (Tema Principal)
+  composer: Ludwig van Beethoven
+  difficulty: 0
+  bpm: 115
+  technicalFocus: Alternancia de semitonos (E4 - D#4), independencia motriz en dedos
+    contiguos y paso hacia el registro medio grave (A3, B3, C4).
+  notes:
+  - time: 1
+    key: E4
+  - time: 1.35
+    key: D#4
+  - time: 1.7
+    key: E4
+  - time: 2.05
+    key: D#4
+  - time: 2.4
+    key: E4
+  - time: 2.75
+    key: B3
+  - time: 3.1
+    key: D4
+  - time: 3.45
+    key: C4
+  - time: 4
+    key: A3
+  - time: 5
+    key: C3
+  - time: 5.35
+    key: E3
+  - time: 5.7
+    key: A3
+  - time: 6.2
+    key: B3
+  - time: 7.2
+    key: E3
+  - time: 7.55
+    key: G#3
+  - time: 7.9
+    key: B3
+  - time: 8.4
+    key: C4
+  - time: 9.4
+    key: E3
+  - time: 9.75
+    key: E4
+  - time: 10.1
+    key: D#4
+  - time: 10.45
+    key: E4
+  - time: 10.8
+    key: D#4
+  - time: 11.15
+    key: E4
+  - time: 11.5
+    key: B3
+  - time: 11.85
+    key: D4
+  - time: 12.2
+    key: C4
+  - time: 12.75
+    key: A3
+  - time: 13.75
+    key: C3
+  - time: 14.1
+    key: E3
+  - time: 14.45
+    key: A3
+  - time: 14.95
+    key: B3
+  - time: 15.95
+    key: E3
+  - time: 16.3
+    key: C4
+  - time: 16.65
+    key: B3
+  - time: 17.2
+    key: A3
+  - time: 19
+    key: B3
+  - time: 19.5
+    key: C4
+  - time: 20
+    key: D4
+  - time: 20.5
+    key: E4
+  - time: 21.5
+    key: G3
+  - time: 22
+    key: F4
+  - time: 22.5
+    key: E4
+  - time: 23
+    key: D4
+  - time: 24
+    key: F3
+  - time: 24.5
+    key: E4
+  - time: 25
+    key: D4
+  - time: 25.5
+    key: C4
+  - time: 26.5
+    key: E3
+  - time: 27
+    key: D4
+  - time: 27.5
+    key: C4
+  - time: 28
+    key: B3
+  - time: 29.5
+    key: E4
+  - time: 30
+    key: E4
+  - time: 30.5
+    key: E4
+  - time: 31
+    key: E4
+  - time: 31.5
+    key: D#4
+  - time: 32
+    key: E4
+  - time: 32.5
+    key: D#4
+  - time: 33
+    key: E4
+  - time: 33.5
+    key: B3
+  - time: 34
+    key: D4
+  - time: 34.5
+    key: C4
+  - time: 35.2
+    key: A3
