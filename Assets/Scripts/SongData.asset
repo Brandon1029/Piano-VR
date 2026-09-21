@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: SongData
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Sweden
+  bpm: 0
+  notes:
+  - time: 0
+    key: B3
+  - time: 1
+    key: E4
+  - time: 2
+    key: G4
+  - time: 3
+    key: F#4
+  - time: 4
+    key: E4
+  - time: 5
+    key: D4
+  - time: 6
+    key: C4
+  - time: 7
+    key: B3
+  - time: 8
+    key: E4
+  - time: 9
+    key: G4
+  - time: 10
+    key: F#4
+  - time: 11
+    key: E4
+  - time: 12
+    key: D4
+  - time: 13
+    key: C4
+  - time: 14
+    key: B3
+  - time: 15
+    key: E4
+  - time: 16
+    key: G4
+  - time: 17
+    key: F#4
+  - time: 18
+    key: E4
+  - time: 19
+    key: D4
+  - time: 20
+    key: C4
+  - time: 21
+    key: B3
+  - time: 22
+    key: E4
+  - time: 23
+    key: G4
+  - time: 24
+    key: F#4
+  - time: 25
+    key: E4
+  - time: 26
+    key: D4
+  - time: 27
+    key: C4
+  - time: 28
+    key: B3
+  - time: 29
+    key: E4
