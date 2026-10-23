@@ -42,16 +42,16 @@ public class NotaMovimiento : MonoBehaviour
 
     public float ObtenerProgreso()
     {
-    if (!targetSet) return 0f;
+        if (!targetSet) return 0f;
 
-    // Se ajusta el punto de llegada considerando el grosor de la nota
-    float puntoFinalReal = targetY + offsetImpactoVisual;
+        // Se ajusta el punto de llegada considerando el grosor de la nota
+        float puntoFinalReal = targetY + offsetImpactoVisual;
 
-    // Calcula el porcentaje lineal (0 = arriba, 1 = punto de impacto)
-    float progresoLineal = Mathf.InverseLerp(spawnY, puntoFinalReal, transform.position.y);
+        // Calcula el porcentaje lineal (0 = arriba, 1 = punto de impacto)
+        float progresoLineal = Mathf.InverseLerp(spawnY, puntoFinalReal, transform.position.y);
 
-    // Curva exponencial: retrasa el brillo para que el pico ocurra justo al impactar
-    return Mathf.Pow(Mathf.Clamp01(progresoLineal), curvaGlow);
+        // Curva exponencial: retrasa el brillo para que el pico ocurra justo al impactar
+        return Mathf.Pow(Mathf.Clamp01(progresoLineal), curvaGlow);
     }
 
     void FixedUpdate()
@@ -77,14 +77,46 @@ public class NotaMovimiento : MonoBehaviour
     }
 
     void Explotar()
+{
+    PianoKey.notasEnEscena.Remove(this);
+
+    // --- MODO AUTO-PLAY FIEL AL SONIDO ORIGINAL ---
+    if (AutoPlayManager.Instance != null && AutoPlayManager.Instance.isAutoPlayEnabled)
     {
-        PianoKey.notasEnEscena.Remove(this);
+        if (targetKey != null)
+        {
+            // Obtiene la fuente de audio original de la tecla
+            AudioSource originalSource = targetKey.GetComponent<AudioSource>();
+            if (originalSource == null) originalSource = targetKey.GetComponentInChildren<AudioSource>();
 
-        if (explosionPrefab != null)
-            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+            if (originalSource != null && originalSource.clip != null)
+            {
+                // Crea un objeto temporal para reproducir el audio de forma independiente (evita que se corten los acordes)
+                GameObject tempAudioObj = new GameObject("TempAudio_" + targetKey.gameObject.name);
+                tempAudioObj.transform.position = transform.position;
 
-        Destroy(gameObject);
+                AudioSource tempSource = tempAudioObj.AddComponent<AudioSource>();
+                
+                // Copia exactamente la configuración de la tecla original para que suene idéntico
+                tempSource.clip = originalSource.clip;
+                tempSource.outputAudioMixerGroup = originalSource.outputAudioMixerGroup;
+                tempSource.spatialBlend = originalSource.spatialBlend; // Mantiene si es 2D o 3D igual al piano
+                tempSource.volume = originalSource.volume;
+                tempSource.pitch = originalSource.pitch;
+
+                tempSource.Play();
+
+                // Destruye el objeto temporal automáticamente cuando termine el clip de audio
+                Destroy(tempAudioObj, originalSource.clip.length);
+            }
+        }
     }
+
+    if (explosionPrefab != null)
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+    Destroy(gameObject);
+}
 
     void OnDestroy()
     {

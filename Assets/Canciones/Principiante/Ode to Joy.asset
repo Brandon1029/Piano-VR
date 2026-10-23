@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Ode to Joy
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Ode to Joy
+  composer: Ludwig van Beethoven
+  difficulty: 0
+  coverImage: {fileID: 0}
+  bpm: 100
+  technicalFocus: "Pr\xE1ctica b\xE1sica de melod\xEDa monof\xF3nica en la escala
+    central, ideal para la digitaci\xF3n inicial."
+  notes:
+  - time: 1
+    key: E4
+  - time: 1.6
+    key: E4
+  - time: 2.2
+    key: F4
+  - time: 2.8
+    key: G4
+  - time: 3.4
+    key: G4
+  - time: 4
+    key: F4
+  - time: 4.6
+    key: E4
+  - time: 5.2
+    key: D4
+  - time: 5.8
+    key: C4
+  - time: 6.4
+    key: C4
+  - time: 7
+    key: D4
+  - time: 7.6
+    key: E4
+  - time: 8.2
+    key: E4
+  - time: 9.1
+    key: D4
+  - time: 9.7
+    key: D4
+  - time: 11
+    key: E4
+  - time: 11.6
+    key: E4
+  - time: 12.2
+    key: F4
+  - time: 12.8
+    key: G4
+  - time: 13.4
+    key: G4
+  - time: 14
+    key: F4
+  - time: 14.6
+    key: E4
+  - time: 15.2
+    key: D4
+  - time: 15.8
+    key: C4
+  - time: 16.4
+    key: C4
+  - time: 17
+    key: D4
+  - time: 17.6
+    key: E4
+  - time: 18.2
+    key: D4
+  - time: 19.1
+    key: C4
+  - time: 19.7
+    key: C4
+  - time: 21
+    key: D4
+  - time: 21.6
+    key: D4
+  - time: 22.2
+    key: E4
+  - time: 22.8
+    key: C4
+  - time: 23.4
+    key: D4
+  - time: 24
+    key: E4
+  - time: 24.3
+    key: F4
+  - time: 24.6
+    key: E4
+  - time: 25.2
+    key: C4
+  - time: 25.8
+    key: D4
+  - time: 26.4
+    key: E4
+  - time: 26.7
+    key: F4
+  - time: 27
+    key: E4
+  - time: 27.6
+    key: D4
+  - time: 28.2
+    key: C4
+  - time: 28.8
+    key: D4
+  - time: 29.4
+    key: G3
+  - time: 31
+    key: E4
+  - time: 31.6
+    key: E4
+  - time: 32.2
+    key: F4
+  - time: 32.8
+    key: G4
+  - time: 33.4
+    key: G4
+  - time: 34
+    key: F4
+  - time: 34.6
+    key: E4
+  - time: 35.2
+    key: D4
+  - time: 35.8
+    key: C4
+  - time: 36.4
+    key: C4
+  - time: 37
+    key: D4
+  - time: 37.6
+    key: E4
+  - time: 38.2
+    key: D4
+  - time: 39.1
+    key: C4
+  - time: 39.7
+    key: C4

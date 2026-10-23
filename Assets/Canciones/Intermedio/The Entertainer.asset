@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: The Entertainer
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: The Entertainer
+  composer: Scott Joplin
+  difficulty: 1
+  coverImage: {fileID: 0}
+  bpm: 90
+  technicalFocus: Ritmica sincopada clasica del Ragtime e independización de acentos.
+  notes:
+  - time: 1.00
+    key: D4
+  - time: 1.17
+    key: D#4
+  - time: 1.33
+    key: E4
+  - time: 1.67
+    key: C5
+  - time: 2.00
+    key: E4
+  - time: 2.33
+    key: C5
+  - time: 2.67
+    key: E4
+  - time: 3.00
+    key: C5
+  - time: 4.00
+    key: D4
+  - time: 4.17
+    key: D#4
+  - time: 4.33
+    key: E4
+  - time: 4.67
+    key: C5
+  - time: 5.00
+    key: D5
+  - time: 5.33
+    key: D#5
+  - time: 5.67
+    key: E5
+  - time: 6.00
+    key: C5
+  - time: 6.33
+    key: D5
+  - time: 6.67
+    key: E5
+  - time: 7.00
+    key: B4
+  - time: 7.33
+    key: D5
+  - time: 7.67
+    key: C5
+  - time: 8.67
+    key: D4
+  - time: 8.83
+    key: D#4
+  - time: 9.00
+    key: E4
+  - time: 9.33
+    key: C5
+  - time: 9.67
+    key: E4
+  - time: 10.00
+    key: C5
+  - time: 10.33
+    key: E4
+  - time: 10.67
+    key: C5
+  - time: 11.67
+    key: A4
+  - time: 12.00
+    key: G4
+  - time: 12.33
+    key: F#4
+  - time: 12.67
+    key: A4
+  - time: 13.00
+    key: C5
+  - time: 13.33
+    key: E5
+  - time: 13.67
+    key: D5
+  - time: 14.00
+    key: C5
+  - time: 14.33
+    key: A4
+  - time: 14.67
+    key: D5
+  - time: 15.67
+    key: D4
+  - time: 15.83
+    key: D#4
+  - time: 16.00
+    key: E4
+  - time: 16.33
+    key: C5
+  - time: 16.67
+    key: E4
+  - time: 17.00
+    key: C5
+  - time: 17.33
+    key: E4
+  - time: 17.67
+    key: C5
+  - time: 18.67
+    key: D4
+  - time: 18.83
+    key: D#4
+  - time: 19.00
+    key: E4
+  - time: 19.33
+    key: C5
+  - time: 19.67
+    key: D5
+  - time: 20.00
+    key: D#5
+  - time: 20.33
+    key: E5
+  - time: 20.67
+    key: C5
+  - time: 21.00
+    key: D5
+  - time: 21.33
+    key: E5
+  - time: 21.67
+    key: B4
+  - time: 22.00
+    key: D5
+  - time: 22.33
+    key: C5
+  - time: 23.33
+    key: C5
+  - time: 23.67
+    key: D5
+  - time: 24.00
+    key: D#5
+  - time: 24.33
+    key: E5
+  - time: 24.67
+    key: C5
+  - time: 25.00
+    key: D5
+  - time: 25.33
+    key: E5
+  - time: 25.67
+    key: C5
+  - time: 26.00
+    key: D5
+  - time: 26.33
+    key: C5
+  - time: 26.67
+    key: E5
+  - time: 27.00
+    key: C5
+  - time: 27.33
+    key: D5
+  - time: 27.67
+    key: E5
+  - time: 28.00
+    key: C5
+  - time: 28.33
+    key: D5
+  - time: 28.67
+    key: C5
+  - time: 29.00
+    key: G4
+  - time: 29.33
+    key: A4
+  - time: 29.67
+    key: Bb4
+  - time: 30.00
+    key: B4
+  - time: 30.33
+    key: C5

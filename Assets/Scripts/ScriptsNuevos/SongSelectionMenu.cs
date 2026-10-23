@@ -5,6 +5,8 @@ using TMPro;
 
 public class SongSelectionMenu : MonoBehaviour
 {
+    public static SongSelectionMenu Instance { get; private set; }
+
     [Header("Base de Datos de Canciones")]
     [SerializeField] private List<SongData> allSongs = new List<SongData>();
 
@@ -22,12 +24,27 @@ public class SongSelectionMenu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txtComposer;
     [SerializeField] private TextMeshProUGUI txtBPM;
     [SerializeField] private TextMeshProUGUI txtFocus;
+    [SerializeField] private Image imgCover;
     [SerializeField] private Button btnPlay;
+
+    [Header("UI de Récords y Estrellas")]
+    [SerializeField] private TextMeshProUGUI txtRecord;
+    [SerializeField] private Image[] starImages; 
+    [SerializeField] private Sprite starFilledSprite; 
+    [SerializeField] private Sprite starEmptySprite;  
 
     [Header("Conexion al Sistema")]
     [SerializeField] private NoteSpawner noteSpawner;
 
-    private SongData selectedSong;
+    private SongData selectedSong;    // Canción actualmente mostrada/seleccionada en el panel
+    private SongData playingSong;     // Canción que está SONANDO actualmente en la escena
+    private bool isPlaying = false; 
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else if (Instance != this) Destroy(gameObject);
+    }
 
     private void Start()
     {
@@ -37,13 +54,11 @@ public class SongSelectionMenu : MonoBehaviour
 
         btnPlay.onClick.AddListener(OnPlayPressed);
 
-        // Iniciar con la lista de nivel Principiante
         FilterByDifficulty(DifficultyLevel.Principiante);
     }
 
     public void FilterByDifficulty(DifficultyLevel difficulty)
     {
-        // Limpiar botones de canciones previos
         foreach (Transform child in songListContainer)
         {
             Destroy(child.gameObject);
@@ -77,7 +92,63 @@ public class SongSelectionMenu : MonoBehaviour
         txtComposer.text = "Compositor: " + song.composer;
         txtBPM.text = "Tempo: " + song.bpm + " BPM";
         txtFocus.text = string.IsNullOrEmpty(song.technicalFocus) ? "" : song.technicalFocus;
+
+        if (imgCover != null)
+        {
+            if (song.coverImage != null)
+            {
+                imgCover.sprite = song.coverImage;
+                imgCover.gameObject.SetActive(true);
+            }
+            else
+            {
+                imgCover.gameObject.SetActive(false);
+            }
+        }
+
         btnPlay.interactable = true;
+
+        // EVALUACIÓN DE ESTADO DEL BOTÓN:
+        // Si la canción seleccionada es exactamente la que está sonando, muestra "Detener la canción"
+        // De lo contrario, muestra "Comenzar a Tocar"
+        bool esLaCancionSonando = isPlaying && (playingSong == selectedSong);
+        ActualizarTextoBoton(esLaCancionSonando);
+
+        ActualizarRécordUI();
+    }
+
+    public void ActualizarRécordUI()
+    {
+        if (selectedSong == null) return;
+
+        float mejorPrecision = ScoreManager.GetBestAccuracy(selectedSong.songName);
+        int mejoresEstrellas = ScoreManager.GetBestStars(selectedSong.songName);
+
+        if (txtRecord != null)
+        {
+            txtRecord.text = mejorPrecision > 0f 
+                ? $"Mejor Récord: {mejorPrecision:F1}%" 
+                : "Sin completar";
+        }
+
+        if (starImages != null && starImages.Length > 0)
+        {
+            for (int i = 0; i < starImages.Length; i++)
+            {
+                if (starImages[i] == null) continue;
+
+                if (i < mejoresEstrellas)
+                {
+                    if (starFilledSprite != null) starImages[i].sprite = starFilledSprite;
+                    starImages[i].color = Color.white;
+                }
+                else
+                {
+                    if (starEmptySprite != null) starImages[i].sprite = starEmptySprite;
+                    starImages[i].color = new Color(0.4f, 0.4f, 0.4f, 0.6f);
+                }
+            }
+        }
     }
 
     private void ClearDetails()
@@ -87,16 +158,81 @@ public class SongSelectionMenu : MonoBehaviour
         txtComposer.text = "";
         txtBPM.text = "";
         txtFocus.text = "No hay piezas disponibles en esta dificultad.";
+        if (imgCover != null) imgCover.gameObject.SetActive(false);
         btnPlay.interactable = false;
+
+        if (txtRecord != null) txtRecord.text = "";
+
+        if (starImages != null)
+        {
+            foreach (var img in starImages)
+            {
+                if (img != null) img.color = Color.clear;
+            }
+        }
+
+        ActualizarTextoBoton(false);
     }
 
     private void OnPlayPressed()
     {
         if (selectedSong == null || noteSpawner == null) return;
 
-        // Arranca la nueva cancion (NoteSpawner limpiará automáticamente la anterior)
-        noteSpawner.StartSong(selectedSong);
-        
-        // Ya no ocultamos el menú: se queda fijo a la derecha
+        // CASO 1: Si presionamos el botón cuando estamos viendo la canción que YA ESTÁ SONANDO
+        if (isPlaying && playingSong == selectedSong)
+        {
+            DetenerModoCancion();
+        }
+        // CASO 2: Si presionamos el botón para iniciar una canción nueva (o reemplazar la anterior)
+        else
+        {
+            // Detiene cualquier pista previa que estuviera cayendo
+            if (noteSpawner != null)
+            {
+                noteSpawner.StopCurrentSong();
+            }
+
+            // Inicia la nueva canción seleccionada
+            noteSpawner.StartSong(selectedSong);
+            playingSong = selectedSong;
+            isPlaying = true;
+
+            ActualizarTextoBoton(true);
+        }
     }
+
+    public void DetenerModoCancion()
+    {
+        if (noteSpawner != null)
+        {
+            noteSpawner.StopCurrentSong();
+        }
+
+        playingSong = null;
+        isPlaying = false;
+        ActualizarTextoBoton(false);
+    }
+
+    private void ActualizarTextoBoton(bool estaSonandoEstaCancion)
+    {
+        if (btnPlay == null) return;
+
+        TextMeshProUGUI btnText = btnPlay.GetComponentInChildren<TextMeshProUGUI>();
+        if (btnText != null)
+        {
+            btnText.text = estaSonandoEstaCancion ? "Detener la canción" : "Comenzar a Tocar";
+        }
+    }
+
+    public void OnSongEnded()
+{
+    playingSong = null;
+    isPlaying = false;
+
+    // 1. Restaurar el texto del botón a "Comenzar a Tocar"
+    ActualizarTextoBoton(false);
+
+    // 2. Refrescar el récord y las estrellas en la interfaz
+    ActualizarRécordUI();
+}
 }

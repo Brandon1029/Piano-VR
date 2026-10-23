@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: "Gymnop\xE9die No. 1"
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Gymnopédie No. 1
+  composer: Erik Satie
+  difficulty: 1
+  coverImage: {fileID: 0}
+  bpm: 70
+  technicalFocus: Control de tempo lento, acompañamiento en bajos y melancolía
+    melódica.
+  notes:
+  - time: 1.00
+    key: F#4
+  - time: 2.70
+    key: A4
+  - time: 4.40
+    key: G4
+  - time: 6.10
+    key: F#4
+  - time: 7.80
+    key: C#4
+  - time: 9.50
+    key: B3
+  - time: 11.20
+    key: C#4
+  - time: 12.90
+    key: D4
+  - time: 14.60
+    key: E4
+  - time: 16.30
+    key: F#4
+  - time: 18.00
+    key: A4
+  - time: 19.70
+    key: G4
+  - time: 21.40
+    key: F#4
+  - time: 23.10
+    key: C#4
+  - time: 24.80
+    key: B3
+  - time: 26.50
+    key: C#4
+  - time: 28.20
+    key: D4
+  - time: 29.90
+    key: F#4
+  - time: 31.60
+    key: E4
+  - time: 33.30
+    key: D4
+  - time: 35.00
+    key: C#4
+  - time: 36.70
+    key: B3
+  - time: 38.40
+    key: A3
+  - time: 40.10
+    key: B3
+  - time: 41.80
+    key: C#4
+  - time: 43.50
+    key: D4
+  - time: 45.20
+    key: E4
+  - time: 46.90
+    key: F#4
+  - time: 48.60
+    key: G4
+  - time: 50.30
+    key: A4
+  - time: 52.00
+    key: B4
+  - time: 53.70
+    key: C#5

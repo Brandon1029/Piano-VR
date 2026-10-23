@@ -8,12 +8,24 @@ public class ResultsManager : MonoBehaviour
     public TextMeshProUGUI finalScoreText;
     public ScoreManager scoreManager;
 
-    public void ShowResults()
+    /// <summary>
+    /// Muestra la pantalla de resultados y guarda la puntuación máxima de la canción activa.
+    /// </summary>
+    public void ShowResults(string songName = "")
+{
+    if (resultsPanel != null) resultsPanel.SetActive(true);
+
+    if (scoreManager != null)
     {
-        resultsPanel.SetActive(true);
-        finalScoreText.text = "Puntaje final: " + scoreManager.score;
-        PlayerPrefs.SetInt("HighScore_Sweden", scoreManager.score);
+        float precision = scoreManager.ObtenerPorcentajePrecision();
+        int estrellas = scoreManager.CalcularEstrellas(precision);
+
+        if (finalScoreText != null)
+            finalScoreText.text = $"Precisión: {precision:F1}%\nEstrellas: {estrellas}★";
+
+        scoreManager.GuardarResultado();
     }
+}
 
     public void RetryLevel()
     {

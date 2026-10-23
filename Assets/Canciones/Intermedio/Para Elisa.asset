@@ -1,0 +1,262 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Para Elisa
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Para Elisa
+  composer: Ludwig van Beethoven
+  difficulty: 1
+  coverImage: {fileID: 0}
+  bpm: 130
+  technicalFocus: Alternancia rapida de cromatismos e intervalos arpegiados con cambio
+    de octava.
+  notes:
+  - time: 1
+    key: E5
+  - time: 1.23
+    key: D#5
+  - time: 1.46
+    key: E5
+  - time: 1.69
+    key: D#5
+  - time: 1.92
+    key: E5
+  - time: 2.15
+    key: B4
+  - time: 2.38
+    key: D5
+  - time: 2.61
+    key: C5
+  - time: 2.84
+    key: A4
+  - time: 3.3
+    key: C4
+  - time: 3.53
+    key: E4
+  - time: 3.76
+    key: A4
+  - time: 3.99
+    key: B4
+  - time: 4.45
+    key: E4
+  - time: 4.68
+    key: G#4
+  - time: 4.91
+    key: B4
+  - time: 5.14
+    key: C5
+  - time: 5.6
+    key: E4
+  - time: 5.83
+    key: E5
+  - time: 6.06
+    key: D#5
+  - time: 6.29
+    key: E5
+  - time: 6.52
+    key: D#5
+  - time: 6.75
+    key: E5
+  - time: 6.98
+    key: B4
+  - time: 7.21
+    key: D5
+  - time: 7.44
+    key: C5
+  - time: 7.67
+    key: A4
+  - time: 8.13
+    key: C4
+  - time: 8.36
+    key: E4
+  - time: 8.59
+    key: A4
+  - time: 8.82
+    key: B4
+  - time: 9.28
+    key: E4
+  - time: 9.51
+    key: C5
+  - time: 9.74
+    key: B4
+  - time: 9.97
+    key: A4
+  - time: 10.89
+    key: E5
+  - time: 11.12
+    key: D#5
+  - time: 11.35
+    key: E5
+  - time: 11.58
+    key: D#5
+  - time: 11.81
+    key: E5
+  - time: 12.04
+    key: B4
+  - time: 12.27
+    key: D5
+  - time: 12.5
+    key: C5
+  - time: 12.73
+    key: A4
+  - time: 13.19
+    key: C4
+  - time: 13.42
+    key: E4
+  - time: 13.65
+    key: A4
+  - time: 13.88
+    key: B4
+  - time: 14.34
+    key: E4
+  - time: 14.57
+    key: G#4
+  - time: 14.8
+    key: B4
+  - time: 15.03
+    key: C5
+  - time: 15.49
+    key: E4
+  - time: 15.72
+    key: E5
+  - time: 15.95
+    key: D#5
+  - time: 16.18
+    key: E5
+  - time: 16.41
+    key: D#5
+  - time: 16.64
+    key: E5
+  - time: 16.87
+    key: B4
+  - time: 17.1
+    key: D5
+  - time: 17.33
+    key: C5
+  - time: 17.56
+    key: A4
+  - time: 18.02
+    key: C4
+  - time: 18.25
+    key: E4
+  - time: 18.48
+    key: A4
+  - time: 18.71
+    key: B4
+  - time: 19.17
+    key: E4
+  - time: 19.4
+    key: C5
+  - time: 19.63
+    key: B4
+  - time: 19.86
+    key: A4
+  - time: 20.78
+    key: B4
+  - time: 21.01
+    key: C5
+  - time: 21.24
+    key: D5
+  - time: 21.47
+    key: E5
+  - time: 21.93
+    key: G4
+  - time: 22.16
+    key: F5
+  - time: 22.39
+    key: E5
+  - time: 22.62
+    key: D5
+  - time: 23.08
+    key: F4
+  - time: 23.31
+    key: E5
+  - time: 23.54
+    key: D5
+  - time: 23.77
+    key: C5
+  - time: 24.23
+    key: E4
+  - time: 24.46
+    key: D5
+  - time: 24.69
+    key: C5
+  - time: 24.92
+    key: B4
+  - time: 25.84
+    key: E5
+  - time: 26.07
+    key: D#5
+  - time: 26.3
+    key: E5
+  - time: 26.53
+    key: D#5
+  - time: 26.76
+    key: E5
+  - time: 26.99
+    key: B4
+  - time: 27.22
+    key: D5
+  - time: 27.45
+    key: C5
+  - time: 27.68
+    key: A4
+  - time: 28.14
+    key: C4
+  - time: 28.37
+    key: E4
+  - time: 28.6
+    key: A4
+  - time: 28.83
+    key: B4
+  - time: 29.29
+    key: E4
+  - time: 29.75
+    key: B4
+  - time: 29.98
+    key: C5
+  - time: 30.44
+    key: E4
+  - time: 30.67
+    key: E5
+  - time: 30.9
+    key: D#5
+  - time: 31.13
+    key: E5
+  - time: 31.36
+    key: D#5
+  - time: 31.59
+    key: E5
+  - time: 31.82
+    key: B4
+  - time: 32.05
+    key: D5
+  - time: 32.28
+    key: C5
+  - time: 32.51
+    key: A4
+  - time: 32.97
+    key: C4
+  - time: 33.2
+    key: E4
+  - time: 33.43
+    key: A4
+  - time: 33.66
+    key: B4
+  - time: 34.12
+    key: E4
+  - time: 34.35
+    key: C5
+  - time: 34.58
+    key: B4
+  - time: 34.81
+    key: A4

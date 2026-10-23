@@ -1,0 +1,138 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Experience
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Experience
+  composer: Ludovico Einaudi
+  difficulty: 1
+  coverImage: {fileID: 0}
+  bpm: 134
+  technicalFocus: Ostinato rítmico acelerado y control de dinámicas ascendentes
+    continuas.
+  notes:
+  - time: 1.00
+    key: F#4
+  - time: 1.22
+    key: A4
+  - time: 1.44
+    key: C#5
+  - time: 1.66
+    key: F#5
+  - time: 1.88
+    key: C#5
+  - time: 2.10
+    key: A4
+  - time: 2.32
+    key: F#4
+  - time: 2.54
+    key: A4
+  - time: 2.76
+    key: F#4
+  - time: 2.98
+    key: A4
+  - time: 3.20
+    key: C#5
+  - time: 3.42
+    key: F#5
+  - time: 3.64
+    key: C#5
+  - time: 3.86
+    key: A4
+  - time: 4.08
+    key: E4
+  - time: 4.30
+    key: G#4
+  - time: 4.52
+    key: B4
+  - time: 4.74
+    key: E5
+  - time: 4.96
+    key: B4
+  - time: 5.18
+    key: G#4
+  - time: 5.40
+    key: E4
+  - time: 5.62
+    key: G#4
+  - time: 5.84
+    key: E4
+  - time: 6.06
+    key: G#4
+  - time: 6.28
+    key: B4
+  - time: 6.50
+    key: E5
+  - time: 6.72
+    key: B4
+  - time: 6.94
+    key: G#4
+  - time: 7.16
+    key: D4
+  - time: 7.38
+    key: F#4
+  - time: 7.60
+    key: A4
+  - time: 7.82
+    key: D5
+  - time: 8.04
+    key: A4
+  - time: 8.26
+    key: F#4
+  - time: 8.48
+    key: D4
+  - time: 8.70
+    key: F#4
+  - time: 8.92
+    key: D4
+  - time: 9.14
+    key: F#4
+  - time: 9.36
+    key: A4
+  - time: 9.58
+    key: D5
+  - time: 9.80
+    key: A4
+  - time: 10.02
+    key: F#4
+  - time: 10.24
+    key: C#4
+  - time: 10.46
+    key: E4
+  - time: 10.68
+    key: G#4
+  - time: 10.90
+    key: C#5
+  - time: 11.12
+    key: G#4
+  - time: 11.34
+    key: E4
+  - time: 11.56
+    key: C#4
+  - time: 11.78
+    key: E4
+  - time: 12.00
+    key: F#5
+  - time: 12.44
+    key: E5
+  - time: 12.88
+    key: D5
+  - time: 13.32
+    key: C#5
+  - time: 13.76
+    key: B4
+  - time: 14.20
+    key: A4
+  - time: 14.64
+    key: G#4
+  - time: 15.08
+    key: F#4

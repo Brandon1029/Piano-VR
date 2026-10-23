@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Brahms' Lullaby
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Brahms' Lullaby
+  composer: Johannes Brahms
+  difficulty: 0
+  coverImage: {fileID: 0}
+  bpm: 80
+  technicalFocus: "Fraseo mel\xF3dico suave (legato) y expresi\xF3n en tempi lentos
+    a lo largo de varias octavas."
+  notes:
+  - time: 1
+    key: E4
+  - time: 1.75
+    key: E4
+  - time: 2.5
+    key: G4
+  - time: 4
+    key: E4
+  - time: 4.75
+    key: E4
+  - time: 5.5
+    key: G4
+  - time: 7
+    key: E4
+  - time: 7.75
+    key: G4
+  - time: 8.5
+    key: C5
+  - time: 9.25
+    key: B4
+  - time: 10
+    key: A4
+  - time: 10.75
+    key: A4
+  - time: 11.5
+    key: G4
+  - time: 13
+    key: D4
+  - time: 13.75
+    key: E4
+  - time: 14.5
+    key: F4
+  - time: 16
+    key: D4
+  - time: 16.75
+    key: E4
+  - time: 17.5
+    key: F4
+  - time: 19
+    key: D4
+  - time: 19.75
+    key: F4
+  - time: 20.5
+    key: B4
+  - time: 21.25
+    key: A4
+  - time: 22
+    key: G4
+  - time: 22.75
+    key: B4
+  - time: 23.5
+    key: C5
+  - time: 25
+    key: C4
+  - time: 25.75
+    key: C4
+  - time: 26.5
+    key: C5
+  - time: 28
+    key: A4
+  - time: 28.75
+    key: F4
+  - time: 29.5
+    key: G4
+  - time: 31
+    key: E4
+  - time: 31.75
+    key: C4
+  - time: 32.5
+    key: F4
+  - time: 33.25
+    key: E4
+  - time: 34
+    key: D4
+  - time: 34.75
+    key: C4
+  - time: 36.5
+    key: E5
+  - time: 37.25
+    key: E5
+  - time: 38
+    key: G5
+  - time: 39.5
+    key: E5
+  - time: 40.25
+    key: E5
+  - time: 41
+    key: G5
+  - time: 42.5
+    key: E5
+  - time: 43.25
+    key: G5
+  - time: 44
+    key: C6
+  - time: 44.75
+    key: B5
+  - time: 45.5
+    key: A5
+  - time: 46.25
+    key: A5
+  - time: 47
+    key: G5
+  - time: 48.5
+    key: D5
+  - time: 49.25
+    key: E5
+  - time: 50
+    key: F5
+  - time: 51.5
+    key: D5
+  - time: 52.25
+    key: E5
+  - time: 53
+    key: F5
+  - time: 54.5
+    key: D5
+  - time: 55.25
+    key: F5
+  - time: 56
+    key: B5
+  - time: 56.75
+    key: A5
+  - time: 57.5
+    key: G5
+  - time: 58.25
+    key: B5
+  - time: 59
+    key: C6
+  - time: 60.5
+    key: C5
+  - time: 61.25
+    key: C5
+  - time: 62
+    key: C6
+  - time: 63.5
+    key: A5
+  - time: 64.25
+    key: F5
+  - time: 65
+    key: G5
+  - time: 66.5
+    key: E5
+  - time: 67.25
+    key: C5
+  - time: 68
+    key: F5
+  - time: 68.75
+    key: E5
+  - time: 69.5
+    key: D5
+  - time: 70.25
+    key: C5

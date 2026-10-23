@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Jingle Bells
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Jingle Bells
+  composer: James Lord Pierpont
+  difficulty: 0
+  coverImage: {fileID: 0}
+  bpm: 120
+  technicalFocus: "Repetici\xF3n r\xEDtmica \xE1gil en un solo dedo y transiciones
+    simples de 3 notas."
+  notes:
+  - time: 1
+    key: E4
+  - time: 1.5
+    key: E4
+  - time: 2
+    key: E4
+  - time: 3
+    key: E4
+  - time: 3.5
+    key: E4
+  - time: 4
+    key: E4
+  - time: 5
+    key: E4
+  - time: 5.5
+    key: G4
+  - time: 6
+    key: C4
+  - time: 6.75
+    key: D4
+  - time: 7.25
+    key: E4
+  - time: 9
+    key: F4
+  - time: 9.5
+    key: F4
+  - time: 10
+    key: F4
+  - time: 10.5
+    key: F4
+  - time: 11
+    key: F4
+  - time: 11.5
+    key: E4
+  - time: 12
+    key: E4
+  - time: 12.5
+    key: E4
+  - time: 13
+    key: E4
+  - time: 13.5
+    key: D4
+  - time: 14
+    key: D4
+  - time: 14.5
+    key: E4
+  - time: 15
+    key: D4
+  - time: 16
+    key: G4
+  - time: 17
+    key: E4
+  - time: 17.5
+    key: E4
+  - time: 18
+    key: E4
+  - time: 19
+    key: E4
+  - time: 19.5
+    key: E4
+  - time: 20
+    key: E4
+  - time: 21
+    key: E4
+  - time: 21.5
+    key: G4
+  - time: 22
+    key: C4
+  - time: 22.75
+    key: D4
+  - time: 23.25
+    key: E4
+  - time: 25
+    key: F4
+  - time: 25.5
+    key: F4
+  - time: 26
+    key: F4
+  - time: 26.5
+    key: F4
+  - time: 27
+    key: F4
+  - time: 27.5
+    key: E4
+  - time: 28
+    key: E4
+  - time: 28.5
+    key: E4
+  - time: 29
+    key: G4
+  - time: 29.5
+    key: G4
+  - time: 30
+    key: F4
+  - time: 30.5
+    key: D4
+  - time: 31
+    key: C4

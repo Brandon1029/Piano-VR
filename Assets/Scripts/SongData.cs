@@ -23,6 +23,9 @@ public class SongData : ScriptableObject
     public string composer = "Desconocido";
     public DifficultyLevel difficulty = DifficultyLevel.Principiante;
 
+    [Header("UI Visual")]
+    public Sprite coverImage; // <--- Imagen de portada para el menú
+
     [Header("Parámetros Musicales")]
     public float bpm;
     [TextArea(2, 4)]

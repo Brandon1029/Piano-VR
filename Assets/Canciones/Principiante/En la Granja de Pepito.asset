@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: En la Granja de Pepito
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: En la Granja de Pepito
+  composer: Tradicional
+  difficulty: 0
+  coverImage: {fileID: 0}
+  bpm: 110
+  technicalFocus: "Pr\xE1ctica de intervalos de cuarta y articulaci\xF3n limpia de
+    notas."
+  notes:
+  - time: 1
+    key: C4
+  - time: 1.54
+    key: C4
+  - time: 2.08
+    key: C4
+  - time: 2.62
+    key: G3
+  - time: 3.16
+    key: A3
+  - time: 3.7
+    key: A3
+  - time: 4.24
+    key: G3
+  - time: 5.32
+    key: E4
+  - time: 5.86
+    key: E4
+  - time: 6.4
+    key: D4
+  - time: 6.94
+    key: D4
+  - time: 7.48
+    key: C4
+  - time: 8.56
+    key: G3
+  - time: 9.1
+    key: C4
+  - time: 9.37
+    key: C4
+  - time: 9.64
+    key: C4
+  - time: 10.18
+    key: G3
+  - time: 10.72
+    key: C4
+  - time: 10.99
+    key: C4
+  - time: 11.26
+    key: C4
+  - time: 11.8
+    key: C4
+  - time: 12.07
+    key: C4
+  - time: 12.34
+    key: C4
+  - time: 12.61
+    key: C4
+  - time: 12.88
+    key: C4
+  - time: 13.15
+    key: C4
+  - time: 13.42
+    key: C4
+  - time: 13.69
+    key: C4
+  - time: 14.23
+    key: C4
+  - time: 14.77
+    key: C4
+  - time: 15.31
+    key: C4
+  - time: 15.85
+    key: G3
+  - time: 16.39
+    key: A3
+  - time: 16.93
+    key: A3
+  - time: 17.47
+    key: G3
+  - time: 18.55
+    key: E4
+  - time: 19.09
+    key: E4
+  - time: 19.63
+    key: D4
+  - time: 20.17
+    key: D4
+  - time: 20.71
+    key: C4
+  - time: 21.8
+    key: C4
+  - time: 22.34
+    key: C4
+  - time: 22.88
+    key: C4
+  - time: 23.42
+    key: G3
+  - time: 23.96
+    key: A3
+  - time: 24.5
+    key: A3
+  - time: 25.04
+    key: G3
+  - time: 26.12
+    key: E4
+  - time: 26.66
+    key: E4
+  - time: 27.2
+    key: D4
+  - time: 27.74
+    key: D4
+  - time: 28.28
+    key: C4

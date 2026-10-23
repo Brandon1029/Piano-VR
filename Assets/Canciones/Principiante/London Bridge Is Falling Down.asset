@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: London Bridge Is Falling Down
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: London Bridge Is Falling Down
+  composer: Tradicional
+  difficulty: 0
+  coverImage: {fileID: 0}
+  bpm: 100
+  technicalFocus: "Agilidad en saltos de tercera interv\xE1lica y retornos r\xE1pidos."
+  notes:
+  - time: 1
+    key: G4
+  - time: 1.45
+    key: A4
+  - time: 1.9
+    key: G4
+  - time: 2.35
+    key: F4
+  - time: 2.8
+    key: E4
+  - time: 3.25
+    key: F4
+  - time: 3.7
+    key: G4
+  - time: 4.6
+    key: D4
+  - time: 5.05
+    key: E4
+  - time: 5.5
+    key: F4
+  - time: 6.4
+    key: E4
+  - time: 6.85
+    key: F4
+  - time: 7.3
+    key: G4
+  - time: 8.2
+    key: G4
+  - time: 8.65
+    key: A4
+  - time: 9.1
+    key: G4
+  - time: 9.55
+    key: F4
+  - time: 10
+    key: E4
+  - time: 10.45
+    key: F4
+  - time: 10.9
+    key: G4
+  - time: 11.8
+    key: D4
+  - time: 12.7
+    key: G4
+  - time: 13.6
+    key: E4
+  - time: 14.5
+    key: C4
+  - time: 15.4
+    key: G4
+  - time: 15.85
+    key: A4
+  - time: 16.3
+    key: G4
+  - time: 16.75
+    key: F4
+  - time: 17.2
+    key: E4
+  - time: 17.65
+    key: F4
+  - time: 18.1
+    key: G4
+  - time: 19
+    key: D4
+  - time: 19.45
+    key: E4
+  - time: 19.9
+    key: F4
+  - time: 20.8
+    key: E4
+  - time: 21.25
+    key: F4
+  - time: 21.7
+    key: G4
+  - time: 22.6
+    key: G4
+  - time: 23.05
+    key: A4
+  - time: 23.5
+    key: G4
+  - time: 23.95
+    key: F4
+  - time: 24.4
+    key: E4
+  - time: 24.85
+    key: F4
+  - time: 25.3
+    key: G4
+  - time: 26.2
+    key: D4
+  - time: 27.1
+    key: G4
+  - time: 28
+    key: E4
+  - time: 28.9
+    key: C4

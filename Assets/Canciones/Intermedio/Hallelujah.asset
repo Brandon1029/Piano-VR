@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Hallelujah
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Hallelujah
+  composer: Leonard Cohen
+  difficulty: 1
+  coverImage: {fileID: 0}
+  bpm: 90
+  technicalFocus: "Arpegios continuos en comp\xE1s de 6/8 y control de la melod\xEDa
+    vocal sostenida."
+  notes:
+  - time: 1.00
+    key: E4
+  - time: 1.67
+    key: G4
+  - time: 2.33
+    key: G4
+  - time: 3.00
+    key: G4
+  - time: 3.67
+    key: G4
+  - time: 4.33
+    key: A4
+  - time: 5.00
+    key: A4
+  - time: 5.67
+    key: A4
+  - time: 6.33
+    key: E4
+  - time: 7.00
+    key: G4
+  - time: 7.67
+    key: G4
+  - time: 8.33
+    key: G4
+  - time: 9.00
+    key: G4
+  - time: 9.67
+    key: A4
+  - time: 10.33
+    key: A4
+  - time: 11.00
+    key: A4
+  - time: 11.67
+    key: G4
+  - time: 12.33
+    key: A4
+  - time: 13.00
+    key: A4
+  - time: 13.67
+    key: A4
+  - time: 14.33
+    key: A4
+  - time: 15.00
+    key: G4
+  - time: 15.67
+    key: G4
+  - time: 16.33
+    key: F4
+  - time: 17.00
+    key: G4
+  - time: 18.33
+    key: G4
+  - time: 19.00
+    key: G4
+  - time: 19.67
+    key: A4
+  - time: 20.33
+    key: A4
+  - time: 21.00
+    key: B4
+  - time: 21.67
+    key: C5
+  - time: 22.33
+    key: C5
+  - time: 23.00
+    key: C5
+  - time: 23.67
+    key: D5
+  - time: 24.33
+    key: D5
+  - time: 25.00
+    key: D5
+  - time: 25.67
+    key: E5
+  - time: 26.33
+    key: E5
+  - time: 27.00
+    key: E5
+  - time: 27.67
+    key: D5
+  - time: 28.33
+    key: D5
+  - time: 29.00
+    key: C5
+  - time: 29.67
+    key: C5
+  - time: 31.00
+    key: E5
+  - time: 33.00
+    key: D5
+  - time: 35.00
+    key: C5
+  - time: 37.00
+    key: B4
+  - time: 39.00
+    key: C5
+  - time: 39.67
+    key: D5
+  - time: 40.33
+    key: C5
+  - time: 41.00
+    key: B4
+  - time: 41.67
+    key: A4
+  - time: 42.33
+    key: G4
+  - time: 43.67
+    key: C5
+  - time: 45.00
+    key: C5
