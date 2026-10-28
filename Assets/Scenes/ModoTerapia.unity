@@ -1195,7 +1195,7 @@ MonoBehaviour:
   volumenMaximo: 0.35
   tiempoEsperaParaReactivar: 4
   velocidadFade: 1.2
-  ambientHabilitado: 1
+  ambientHabilitado: 0
 --- !u!82 &185430018
 AudioSource:
   m_ObjectHideFlags: 0
