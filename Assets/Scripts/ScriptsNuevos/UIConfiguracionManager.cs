@@ -22,7 +22,7 @@ public class UIConfiguracionManager : MonoBehaviour
 
     [Header("Referencias de Sistemas")]
     [Tooltip("Asigna la referencia del AutoPlayManager en la escena")]
-    public AutoPlayManager autoPlayManager; // <--- Referencia directa a la clase de tu script
+    public AutoPlayManager autoPlayManager;
 
     void Awake()
     {
@@ -54,10 +54,12 @@ public class UIConfiguracionManager : MonoBehaviour
             toggleAutoplayer.onValueChanged.AddListener(OnToggleAutoplayerChanged);
 
         ActualizarTextoOctava();
+        Debug.Log("[UIConfiguracionManager] Gestor de configuración UI inicializado.");
     }
 
     public void AbrirConfiguracion()
     {
+        Debug.Log("[UIConfiguracionManager] [UI] Abrir Panel de Configuración pulsado.");
         if (panelCanciones != null) panelCanciones.SetActive(false);
         if (panelConfiguracion != null) panelConfiguracion.SetActive(true);
         ActualizarTextoOctava();
@@ -65,6 +67,7 @@ public class UIConfiguracionManager : MonoBehaviour
 
     public void VolverACanciones()
     {
+        Debug.Log("[UIConfiguracionManager] [UI] Volver al Panel de Canciones pulsado.");
         if (panelConfiguracion != null) panelConfiguracion.SetActive(false);
         if (panelCanciones != null) panelCanciones.SetActive(true);
     }
@@ -75,6 +78,7 @@ public class UIConfiguracionManager : MonoBehaviour
         {
             PianoManager.Instance.SubirOctava();
             ActualizarTextoOctava();
+            Debug.Log($"[UIConfiguracionManager] [UI] Botón Subir Octava (+) presionado. Nueva octava base: {PianoManager.Instance.octavaBaseActual}");
         }
     }
 
@@ -84,6 +88,7 @@ public class UIConfiguracionManager : MonoBehaviour
         {
             PianoManager.Instance.BajarOctava();
             ActualizarTextoOctava();
+            Debug.Log($"[UIConfiguracionManager] [UI] Botón Bajar Octava (-) presionado. Nueva octava base: {PianoManager.Instance.octavaBaseActual}");
         }
     }
 
@@ -98,6 +103,7 @@ public class UIConfiguracionManager : MonoBehaviour
 
     private void OnTogglePopUpChanged(bool estado)
     {
+        Debug.Log($"[UIConfiguracionManager] [UI] Toggle PopUp Notas cambiado a: {estado}");
         foreach (var key in PianoKey.todasLasTeclas)
         {
             if (key != null)
@@ -109,6 +115,7 @@ public class UIConfiguracionManager : MonoBehaviour
 
     private void OnToggleMusicaAmbientalChanged(bool estado)
     {
+        Debug.Log($"[UIConfiguracionManager] [UI] Toggle Música Ambiental cambiado a: {estado}");
         if (AmbientAudioManager.Instance != null)
         {
             AmbientAudioManager.Instance.SetAmbientHabilitado(estado);
@@ -117,18 +124,15 @@ public class UIConfiguracionManager : MonoBehaviour
 
     private void OnToggleAutoplayerChanged(bool estado)
     {
+        Debug.Log($"[UIConfiguracionManager] [UI] Toggle Autoplayer cambiado a: {estado}");
         if (PianoManager.Instance != null)
         {
             PianoManager.Instance.autoplayerHabilitado = estado;
         }
 
-        // Modifica directamente la variable de control del AutoPlayManager
         if (autoPlayManager != null)
         {
-            // Cambia la variable booleana expuesta en la casilla del Inspector
             autoPlayManager.isAutoPlayEnabled = estado; 
-
-            // Opcional: También activa o desactiva el componente entero
             autoPlayManager.enabled = estado; 
         }
     }

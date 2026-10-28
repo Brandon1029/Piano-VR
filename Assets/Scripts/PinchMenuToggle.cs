@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Management;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public class PinchMenuToggle : MonoBehaviour
 {
@@ -13,36 +16,70 @@ public class PinchMenuToggle : MonoBehaviour
 
     void Start()
     {
-        var xrManager = XRGeneralSettings.Instance.Manager;
-        handSubsystem = xrManager.activeLoader.GetLoadedSubsystem<XRHandSubsystem>();
+        try
+        {
+            if (XRGeneralSettings.Instance != null && XRGeneralSettings.Instance.Manager != null && XRGeneralSettings.Instance.Manager.activeLoader != null)
+            {
+                handSubsystem = XRGeneralSettings.Instance.Manager.activeLoader.GetLoadedSubsystem<XRHandSubsystem>();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"[PinchMenuToggle] No se pudo obtener XRHandSubsystem (normal en modo Editor sin VR): {ex.Message}");
+        }
         
         if (menuCanvas == null)
             menuCanvas = GameObject.Find("CanvasMenus");
             
-        menuCanvas.SetActive(false);
+        if (menuCanvas != null)
+            menuCanvas.SetActive(false);
     }
 
     void Update()
-{
-    if (handSubsystem == null) return;
-    
-    try
     {
-        var leftHand = handSubsystem.leftHand;
-        if (!leftHand.isTracked) return;
-
-        bool isPinching = IsPinching(leftHand);
-
-        if (isPinching && !wasPinching)
+#if UNITY_EDITOR || UNITY_STANDALONE
+        // Soporte para alternar el menú en PC con la tecla 'M'
+#if ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null && Keyboard.current.mKey.wasPressedThisFrame)
         {
-            menuVisible = !menuVisible;
+            AlternarMenu("PC Teclado 'M'");
+        }
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            AlternarMenu("PC Teclado 'M'");
+        }
+#endif
+#endif
+
+        if (handSubsystem == null) return;
+        
+        try
+        {
+            var leftHand = handSubsystem.leftHand;
+            if (!leftHand.isTracked) return;
+
+            bool isPinching = IsPinching(leftHand);
+
+            if (isPinching && !wasPinching)
+            {
+                AlternarMenu("Gesto de Pellizco VR (Mano Izquierda)");
+            }
+
+            wasPinching = isPinching;
+        }
+        catch { }
+    }
+
+    private void AlternarMenu(string origen)
+    {
+        menuVisible = !menuVisible;
+        if (menuCanvas != null)
+        {
             menuCanvas.SetActive(menuVisible);
         }
-
-        wasPinching = isPinching;
+        Debug.Log($"[PinchMenuToggle] Menú Canvas alternado a: {menuVisible} (Disparado por: {origen})");
     }
-    catch { }
-}
 
     bool IsPinching(XRHand hand)
     {

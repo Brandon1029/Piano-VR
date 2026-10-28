@@ -1,10 +1,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
-public class PianoKey : MonoBehaviour
+public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     [Header("Física")]
     public float pressDepth  = 0.008f;
@@ -84,6 +90,54 @@ public class PianoKey : MonoBehaviour
 
         int octavaBase = (PianoManager.Instance != null) ? PianoManager.Instance.octavaBaseActual : 3;
         ReconfigurarOctava(octavaBase);
+
+        ConfigurarInteraccionVR();
+    }
+
+    private void ConfigurarInteraccionVR()
+    {
+        var simpleInteractable = GetComponent<XRSimpleInteractable>();
+        if (simpleInteractable == null)
+        {
+            simpleInteractable = gameObject.AddComponent<XRSimpleInteractable>();
+        }
+
+        if (simpleInteractable != null)
+        {
+            // Disparo/Gatillo de XR Ray Interactor o selección de XR Direct Interactor
+            simpleInteractable.selectEntered.AddListener(args =>
+            {
+                string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Interactor";
+                Debug.Log($"[PianoKey] [VR SelectEntered] Tecla '{nombreNotaCompleto}' presionada por '{interactor}'");
+                OnPokeEnter();
+            });
+
+            simpleInteractable.selectExited.AddListener(args =>
+            {
+                string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Interactor";
+                Debug.Log($"[PianoKey] [VR SelectExited] Tecla '{nombreNotaCompleto}' liberada por '{interactor}'");
+                OnPokeExit();
+            });
+
+            // Contacto de XRPokeInteractor o toque directo
+            simpleInteractable.hoverEntered.AddListener(args =>
+            {
+                if (args.interactorObject is XRPokeInteractor || args.interactorObject is XRDirectInteractor)
+                {
+                    string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Touch";
+                    Debug.Log($"[PianoKey] [VR Poke/Direct Touch] Tecla '{nombreNotaCompleto}' tocada por '{interactor}'");
+                    OnPokeEnter();
+                }
+            });
+
+            simpleInteractable.hoverExited.AddListener(args =>
+            {
+                if (args.interactorObject is XRPokeInteractor || args.interactorObject is XRDirectInteractor)
+                {
+                    OnPokeExit();
+                }
+            });
+        }
     }
 
     private void ExtraerNotaYOctavaInicial()
@@ -197,6 +251,127 @@ public class PianoKey : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        ActualizarMouseEditor();
+#endif
+    }
+
+#if UNITY_EDITOR || UNITY_STANDALONE
+    private void ActualizarMouseEditor()
+    {
+#if ENABLE_INPUT_SYSTEM
+        if (Mouse.current != null)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                Camera cam = Camera.main;
+                if (cam != null)
+                {
+                    Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
+                    if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+                    {
+                        if (hit.transform == transform || hit.transform.IsChildOf(transform))
+                        {
+                            Debug.Log($"[PianoKey] [PC Mouse Click - New Input] Tecla '{nombreNotaCompleto}' presionada");
+                            OnPokeEnter();
+                        }
+                    }
+                }
+            }
+            else if (Mouse.current.leftButton.wasReleasedThisFrame && isPressed)
+            {
+                OnPokeExit();
+            }
+        }
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        if (Input.GetMouseButtonDown(0))
+        {
+            Camera cam = Camera.main;
+            if (cam != null)
+            {
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+                {
+                    if (hit.transform == transform || hit.transform.IsChildOf(transform))
+                    {
+                        Debug.Log($"[PianoKey] [PC Mouse Click - Legacy] Tecla '{nombreNotaCompleto}' presionada");
+                        OnPokeEnter();
+                    }
+                }
+            }
+        }
+        else if (Input.GetMouseButtonUp(0) && isPressed)
+        {
+            OnPokeExit();
+        }
+#endif
+    }
+#endif
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        string modulo = eventData.pointerCurrentRaycast.module != null ? eventData.pointerCurrentRaycast.module.GetType().Name : "EventSystem";
+        Debug.Log($"[PianoKey] [PointerDown] Tecla '{nombreNotaCompleto}' presionada via {modulo}");
+        OnPokeEnter();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log($"[PianoKey] [PointerUp] Tecla '{nombreNotaCompleto}' liberada");
+        OnPokeExit();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // Evento de clic para EventSystem
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (EsContactoFisicoValido(other))
+        {
+            Debug.Log($"[PianoKey] [TriggerEnter] Tecla '{nombreNotaCompleto}' activada por '{other.name}'");
+            OnPokeEnter();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (EsContactoFisicoValido(other))
+        {
+            OnPokeExit();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (EsContactoFisicoValido(collision.collider))
+        {
+            Debug.Log($"[PianoKey] [CollisionEnter] Tecla '{nombreNotaCompleto}' activada por colisión con '{collision.collider.name}'");
+            OnPokeEnter();
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (EsContactoFisicoValido(collision.collider))
+        {
+            OnPokeExit();
+        }
+    }
+
+    private bool EsContactoFisicoValido(Collider col)
+    {
+        if (col == null) return false;
+        string n = col.name.ToLower();
+        return n.Contains("tip") || n.Contains("distal") || n.Contains("index") ||
+               n.Contains("middle") || n.Contains("ring") || n.Contains("pinky") ||
+               n.Contains("thumb") || n.Contains("poke") || n.Contains("controller") ||
+               n.Contains("hand");
+    }
+
     void LateUpdate()
     {
         if (todasLasTeclas.Count > 0 && this == todasLasTeclas[0])
@@ -270,14 +445,20 @@ public class PianoKey : MonoBehaviour
     public void OnPokeEnter()
     {
         isPressed = true;
+        Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada}");
 
-        if (audioSource.isPlaying)
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+
+        if (audioSource != null)
         {
-            audioSource.Stop();
-        }
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
 
-        audioSource.time = 0f;
-        audioSource.Play();
+            audioSource.time = 0f;
+            audioSource.Play();
+        }
 
         // Notifica interacción para silenciar la música ambiental
         if (AmbientAudioManager.Instance != null)
@@ -305,47 +486,48 @@ public class PianoKey : MonoBehaviour
     public void OnPokeExit()
     {
         isPressed = false;
+        Debug.Log($"[PianoKey] Reposo de tecla: '{nombreNotaCompleto}' ({gameObject.name})");
     }
 
     private void EvaluarAciertoNota()
-{
-    NotaMovimiento notaCercana = null;
-    float menorDistanciaY = float.MaxValue;
-
-    // Recorre las notas activas en pantalla
-    foreach (var nota in notasEnEscena)
     {
-        if (nota != null && nota.targetKey == this)
-        {
-            float yImpactoIdeal = transform.position.y;
-            float diferenciaDistancia = Mathf.Abs(nota.transform.position.y - yImpactoIdeal);
+        NotaMovimiento notaCercana = null;
+        float menorDistanciaY = float.MaxValue;
 
-            // Evalúa si la nota está dentro del margen de tolerancia vertical
-            if (diferenciaDistancia <= rangoToleranciaHit && diferenciaDistancia < menorDistanciaY)
+        // Recorre las notas activas en pantalla
+        foreach (var nota in notasEnEscena)
+        {
+            if (nota != null && nota.targetKey == this)
             {
-                menorDistanciaY = diferenciaDistancia;
-                notaCercana = nota;
+                float yImpactoIdeal = transform.position.y;
+                float diferenciaDistancia = Mathf.Abs(nota.transform.position.y - yImpactoIdeal);
+
+                // Evalúa si la nota está dentro del margen de tolerancia vertical
+                if (diferenciaDistancia <= rangoToleranciaHit && diferenciaDistancia < menorDistanciaY)
+                {
+                    menorDistanciaY = diferenciaDistancia;
+                    notaCercana = nota;
+                }
             }
         }
-    }
 
-    if (notaCercana != null)
-    {
-        if (ScoreManager.Instance != null)
+        if (notaCercana != null)
         {
-            ScoreManager.Instance.RegistrarAcierto();
-            Debug.Log($"[PianoKey] ¡Acierto registrado en {nombreNotaCompleto}! Precisión actual: {ScoreManager.Instance.ObtenerPorcentajePrecision():F1}%");
-        }
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.RegistrarAcierto();
+                Debug.Log($"[PianoKey] ¡Acierto registrado en {nombreNotaCompleto}! Precisión actual: {ScoreManager.Instance.ObtenerPorcentajePrecision():F1}%");
+            }
 
-        // Remover de la lista global y destruir la nota acertada
-        notasEnEscena.Remove(notaCercana);
-        Destroy(notaCercana.gameObject);
+            // Remover de la lista global y destruir la nota acertada
+            notasEnEscena.Remove(notaCercana);
+            Destroy(notaCercana.gameObject);
+        }
+        else
+        {
+            Debug.LogWarning($"[PianoKey] Se presionó {nombreNotaCompleto} pero no había ninguna nota dentro del rango (Tolerancia: {rangoToleranciaHit}m).");
+        }
     }
-    else
-    {
-        Debug.LogWarning($"[PianoKey] Se presionó {nombreNotaCompleto} pero no había ninguna nota dentro del rango (Tolerancia: {rangoToleranciaHit}m).");
-    }
-}
 
     void FixedUpdate()
     {
@@ -359,7 +541,16 @@ public class PianoKey : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    void OnMouseDown() { OnPokeEnter(); }
-    void OnMouseUp()   { OnPokeExit(); }
+    void OnMouseDown()
+    {
+        Debug.Log($"[PianoKey] [Legacy OnMouseDown] Tecla '{nombreNotaCompleto}' presionada");
+        OnPokeEnter();
+    }
+
+    void OnMouseUp()
+    {
+        Debug.Log($"[PianoKey] [Legacy OnMouseUp] Tecla '{nombreNotaCompleto}' liberada");
+        OnPokeExit();
+    }
 #endif
 }

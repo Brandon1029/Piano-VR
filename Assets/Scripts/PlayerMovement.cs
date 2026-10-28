@@ -1,4 +1,7 @@
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,12 +12,31 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        if (cameraTransform == null && Camera.main != null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
     }
 
     void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal"); // A/D
-        float moveVertical = Input.GetAxis("Vertical");     // W/S
+        float moveHorizontal = 0f;
+        float moveVertical = 0f;
+
+#if ENABLE_INPUT_SYSTEM
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveHorizontal += 1f;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)  moveHorizontal -= 1f;
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)    moveVertical += 1f;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)  moveVertical -= 1f;
+        }
+#elif ENABLE_LEGACY_INPUT_MANAGER
+        moveHorizontal = Input.GetAxis("Horizontal");
+        moveVertical = Input.GetAxis("Vertical");
+#endif
+
+        if (cameraTransform == null) return;
 
         // Dirección relativa a la cámara
         Vector3 forward = cameraTransform.forward;
@@ -29,5 +51,9 @@ public class PlayerMovement : MonoBehaviour
         // Movimiento según cámara
         Vector3 movement = (forward * moveVertical + right * moveHorizontal).normalized;
 
-        rb.linearVelocity = movement * speed;
-    }}
+        if (rb != null)
+        {
+            rb.linearVelocity = movement * speed;
+        }
+    }
+}
