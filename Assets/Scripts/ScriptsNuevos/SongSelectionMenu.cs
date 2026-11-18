@@ -2,9 +2,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using PianoVR;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SongSelectionMenu : MonoBehaviour
 {
+    [System.Serializable]
+    public class SceneField
+    {
+        [SerializeField] private Object sceneAsset;
+        [SerializeField] private string sceneName = "";
+
+        public string SceneName => sceneName;
+
+        public static implicit operator string(SceneField sceneField)
+        {
+            return sceneField != null ? sceneField.SceneName : "";
+        }
+    }
+
+#if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(SceneField))]
+    public class SceneFieldPropertyDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, GUIContent.none, property);
+            SerializedProperty sceneAsset = property.FindPropertyRelative("sceneAsset");
+            SerializedProperty sceneName = property.FindPropertyRelative("sceneName");
+
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            if (sceneAsset != null)
+            {
+                sceneAsset.objectReferenceValue = EditorGUI.ObjectField(position, sceneAsset.objectReferenceValue, typeof(SceneAsset), false);
+                if (sceneAsset.objectReferenceValue != null)
+                {
+                    sceneName.stringValue = (sceneAsset.objectReferenceValue as SceneAsset).name;
+                }
+            }
+            EditorGUI.EndProperty();
+        }
+    }
+#endif
+
     public static SongSelectionMenu Instance { get; private set; }
 
     [Header("Base de Datos de Canciones")]
@@ -35,6 +77,9 @@ public class SongSelectionMenu : MonoBehaviour
 
     [Header("Conexion al Sistema")]
     [SerializeField] private NoteSpawner noteSpawner;
+
+    [Header("Configuración de Salida")]
+    [SerializeField] private SceneField escenaDestino;
 
     private SongData selectedSong;    // Canción actualmente mostrada/seleccionada en el panel
     private SongData playingSong;     // Canción que está SONANDO actualmente en la escena
@@ -187,24 +232,20 @@ public class SongSelectionMenu : MonoBehaviour
     {
         if (selectedSong == null || noteSpawner == null) return;
 
-        // CASO 1: Si presionamos el botón cuando estamos viendo la canción que YA ESTÁ SONANDO
         if (isPlaying && playingSong == selectedSong)
         {
             Debug.Log($"[SongSelectionMenu] [UI] Botón Play pulsado -> Deteniendo canción '{selectedSong.songName}'");
             DetenerModoCancion();
         }
-        // CASO 2: Si presionamos el botón para iniciar una canción nueva (o reemplazar la anterior)
         else
         {
             Debug.Log($"[SongSelectionMenu] [UI] Botón Play pulsado -> Iniciando canción '{selectedSong.songName}' ({selectedSong.bpm} BPM)");
 
-            // Detiene cualquier pista previa que estuviera cayendo
             if (noteSpawner != null)
             {
                 noteSpawner.StopCurrentSong();
             }
 
-            // Inicia la nueva canción seleccionada
             noteSpawner.StartSong(selectedSong);
             playingSong = selectedSong;
             isPlaying = true;
@@ -243,10 +284,26 @@ public class SongSelectionMenu : MonoBehaviour
         playingSong = null;
         isPlaying = false;
 
-        // 1. Restaurar el texto del botón a "Comenzar a Tocar"
         ActualizarTextoBoton(false);
-
-        // 2. Refrescar el récord y las estrellas en la interfaz
         ActualizarRécordUI();
+    }
+
+    public void SalirAEscenaDestino()
+    {
+        if (escenaDestino == null || string.IsNullOrEmpty(escenaDestino.SceneName))
+        {
+            Debug.LogWarning("[SongSelectionMenu] No has arrastrado ninguna escena en 'Escena Destino'.");
+            return;
+        }
+
+        if (isPlaying)
+        {
+            DetenerModoCancion();
+        }
+
+        if (SceneTransitionManager.Instance != null)
+        {
+            SceneTransitionManager.Instance.TransitionToScene(escenaDestino);
+        }
     }
 }

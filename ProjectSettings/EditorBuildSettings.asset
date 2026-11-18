@@ -8,15 +8,27 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
-  - enabled: 1
-    path: Assets/Scenes/ModoLibreMenu.unity
+  - enabled: 0
+    path: Assets/Scenes/ModoLibre.unity
     guid: 3bd2df388fc9a1b428b0a1371d4ab667
   - enabled: 0
     path: Assets/Scenes/ModoLibre.unity
-    guid: da0d5702470c84a579cd4ee126703056
+    guid: 3bd2df388fc9a1b428b0a1371d4ab667
   - enabled: 0
-    path: Assets/Scenes/ModoTerapia.unity
+    path: Assets/Scenes/Temp/NoSeUsa.unity
     guid: 3cc050035c6fd43cb86003c342a2b6f5
+  - enabled: 0
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: 687bac8c449f0554f97a4b1542892e1e
+  - enabled: 0
+    path: Assets/Scenes/MainMenu_VR.unity
+    guid: 7d811594a4dbfff4e900a944c52df335
+  - enabled: 0
+    path: Assets/Scenes/ModoMusica.unity
+    guid: 5e7af4bd95ac53a4cb784a9eedf8f6f9
+  - enabled: 1
+    path: Assets/Scenes/ModoLibreMenu.unity
+    guid: 996164ca57c8ad74aa1e228f0e6b2807
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d5a2e405fb725de4e887867956718d32, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
@@ -25,5 +37,5 @@ EditorBuildSettings:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 985fdffee33a5944396199c6b7145dd4, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 908d62378b8205449861e5838a18a596, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 4b3de149e50ea0c4f8ad04c79b9f12ec, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 3dd11dcd12272e54f8a19d8224e35f53, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 828a1b0e1c2d24fc48f49c826c668c5e, type: 2}
   m_UseUCBPForAssetBundles: 0

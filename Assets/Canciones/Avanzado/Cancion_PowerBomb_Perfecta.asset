@@ -15,7 +15,7 @@ MonoBehaviour:
   songName: Power Bomb (Mega Man Zero 2)
   composer: Ippo Yamada
   difficulty: 2
-  coverImage: {fileID: 0}
+  coverImage: {fileID: 1746404485, guid: 971ecd2a26862054f85990bbf8a188ea, type: 3}
   bpm: 140
   technicalFocus: 
   notes:

@@ -8,6 +8,8 @@ TagManager:
   - Hand
   - Teclas
   - FallingNote
+  - PlayerHand
+  - PlayerFinger
   layers:
   - Default
   - TransparentFX

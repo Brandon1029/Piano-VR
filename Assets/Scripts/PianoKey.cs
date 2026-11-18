@@ -8,14 +8,24 @@ using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
+[RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
-public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+public class PianoKey : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler,
+    IPointerDownHandler,
+    IPointerUpHandler,
+    IPointerClickHandler
 {
-    [Header("Física")]
+    [Header("Física y Movimiento")]
     public float pressDepth  = 0.008f;
     public float pressSpeed  = 20f;
     public float returnSpeed = 8f;
+
+    [Header("Protección al Iniciar la Escena")]
+    [Tooltip("Tiempo en segundos tras cargar la escena donde se ignoran colisiones para evitar que las teclas se presionen solas al arrancar.")]
+    public float startupGracePeriod = 0.25f;
 
     [Header("Configuración de Impacto")]
     [Tooltip("Distancia vertical máxima (en metros) entre la nota y la tecla para considerar un acierto.")]
@@ -48,6 +58,7 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     AudioSource audioSource;
     Rigidbody   rb;
+    BoxCollider boxCollider;
     Vector3     restLocalPosition;
     Vector3     pressedLocalPosition;
     public bool isPressed = false;
@@ -59,12 +70,59 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     public static List<PianoKey> todasLasTeclas = new List<PianoKey>();
     public static List<NotaMovimiento> notasEnEscena = new List<NotaMovimiento>();
 
+    // Contador de interactores/contactos activos para evitar dobles disparos o liberaciones prematuras
+    private int interactoresActivos = 0;
+
     // Diccionario original para validación de notas base
-    static Dictionary<string, string> notaES = new Dictionary<string, string>()
+    static readonly Dictionary<string, string> notaES = new Dictionary<string, string>()
     {
         {"C", "C"}, {"D", "D"}, {"E", "E"},
         {"F", "F"}, {"G", "G"}, {"A", "A"}, {"B", "B"}
     };
+
+    // Palabras clave para reconocer colisionadores de manos y dedos (Hand Tracking) de Meta Quest.
+    // Se excluyen explícitamente mandos y controladores para que NO toquen teclas por error físico.
+    private static readonly string[] PalabrasClaveVR = new string[]
+    {
+        "poke", "hand", "finger", "index", "tip",
+        "interactor", "capsule", "xr", "mano", "dedo",
+        "distal", "ring", "middle", "pinky", "little", "thumb",
+        "touch", "direct", "bone", "joint",
+        "wrist", "palm", "b_r_", "b_l_", "ovr"
+    };
+
+    // --- Añadir dentro de la clase PianoKey ---
+    private readonly HashSet<FingerPianoTouch> dedosPresionando = new HashSet<FingerPianoTouch>();
+    private float ultimoDisparoTiempo = -1f;
+    private const float COOLDOWN_TECLA = 0.08f;
+
+    public void RegistrarToqueDedo(FingerPianoTouch dedo)
+    {
+        if (Time.timeSinceLevelLoad < startupGracePeriod) return;
+        if (dedo == null || dedosPresionando.Contains(dedo)) return;
+
+        bool estabaLibre = (dedosPresionando.Count == 0 && interactoresActivos == 0);
+        dedosPresionando.Add(dedo);
+
+        if (estabaLibre && !isPressed && (Time.time - ultimoDisparoTiempo >= COOLDOWN_TECLA))
+        {
+            ultimoDisparoTiempo = Time.time;
+            OnPokeEnter();
+        }
+    }
+
+    public void LiberarToqueDedo(FingerPianoTouch dedo)
+    {
+        if (dedo == null) return;
+
+        if (dedosPresionando.Remove(dedo))
+        {
+            if (dedosPresionando.Count == 0 && interactoresActivos == 0 && isPressed)
+            {
+                OnPokeExit();
+            }
+        }
+    }
 
     void Awake()
     {
@@ -74,6 +132,7 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             todasLasTeclas.Add(this);
 
         ExtraerNotaYOctavaInicial();
+        AsegurarFisicasTecla();
     }
 
     void OnDestroy()
@@ -85,14 +144,67 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         audioSource          = GetComponent<AudioSource>();
         rb                   = GetComponent<Rigidbody>();
+        boxCollider          = GetComponent<BoxCollider>();
         restLocalPosition    = transform.localPosition;
         pressedLocalPosition = restLocalPosition - new Vector3(0, pressDepth, 0);
 
         int octavaBase = (PianoManager.Instance != null) ? PianoManager.Instance.octavaBaseActual : 3;
         ReconfigurarOctava(octavaBase);
 
+        AsegurarFisicasTecla();
+        IgnorarColisionesEntreTeclas();
         ConfigurarInteraccionVR();
     }
+
+    /// <summary>
+    /// Garantiza que la tecla tenga un BoxCollider como Trigger y un Rigidbody cinemático.
+    /// </summary>
+    public void AsegurarFisicasTecla()
+    {
+        // 1. BoxCollider marcado como Is Trigger
+        if (boxCollider == null)
+            boxCollider = GetComponent<BoxCollider>();
+        if (boxCollider == null)
+            boxCollider = gameObject.AddComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
+
+        // 2. Rigidbody marcado como Is Kinematic y sin gravedad
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+        if (rb == null)
+            rb = gameObject.AddComponent<Rigidbody>();
+
+        rb.isKinematic            = true;
+        rb.useGravity             = false;
+        rb.interpolation          = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        rb.constraints            = RigidbodyConstraints.FreezeAll;
+
+        // Capa Teclas (capa 6)
+        gameObject.layer = 6;
+    }
+
+    private void IgnorarColisionesEntreTeclas()
+    {
+        Collider myCol = GetComponent<Collider>();
+        if (myCol == null) return;
+
+        foreach (var otherKey in todasLasTeclas)
+        {
+            if (otherKey != null && otherKey != this)
+            {
+                Collider otherCol = otherKey.GetComponent<Collider>();
+                if (otherCol != null)
+                {
+                    Physics.IgnoreCollision(myCol, otherCol, true);
+                }
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Interacción por Rayo / Puntero (XR Ray Interactor & XR Simple Interactable)
+    // ─────────────────────────────────────────────────────────────────────────
 
     private void ConfigurarInteraccionVR()
     {
@@ -104,39 +216,350 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
         if (simpleInteractable != null)
         {
-            // Disparo/Gatillo de XR Ray Interactor o selección de XR Direct Interactor
+            // Aceptar todas las capas de interacción
+            simpleInteractable.interactionLayers = ~0;
+
+            // Asegurar que el interactable incluya el BoxCollider de la tecla
+            Collider col = GetComponent<Collider>();
+            if (col != null && !simpleInteractable.colliders.Contains(col))
+            {
+                simpleInteractable.colliders.Clear();
+                simpleInteractable.colliders.Add(col);
+            }
+
+            // Limpiar eventos anteriores para evitar llamadas duplicadas
+            simpleInteractable.selectEntered.RemoveAllListeners();
+            simpleInteractable.selectExited.RemoveAllListeners();
+            simpleInteractable.hoverEntered.RemoveAllListeners();
+            simpleInteractable.hoverExited.RemoveAllListeners();
+
+            // Interacción por Raycast de Controles:
+            // Al apuntar el raycast de un control hacia una tecla y presionar el gatillo (Select/Activate),
+            // debe tocar exactamente esa única tecla apuntada y soltarla al soltar el gatillo o salir de la tecla.
             simpleInteractable.selectEntered.AddListener(args =>
             {
-                string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Interactor";
-                Debug.Log($"[PianoKey] [VR SelectEntered] Tecla '{nombreNotaCompleto}' presionada por '{interactor}'");
-                OnPokeEnter();
+                string interactorName = args.interactorObject != null ? args.interactorObject.transform.name : "XR Ray Interactor";
+                Debug.Log($"[PianoKey] [Ray Select (Gatillo)] Tecla '{nombreNotaCompleto}' activada por '{interactorName}'");
+                RegistrarEntradaInteractuador();
             });
 
             simpleInteractable.selectExited.AddListener(args =>
             {
-                string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Interactor";
-                Debug.Log($"[PianoKey] [VR SelectExited] Tecla '{nombreNotaCompleto}' liberada por '{interactor}'");
-                OnPokeExit();
+                string interactorName = args.interactorObject != null ? args.interactorObject.transform.name : "XR Ray Interactor";
+                Debug.Log($"[PianoKey] [Ray Select Soltado] Tecla '{nombreNotaCompleto}' liberada por '{interactorName}'");
+                RegistrarSalidaInteractuador();
             });
 
-            // Contacto de XRPokeInteractor o toque directo
-            simpleInteractable.hoverEntered.AddListener(args =>
-            {
-                if (args.interactorObject is XRPokeInteractor || args.interactorObject is XRDirectInteractor)
-                {
-                    string interactor = args.interactorObject != null ? args.interactorObject.transform.name : "VR Touch";
-                    Debug.Log($"[PianoKey] [VR Poke/Direct Touch] Tecla '{nombreNotaCompleto}' tocada por '{interactor}'");
-                    OnPokeEnter();
-                }
-            });
-
+            // Si el rayo sale de la tecla mientras se mantenía presionado el gatillo, liberar la tecla
             simpleInteractable.hoverExited.AddListener(args =>
             {
-                if (args.interactorObject is XRPokeInteractor || args.interactorObject is XRDirectInteractor)
+                if (simpleInteractable.isSelected)
                 {
-                    OnPokeExit();
+                    Debug.Log($"[PianoKey] [Ray Salió con Gatillo Presionado] Tecla '{nombreNotaCompleto}' liberada");
+                    RegistrarSalidaInteractuador();
                 }
             });
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // EventSystem Ray Hover (UI / TrackedDeviceGraphicRaycaster / PhysicsRaycaster)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // El rayo entra a la tecla (hover visual). NO suena hasta presionar el gatillo / clic.
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // Si el puntero tenía la tecla presionada (gatillo/clic) y sale de la tecla, soltarla
+        if (eventData.dragging || (eventData.pointerPress != null && eventData.pointerPress == gameObject))
+        {
+            RegistrarSalidaInteractuador();
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log($"[PianoKey] [OnPointerDown (Gatillo/Clic)] Tecla '{nombreNotaCompleto}' presionada");
+        RegistrarEntradaInteractuador();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log($"[PianoKey] [OnPointerUp] Tecla '{nombreNotaCompleto}' liberada");
+        RegistrarSalidaInteractuador();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Detección Física de Hand Tracking y Dedos (OnTriggerEnter / OnTriggerExit)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /*private void OnTriggerEnter(Collider other)
+    {
+        if (other == null) return;
+
+        // 1. Protección inicial: ignorar colisiones con el propio chasis del piano (transform.parent)
+        // para evitar que las teclas se presionen solas al dar Play.
+        if (transform.parent != null && (other.transform == transform.parent || other.transform.IsChildOf(transform.parent)))
+            return;
+
+        // 2. Ignorar colisiones con otras teclas o notas que caen
+        if (other.GetComponentInParent<PianoKey>() != null) return;
+        if (other.GetComponentInParent<NotaMovimiento>() != null) return;
+
+        // 3. Protección de inicio: ignorar durante los primeros instantes de arranque
+        if (Time.timeSinceLevelLoad < startupGracePeriod) return;
+
+        // 4. Validación de colisionadores de manos y dedos de Meta Quest
+        if (EsColisionadorVRValido(other))
+        {
+            Debug.Log($"[PianoKey] [OnTriggerEnter] Tecla '{nombreNotaCompleto}' tocada por dedo/mano '{other.name}' ({other.GetType().Name})");
+            RegistrarEntradaInteractuador();
+        }
+    }*/
+
+    /*private void OnTriggerExit(Collider other)
+    {
+        if (other == null) return;
+
+        if (transform.parent != null && (other.transform == transform.parent || other.transform.IsChildOf(transform.parent)))
+            return;
+
+        if (other.GetComponentInParent<PianoKey>() != null) return;
+
+        if (EsColisionadorVRValido(other))
+        {
+            Debug.Log($"[PianoKey] [OnTriggerExit] Dedo/mano '{other.name}' salió de la tecla '{nombreNotaCompleto}'");
+            RegistrarSalidaInteractuador();
+        }
+    }*/
+
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        if (collision != null && collision.collider != null)
+        {
+            OnTriggerEnter(collision.collider);
+        }
+    }*/
+
+    /*private void OnCollisionExit(Collision collision)
+    {
+        if (collision != null && collision.collider != null)
+        {
+            OnTriggerExit(collision.collider);
+        }
+    }*/
+
+    /// <summary>
+    /// Valida si el colisionador entrante corresponde a las cápsulas/articulaciones de los dedos
+    /// generadas por el SDK de Meta (Hand Tracking).
+    /// EXCLUYE expresamente colisionadores de mandos físicos para que no toquen teclas por error físico.
+    /// </summary>
+    private bool EsColisionadorVRValido(Collider col)
+    {
+        if (col == null) return false;
+
+        // Protección contra el propio chasis del piano o padres fijos
+        if (transform.parent != null && (col.transform == transform.parent || col.transform.IsChildOf(transform.parent)))
+            return false;
+
+        // Ignorar si es otra tecla del piano o nota
+        if (col.GetComponentInParent<PianoKey>() != null) return false;
+        if (col.GetComponentInParent<NotaMovimiento>() != null) return false;
+
+        // Descartar objetos estáticos de entorno
+        if (col.gameObject.isStatic) return false;
+
+        string colName = col.name.ToLower();
+
+        // EXCLUSIÓN ESTRICTA: Los mandos/controles físicos NUNCA deben tocar teclas por choque físico (solo por raycast)
+        if (colName.Contains("controller") || colName.Contains("mando") || colName.Contains("ray") || colName.Contains("teleport"))
+        {
+            return false;
+        }
+        if (col.transform.parent != null)
+        {
+            string parentName = col.transform.parent.name.ToLower();
+            if (parentName.Contains("controller") || parentName.Contains("mando") || parentName.Contains("teleport"))
+            {
+                return false;
+            }
+        }
+
+        if (colName.Contains("piso") || colName.Contains("floor") || colName.Contains("stand") ||
+            colName.Contains("synthesizer") || colName.Contains("piano") || colName.Contains("table") ||
+            colName.Contains("mesa") || colName.Contains("wall") || colName.Contains("ceiling") ||
+            colName.Contains("room") || colName.Contains("chassis"))
+        {
+            return false;
+        }
+
+        // 1. Reconocer componentes de tipo CapsuleCollider o SphereCollider (articulaciones de dedos en Meta XR)
+        if (col is CapsuleCollider || col is SphereCollider)
+        {
+            return true;
+        }
+
+        // 2. Reconocer colisionadores dinámicos que tengan Rigidbody (kinemático o dinámico)
+        // El SDK de Meta asocia Rigidbodys kinemáticos a las cápsulas o articulaciones de las manos
+        if (col.attachedRigidbody != null)
+        {
+            return true;
+        }
+
+        // 3. Reconocer componentes de XR Hands o Interactors en la jerarquía
+        if (col.GetComponentInParent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInteractor>() != null)
+            return true;
+
+        // 4. Reconocer por tags seguros (sin excepción si el tag no está registrado)
+        string colTag = col.gameObject.tag;
+        if (colTag == "PlayerHand" || colTag == "PlayerFinger" || colTag == "Hand")
+            return true;
+
+        if (col.transform.parent != null)
+        {
+            string parentTag = col.transform.parent.gameObject.tag;
+            if (parentTag == "PlayerHand" || parentTag == "PlayerFinger" || parentTag == "Hand")
+                return true;
+        }
+
+        // 5. Validación por palabras clave en el nombre del colisionador
+        for (int i = 0; i < PalabrasClaveVR.Length; i++)
+        {
+            if (colName.Contains(PalabrasClaveVR[i]))
+                return true;
+        }
+
+        // 6. Validación por palabras clave en el nombre del Transform padre
+        if (col.transform.parent != null)
+        {
+            string parentName = col.transform.parent.name.ToLower();
+            for (int i = 0; i < PalabrasClaveVR.Length; i++)
+            {
+                if (parentName.Contains(PalabrasClaveVR[i]))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Control Centralizado de Activación y Reposo
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private void RegistrarEntradaInteractuador()
+    {
+        if (Time.timeSinceLevelLoad < startupGracePeriod) return;
+
+        interactoresActivos++;
+
+        if (!isPressed)
+        {
+            OnPokeEnter();
+        }
+    }
+
+    private void RegistrarSalidaInteractuador()
+    {
+        interactoresActivos = Mathf.Max(0, interactoresActivos - 1);
+
+        if (interactoresActivos == 0 && isPressed)
+        {
+            OnPokeExit();
+        }
+    }
+
+    public void OnPokeEnter()
+    {
+        isPressed = true;
+        Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada}");
+
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+
+        if (audioSource != null)
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+
+            audioSource.time = 0f;
+            audioSource.Play();
+        }
+
+        // Notifica interacción para silenciar la música ambiental
+        if (AmbientAudioManager.Instance != null)
+        {
+            AmbientAudioManager.Instance.NotificarTeclaTocada();
+        }
+
+        // Instancia el Pop-up flotante en 3D
+        if (mostrarPopUpNota && prefabPopUpNota != null)
+        {
+            Vector3 posicionSpawn = transform.position + new Vector3(0, 0.08f, 0);
+            GameObject popUpObj = Instantiate(prefabPopUpNota, posicionSpawn, Quaternion.identity);
+            EfectoPopUpNota popupScript = popUpObj.GetComponent<EfectoPopUpNota>();
+            if (popupScript != null)
+            {
+                popupScript.Inicializar(nombreNotaCompleto);
+            }
+        }
+
+        ApplyEmission(Color.black, 0f);
+
+        EvaluarAciertoNota();
+    }
+
+    public void OnPokeExit()
+    {
+        isPressed = false;
+        Debug.Log($"[PianoKey] Reposo de tecla: '{nombreNotaCompleto}' ({gameObject.name})");
+    }
+
+    private void EvaluarAciertoNota()
+    {
+        NotaMovimiento notaCercana = null;
+        float menorDistanciaY = float.MaxValue;
+
+        // Recorre las notas activas en pantalla
+        foreach (var nota in notasEnEscena)
+        {
+            if (nota != null && nota.targetKey == this)
+            {
+                float yImpactoIdeal = transform.position.y;
+                float diferenciaDistancia = Mathf.Abs(nota.transform.position.y - yImpactoIdeal);
+
+                // Evalúa si la nota está dentro del margen de tolerancia vertical
+                if (diferenciaDistancia <= rangoToleranciaHit && diferenciaDistancia < menorDistanciaY)
+                {
+                    menorDistanciaY = diferenciaDistancia;
+                    notaCercana = nota;
+                }
+            }
+        }
+
+        if (notaCercana != null)
+        {
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.RegistrarAcierto();
+                Debug.Log($"[PianoKey] ¡Acierto registrado en {nombreNotaCompleto}! Precisión actual: {ScoreManager.Instance.ObtenerPorcentajePrecision():F1}%");
+            }
+
+            // Remover de la lista global y destruir la nota acertada
+            notasEnEscena.Remove(notaCercana);
+            Destroy(notaCercana.gameObject);
+        }
+        else
+        {
+            Debug.Log($"[PianoKey] Se presionó {nombreNotaCompleto} pero no había ninguna nota dentro del rango (Tolerancia: {rangoToleranciaHit}m).");
         }
     }
 
@@ -275,14 +698,14 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                         if (hit.transform == transform || hit.transform.IsChildOf(transform))
                         {
                             Debug.Log($"[PianoKey] [PC Mouse Click - New Input] Tecla '{nombreNotaCompleto}' presionada");
-                            OnPokeEnter();
+                            RegistrarEntradaInteractuador();
                         }
                     }
                 }
             }
-            else if (Mouse.current.leftButton.wasReleasedThisFrame && isPressed)
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
-                OnPokeExit();
+                RegistrarSalidaInteractuador();
             }
         }
 #elif ENABLE_LEGACY_INPUT_MANAGER
@@ -297,80 +720,18 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
                     if (hit.transform == transform || hit.transform.IsChildOf(transform))
                     {
                         Debug.Log($"[PianoKey] [PC Mouse Click - Legacy] Tecla '{nombreNotaCompleto}' presionada");
-                        OnPokeEnter();
+                        RegistrarEntradaInteractuador();
                     }
                 }
             }
         }
-        else if (Input.GetMouseButtonUp(0) && isPressed)
+        else if (Input.GetMouseButtonUp(0))
         {
-            OnPokeExit();
+            RegistrarSalidaInteractuador();
         }
 #endif
     }
 #endif
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        string modulo = eventData.pointerCurrentRaycast.module != null ? eventData.pointerCurrentRaycast.module.GetType().Name : "EventSystem";
-        Debug.Log($"[PianoKey] [PointerDown] Tecla '{nombreNotaCompleto}' presionada via {modulo}");
-        OnPokeEnter();
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log($"[PianoKey] [PointerUp] Tecla '{nombreNotaCompleto}' liberada");
-        OnPokeExit();
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        // Evento de clic para EventSystem
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (EsContactoFisicoValido(other))
-        {
-            Debug.Log($"[PianoKey] [TriggerEnter] Tecla '{nombreNotaCompleto}' activada por '{other.name}'");
-            OnPokeEnter();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (EsContactoFisicoValido(other))
-        {
-            OnPokeExit();
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (EsContactoFisicoValido(collision.collider))
-        {
-            Debug.Log($"[PianoKey] [CollisionEnter] Tecla '{nombreNotaCompleto}' activada por colisión con '{collision.collider.name}'");
-            OnPokeEnter();
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (EsContactoFisicoValido(collision.collider))
-        {
-            OnPokeExit();
-        }
-    }
-
-    private bool EsContactoFisicoValido(Collider col)
-    {
-        if (col == null) return false;
-        string n = col.name.ToLower();
-        return n.Contains("tip") || n.Contains("distal") || n.Contains("index") ||
-               n.Contains("middle") || n.Contains("ring") || n.Contains("pinky") ||
-               n.Contains("thumb") || n.Contains("poke") || n.Contains("controller") ||
-               n.Contains("hand");
-    }
 
     void LateUpdate()
     {
@@ -442,93 +803,6 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         keyRenderer.SetPropertyBlock(propBlock);
     }
 
-    public void OnPokeEnter()
-    {
-        isPressed = true;
-        Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada}");
-
-        if (audioSource == null) audioSource = GetComponent<AudioSource>();
-
-        if (audioSource != null)
-        {
-            if (audioSource.isPlaying)
-            {
-                audioSource.Stop();
-            }
-
-            audioSource.time = 0f;
-            audioSource.Play();
-        }
-
-        // Notifica interacción para silenciar la música ambiental
-        if (AmbientAudioManager.Instance != null)
-        {
-            AmbientAudioManager.Instance.NotificarTeclaTocada();
-        }
-
-        // Instancia el Pop-up flotante en 3D
-        if (mostrarPopUpNota && prefabPopUpNota != null)
-        {
-            Vector3 posicionSpawn = transform.position + new Vector3(0, 0.08f, 0);
-            GameObject popUpObj = Instantiate(prefabPopUpNota, posicionSpawn, Quaternion.identity);
-            EfectoPopUpNota popupScript = popUpObj.GetComponent<EfectoPopUpNota>();
-            if (popupScript != null)
-            {
-                popupScript.Inicializar(nombreNotaCompleto);
-            }
-        }
-
-        ApplyEmission(Color.black, 0f);
-
-        EvaluarAciertoNota();
-    }
-
-    public void OnPokeExit()
-    {
-        isPressed = false;
-        Debug.Log($"[PianoKey] Reposo de tecla: '{nombreNotaCompleto}' ({gameObject.name})");
-    }
-
-    private void EvaluarAciertoNota()
-    {
-        NotaMovimiento notaCercana = null;
-        float menorDistanciaY = float.MaxValue;
-
-        // Recorre las notas activas en pantalla
-        foreach (var nota in notasEnEscena)
-        {
-            if (nota != null && nota.targetKey == this)
-            {
-                float yImpactoIdeal = transform.position.y;
-                float diferenciaDistancia = Mathf.Abs(nota.transform.position.y - yImpactoIdeal);
-
-                // Evalúa si la nota está dentro del margen de tolerancia vertical
-                if (diferenciaDistancia <= rangoToleranciaHit && diferenciaDistancia < menorDistanciaY)
-                {
-                    menorDistanciaY = diferenciaDistancia;
-                    notaCercana = nota;
-                }
-            }
-        }
-
-        if (notaCercana != null)
-        {
-            if (ScoreManager.Instance != null)
-            {
-                ScoreManager.Instance.RegistrarAcierto();
-                Debug.Log($"[PianoKey] ¡Acierto registrado en {nombreNotaCompleto}! Precisión actual: {ScoreManager.Instance.ObtenerPorcentajePrecision():F1}%");
-            }
-
-            // Remover de la lista global y destruir la nota acertada
-            notasEnEscena.Remove(notaCercana);
-            Destroy(notaCercana.gameObject);
-        }
-        else
-        {
-            Debug.LogWarning($"[PianoKey] Se presionó {nombreNotaCompleto} pero no había ninguna nota dentro del rango (Tolerancia: {rangoToleranciaHit}m).");
-        }
-    }
-
     void FixedUpdate()
     {
         Vector3 targetLocal = isPressed ? pressedLocalPosition : restLocalPosition;
@@ -537,20 +811,27 @@ public class PianoKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             ? transform.parent.TransformPoint(targetLocal)
             : targetLocal;
 
-        rb.MovePosition(Vector3.Lerp(transform.position, targetWorld, Time.fixedDeltaTime * speed));
+        if (rb != null && !rb.isKinematic)
+        {
+            rb.MovePosition(Vector3.Lerp(transform.position, targetWorld, Time.fixedDeltaTime * speed));
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, targetWorld, Time.fixedDeltaTime * speed);
+        }
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
     void OnMouseDown()
     {
         Debug.Log($"[PianoKey] [Legacy OnMouseDown] Tecla '{nombreNotaCompleto}' presionada");
-        OnPokeEnter();
+        RegistrarEntradaInteractuador();
     }
 
     void OnMouseUp()
     {
         Debug.Log($"[PianoKey] [Legacy OnMouseUp] Tecla '{nombreNotaCompleto}' liberada");
-        OnPokeExit();
+        RegistrarSalidaInteractuador();
     }
 #endif
 }
