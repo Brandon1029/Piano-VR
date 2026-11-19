@@ -130,6 +130,11 @@ public class SongSelectionMenu : MonoBehaviour
                     Debug.Log($"[SongSelectionMenu] [UI] Canción seleccionada de la lista: '{song.songName}'");
                     SelectSong(song);
                 });
+
+                if (XRUIInteractionEnabler.Instance != null)
+                {
+                    XRUIInteractionEnabler.Instance.MejorarControlesEnJerarquia(itemObj.transform);
+                }
             }
 
             SelectSong(filtered[0]);
