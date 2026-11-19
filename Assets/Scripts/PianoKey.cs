@@ -91,37 +91,58 @@ public class PianoKey : MonoBehaviour,
         "wrist", "palm", "b_r_", "b_l_", "ovr"
     };
 
-    // --- Añadir dentro de la clase PianoKey ---
-    private readonly HashSet<FingerPianoTouch> dedosPresionando = new HashSet<FingerPianoTouch>();
-    private float ultimoDisparoTiempo = -1f;
-    private const float COOLDOWN_TECLA = 0.08f;
+    // ── Control centralizado de dedos (identificador único = Transform) ─────
+    // Comportamiento de clic de ratón: Down -> isPressed = true, Up -> isPressed = false.
+    // Sin cooldowns ni temporizadores: solo el contacto físico decide.
+    private readonly HashSet<Transform> dedosPresionando = new HashSet<Transform>();
 
-    public void RegistrarToqueDedo(FingerPianoTouch dedo)
+    /// <summary>
+    /// Intenta presionar la tecla con un dedo. Devuelve true solo si la tecla estaba
+    /// libre (ningún dedo ni interactor) y este dedo pasa a ser su dueño.
+    /// </summary>
+    public bool RegistrarToqueDedo(Transform dedo)
     {
-        if (Time.timeSinceLevelLoad < startupGracePeriod) return;
-        if (dedo == null || dedosPresionando.Contains(dedo)) return;
+        if (dedo == null) return false;
+        if (Time.timeSinceLevelLoad < startupGracePeriod) return false;
+        if (dedosPresionando.Contains(dedo)) return true; // ya es el dueño, no vuelve a sonar
 
-        bool estabaLibre = (dedosPresionando.Count == 0 && interactoresActivos == 0);
+        // Tecla ocupada (hundida, otro dedo o un interactor/rayo) -> rechazar
+        if (isPressed || dedosPresionando.Count > 0 || interactoresActivos > 0) return false;
+
         dedosPresionando.Add(dedo);
-
-        if (estabaLibre && !isPressed && (Time.time - ultimoDisparoTiempo >= COOLDOWN_TECLA))
-        {
-            ultimoDisparoTiempo = Time.time;
-            OnPokeEnter();
-        }
+        OnPokeEnter(); // isPressed = true
+        return true;
     }
 
-    public void LiberarToqueDedo(FingerPianoTouch dedo)
+    /// <summary>
+    /// Libera el dedo. Si ya no queda ningún dedo ni interactor, la tecla vuelve a reposo.
+    /// </summary>
+    public void LiberarToqueDedo(Transform dedo)
     {
         if (dedo == null) return;
 
-        if (dedosPresionando.Remove(dedo))
+        if (dedosPresionando.Remove(dedo) &&
+            dedosPresionando.Count == 0 && interactoresActivos == 0 && isPressed)
         {
-            if (dedosPresionando.Count == 0 && interactoresActivos == 0 && isPressed)
-            {
-                OnPokeExit();
-            }
+            OnPokeExit(); // isPressed = false
         }
+    }
+
+    /// <summary>
+    /// Comprobación de salida compartida por HandColliders y FingerPianoTouch:
+    /// el dedo sigue "dentro" si está a menos de 'radio' del collider de la tecla,
+    /// evaluado en su posición y en su posición desplazada pressDepth hacia abajo
+    /// (compensa el hundimiento de la tecla con el dedo quieto). No usa OnTriggerExit.
+    /// </summary>
+    public bool DedoDentroDeVolumen(Vector3 posicionDedo, float radio)
+    {
+        Collider col = boxCollider != null ? boxCollider : GetComponent<Collider>();
+        if (col == null) return false;
+
+        Vector3 posCompensada = posicionDedo + Vector3.down * pressDepth;
+
+        return Vector3.Distance(posicionDedo,  col.ClosestPoint(posicionDedo))  <= radio ||
+               Vector3.Distance(posCompensada, col.ClosestPoint(posCompensada)) <= radio;
     }
 
     void Awake()
@@ -478,6 +499,8 @@ public class PianoKey : MonoBehaviour,
 
     public void OnPokeEnter()
     {
+        // Una tecla hundida jamás vuelve a sonar mientras siga presionada
+        if (isPressed) return;
         isPressed = true;
         Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada}");
 

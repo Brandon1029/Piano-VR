@@ -1,22 +1,36 @@
 using UnityEngine;
 
+/// <summary>
+/// Toque de una punta de dedo sobre las teclas del piano.
+///
+/// • Identificador del dedo = este Transform (el mismo que usa HandColliders), por lo que
+///   aunque ambos sistemas vieran el mismo dedo, PianoKey nunca dispara dos veces.
+/// • Si hay un HandColliders activo en la escena, este componente NO dispara
+///   (evita doble detección); HandColliders es el controlador del rig.
+/// • Sin timers ni cooldowns: se libera solo cuando el dedo sale del volumen de la tecla
+///   (PianoKey.DedoDentroDeVolumen, compensado en Y por pressDepth). No usa OnTriggerExit.
+/// </summary>
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
 public class FingerPianoTouch : MonoBehaviour
 {
     [Header("Ajustes de Toque Único")]
-    [Tooltip("Radio de la yema del dedo (4 mm)")]
+    [Tooltip("Radio de la yema del dedo (mínimo 4 mm)")]
     public float radioYema = 0.004f;
 
-    [Tooltip("Cuánto debe subir el dedo (en metros) por encima del punto donde tocó la tecla para poder volver a tocar")]
-    public float alturaMinimaParaRearmar = 0.018f; // 1.8 cm hacia arriba
+    [Tooltip("Multiplicador del radio para considerar que el dedo salió de la tecla.")]
+    public float multiplicadorSalida = 1.6f;
+
+    [Tooltip("Si hay un HandColliders activo en la escena, este componente no dispara teclas.")]
+    public bool cederAHandColliders = true;
 
     private PianoKey teclaActiva = null;
-    private float yAlTocar = 0f;
-    private bool bloqueadoHastaLevantar = false;
+    private bool controladoPorHandColliders = false;
 
     private void Awake()
     {
+        if (radioYema < 0.004f) radioYema = 0.004f;
+
         SphereCollider col = GetComponent<SphereCollider>();
         col.isTrigger = true;
         col.radius = radioYema;
@@ -26,44 +40,47 @@ public class FingerPianoTouch : MonoBehaviour
         rb.useGravity = false;
     }
 
-    private void Update()
+    private void Start()
     {
-        if (!bloqueadoHastaLevantar) return;
-
-        // El dedo permanece BLOQUEADO (aunque la tecla baje y suba)
-        // hasta que levantes el dedo 1.8 cm por encima de donde hiciste el toque.
-        if (transform.position.y >= yAlTocar + alturaMinimaParaRearmar)
+        if (cederAHandColliders)
         {
-            LiberarTeclaActual();
+            HandColliders hc = FindAnyObjectByType<HandColliders>();
+            controladoPorHandColliders = hc != null && hc.isActiveAndEnabled;
+            if (controladoPorHandColliders)
+                Debug.Log($"[FingerPianoTouch] '{name}': HandColliders controla el rig, disparo propio desactivado.");
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si ya tocó una tecla y no has levantado el dedo, ignora TODO (ni repite ni toca vecinas)
-        if (bloqueadoHastaLevantar || teclaActiva != null) return;
+        if (controladoPorHandColliders) return;
+        if (teclaActiva != null) return; // 1 dedo = máximo 1 tecla
 
         PianoKey key = other.GetComponentInParent<PianoKey>();
-        if (key != null)
+        if (key != null && key.RegistrarToqueDedo(transform))
         {
             teclaActiva = key;
-            yAlTocar = transform.position.y;
-            bloqueadoHastaLevantar = true;
-            teclaActiva.RegistrarToqueDedo(this);
         }
     }
 
-    // NO usamos OnTriggerExit para desbloquear, porque al hundirse la tecla
-    // dispara OnTriggerExit falsos aunque no hayas movido el dedo.
+    private void FixedUpdate()
+    {
+        if (teclaActiva == null) return;
+
+        // Bloqueado mientras siga dentro del volumen compensado; solo se libera al salir.
+        if (!teclaActiva.DedoDentroDeVolumen(transform.position, radioYema * multiplicadorSalida))
+        {
+            LiberarTeclaActual();
+        }
+    }
 
     public void LiberarTeclaActual()
     {
         if (teclaActiva != null)
         {
-            teclaActiva.LiberarToqueDedo(this);
+            teclaActiva.LiberarToqueDedo(transform);
             teclaActiva = null;
         }
-        bloqueadoHastaLevantar = false;
     }
 
     private void OnDisable()
