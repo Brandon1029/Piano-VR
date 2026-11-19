@@ -5,17 +5,20 @@ using System.Collections.Generic;
 /// Detección táctil de las puntas de los dedos (Hand Tracking) sobre las teclas del piano.
 ///
 /// Comportamiento idéntico a un clic de ratón (Down -> true, Up -> false), SIN cooldowns:
-///   • Identificador único de cada dedo = su Transform (nunca t.name).
-///   • Un dedo con tecla activa NO busca otras teclas (1 dedo = máx. 1 tecla).
-///   • El dedo permanece bloqueado mientras siga dentro de un volumen de salida ampliado
-///     (detectionRadius * 1.6) evaluado en su posición y compensado hacia abajo por el
-///     hundimiento de la tecla (pressDepth). Solo al salir por completo se libera.
+///   • Agrupa nodos por dedo físico completo (mano + dedo, ej. L_Index, R_Thumb) mediante
+///     PianoKey.ObtenerIdDedoFisico, de modo que 'tip' y 'distal' del mismo dedo jamás
+///     actúen como dos dedos distintos.
+///   • Exclusividad estricta 1 dedo = 1 tecla: mientras un dedo físico tenga una tecla
+///     activa, bloquea por completo cualquier intento de activar teclas vecinas hasta que
+///     se retire del volumen de la tecla actual.
+///   • Radio de entrada preciso de yema (0.009 m forzado en Start) priorizando únicamente
+///     la tecla más cercana a la punta del dedo.
 /// </summary>
 public class HandColliders : MonoBehaviour
 {
     [Header("Configuración de Detección")]
-    [Tooltip("Radio de la esfera de detección en cada punta de dedo (metros).")]
-    public float detectionRadius = 0.02f;
+    [Tooltip("Radio de la esfera de detección en cada punta de dedo (metros). Se ajusta a 0.009 m en Start.")]
+    public float detectionRadius = 0.009f;
 
     [Tooltip("Multiplicador del radio para considerar que el dedo salió de la tecla.")]
     public float multiplicadorSalida = 1.6f;
@@ -27,17 +30,25 @@ public class HandColliders : MonoBehaviour
     [Tooltip("Tiempo en segundos tras cargar la escena durante el cual se ignoran toques automáticos.")]
     public float startupGracePeriod = 0.5f;
 
-    // Único estado: qué tecla tiene presionada cada dedo (clave = instancia Transform)
-    private readonly Dictionary<Transform, PianoKey> teclaActivaPorDedo = new Dictionary<Transform, PianoKey>();
+    private struct EstadoDedo
+    {
+        public Transform nodo;
+        public PianoKey  tecla;
+    }
+
+    // Estado por dedo físico completo (clave = "L_Index", "R_Middle", etc.)
+    private readonly Dictionary<string, EstadoDedo> dedosActivos = new Dictionary<string, EstadoDedo>();
 
     // Buffers reutilizables (sin asignaciones por frame)
-    private readonly List<Transform> bufferTransforms = new List<Transform>();
-    private readonly List<Transform> bufferLiberar    = new List<Transform>();
-    private readonly Collider[]      bufferColliders  = new Collider[16];
+    private readonly List<Transform>              bufferTransforms = new List<Transform>();
+    private readonly List<string>                 bufferLiberar    = new List<string>();
+    private readonly Dictionary<string, Transform> puntaPorDedo    = new Dictionary<string, Transform>();
+    private readonly Collider[]                   bufferColliders  = new Collider[16];
 
     void Start()
     {
-        if (detectionRadius < 0.005f) detectionRadius = 0.02f;
+        // Forzar radio preciso de yema (9 mm) para sobrescribir valores antiguos serializados en escena
+        detectionRadius = 0.009f;
 
         // Si teclasMask no está configurada, usar capa 6 (Teclas) y capa 0 (Default)
         if (teclasMask.value == 0) teclasMask = (1 << 6) | (1 << 0);
@@ -51,53 +62,74 @@ public class HandColliders : MonoBehaviour
 
         float radioSalida = detectionRadius * multiplicadorSalida;
 
-        // ── 1. Dedos que YA tienen tecla: solo comprobar si siguen dentro ──────
+        // ── 1. Dedos físicos que YA tienen tecla: comprobar solo si siguen dentro ─
+        // Ningún nodo de estos dedos puede tocar teclas vecinas hasta liberarse.
         bufferLiberar.Clear();
-        foreach (var kv in teclaActivaPorDedo)
+        foreach (var kv in dedosActivos)
         {
-            Transform dedo  = kv.Key;
-            PianoKey  tecla = kv.Value;
+            string    fingerId = kv.Key;
+            Transform dedo     = kv.Value.nodo;
+            PianoKey  tecla    = kv.Value.tecla;
 
-            // Dedo destruido / oculto (tracking perdido) o tecla destruida -> liberar
             if (dedo == null || !dedo.gameObject.activeInHierarchy || tecla == null)
             {
-                bufferLiberar.Add(dedo);
+                bufferLiberar.Add(fingerId);
                 continue;
             }
 
             if (!tecla.DedoDentroDeVolumen(dedo.position, radioSalida))
-                bufferLiberar.Add(dedo);
-            // Mientras siga dentro: bloqueado, no se hace nada (no vuelve a sonar).
+                bufferLiberar.Add(fingerId);
         }
 
-        foreach (Transform dedo in bufferLiberar)
+        foreach (string fingerId in bufferLiberar)
         {
-            if (teclaActivaPorDedo.TryGetValue(dedo, out PianoKey tecla))
+            if (dedosActivos.TryGetValue(fingerId, out EstadoDedo estado))
             {
-                if (tecla != null)
+                if (estado.tecla != null)
                 {
-                    tecla.LiberarToqueDedo(dedo);
-                    Debug.Log($"[HandColliders] UP '{tecla.nombreNotaCompleto}' (dedo salió del volumen)");
+                    estado.tecla.LiberarToqueDedo(estado.nodo);
+                    Debug.Log($"[HandColliders] UP '{estado.tecla.nombreNotaCompleto}' dedo='{fingerId}'");
                 }
-                teclaActivaPorDedo.Remove(dedo);
+                dedosActivos.Remove(fingerId);
             }
         }
 
-        // ── 2. Dedos libres: buscar UNA sola tecla dentro de detectionRadius ───
+        // ── 2. Agrupar nodos libres por dedo físico (1 sola punta por dedo) ───────
         bufferTransforms.Clear();
         GetComponentsInChildren(false, bufferTransforms);
+        puntaPorDedo.Clear();
 
-        foreach (Transform dedo in bufferTransforms)
+        foreach (Transform t in bufferTransforms)
         {
-            if (dedo == null) continue;
-            if (teclaActivaPorDedo.ContainsKey(dedo)) continue; // ya bloqueado con su tecla
-            if (!EsPuntaDeDedo(dedo)) continue;
+            if (t == null) continue;
+            if (!EsNodoDeDedoValido(t, out bool esTip)) continue;
+
+            string fingerId = PianoKey.ObtenerIdDedoFisico(t);
+
+            // Si este dedo físico ya está presionando una tecla, bloquear todos sus nodos (tip, distal, etc.)
+            if (dedosActivos.ContainsKey(fingerId)) continue;
+
+            // Priorizar siempre el nodo 'tip' sobre 'distal' para que cada dedo físico tenga 1 solo punto
+            if (!puntaPorDedo.TryGetValue(fingerId, out Transform existente) ||
+                (esTip && !EsNombreTip(existente.name)))
+            {
+                puntaPorDedo[fingerId] = t;
+            }
+        }
+
+        // ── 3. Dedos físicos libres: buscar SOLO la tecla más cercana ─────────────
+        foreach (var kv in puntaPorDedo)
+        {
+            string    fingerId = kv.Key;
+            Transform dedo     = kv.Value;
 
             int n = Physics.OverlapSphereNonAlloc(dedo.position, detectionRadius, bufferColliders,
                                                   teclasMask, QueryTriggerInteraction.Collide);
 
-            PianoKey keyCercana = null;
-            float    distMin    = float.MaxValue;
+            PianoKey keyCercana     = null;
+            float    distSuperficie = float.MaxValue;
+            float    distCentroSqr  = float.MaxValue;
+
             for (int i = 0; i < n; i++)
             {
                 Collider col = bufferColliders[i];
@@ -106,44 +138,67 @@ public class HandColliders : MonoBehaviour
                 PianoKey k = col.GetComponentInParent<PianoKey>();
                 if (k == null) continue;
 
-                float d = Vector3.Distance(dedo.position, col.ClosestPoint(dedo.position));
-                if (d < distMin) { distMin = d; keyCercana = k; }
+                float dSup = Vector3.Distance(dedo.position, col.ClosestPoint(dedo.position));
+                float dCen = (dedo.position - col.bounds.center).sqrMagnitude;
+
+                // Priorizar la tecla más cercana en superficie; en empate (ej. dentro de 2 colliders), la de centro más cercano
+                if (dSup < distSuperficie - 0.0005f ||
+                    (Mathf.Abs(dSup - distSuperficie) <= 0.0005f && dCen < distCentroSqr))
+                {
+                    distSuperficie = dSup;
+                    distCentroSqr  = dCen;
+                    keyCercana     = k;
+                }
             }
 
             if (keyCercana != null && keyCercana.RegistrarToqueDedo(dedo))
             {
-                teclaActivaPorDedo[dedo] = keyCercana;
-                Debug.Log($"[HandColliders] DOWN '{keyCercana.nombreNotaCompleto}' por '{dedo.name}'");
+                dedosActivos[fingerId] = new EstadoDedo { nodo = dedo, tecla = keyCercana };
+                Debug.Log($"[HandColliders] DOWN '{keyCercana.nombreNotaCompleto}' dedo='{fingerId}' ({dedo.name})");
             }
         }
     }
 
-    /// <summary>
-    /// Solo las PUNTAS (tip) de los dedos actúan como identificador de dedo.
-    /// Se excluyen huesos distales/poke/attach para que un mismo dedo físico no
-    /// aparezca como varios "dedos" distintos, y se excluyen mandos/rayos/teleport.
-    /// </summary>
-    private static bool EsPuntaDeDedo(Transform t)
+    private static bool EsNombreTip(string nombre)
     {
-        string n = t.name.ToLower();
+        return nombre != null && nombre.ToLowerInvariant().Contains("tip");
+    }
+
+    /// <summary>
+    /// Reconoce nodos de dedos (tip / distal / tag PlayerFinger) excluyendo mandos/rayos/teleport.
+    /// El agrupamiento por fingerId garantiza que 'tip' y 'distal' del mismo dedo nunca actúen por separado.
+    /// </summary>
+    private static bool EsNodoDeDedoValido(Transform t, out bool esTip)
+    {
+        esTip = false;
+        string n = t.name.ToLowerInvariant();
 
         if (n.Contains("controller") || n.Contains("mando") ||
             n.Contains("ray")        || n.Contains("teleport"))
             return false;
 
-        if (n.Contains("tip") &&
-            (n.Contains("index") || n.Contains("middle") || n.Contains("ring") ||
-             n.Contains("pinky") || n.Contains("little") || n.Contains("thumb")))
-            return true;
+        bool esDedo = n.Contains("index") || n.Contains("middle") || n.Contains("ring") ||
+                      n.Contains("pinky") || n.Contains("little") || n.Contains("thumb");
 
-        string tagStr = t.gameObject.tag;
-        return tagStr == "PlayerFinger";
+        if (esDedo && (n.Contains("tip") || n.Contains("distal")))
+        {
+            esTip = n.Contains("tip");
+            return true;
+        }
+
+        if (t.gameObject.tag == "PlayerFinger")
+        {
+            esTip = n.Contains("tip");
+            return true;
+        }
+
+        return false;
     }
 
     void OnDisable()
     {
-        foreach (var kv in teclaActivaPorDedo)
-            if (kv.Value != null) kv.Value.LiberarToqueDedo(kv.Key);
-        teclaActivaPorDedo.Clear();
+        foreach (var kv in dedosActivos)
+            if (kv.Value.tecla != null) kv.Value.tecla.LiberarToqueDedo(kv.Value.nodo);
+        dedosActivos.Clear();
     }
 }

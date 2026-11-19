@@ -617,7 +617,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &38379291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5098559829858595995, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -1817,7 +1818,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &163451800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +1915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &176504836
 GameObject:
   m_ObjectHideFlags: 0
@@ -4568,7 +4571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.694
+      value: 1.909
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5573,7 +5576,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &479215333
 GameObject:
   m_ObjectHideFlags: 0
@@ -9225,8 +9229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61a91195a22dd4caf82e75309d2eb955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandColliders
-  detectionRadius: 0.02
-  tiempoMinEntreNotas: 0.08
+  detectionRadius: 0.003
+  multiplicadorSalida: 1.6
   teclasMask:
     serializedVersion: 2
     m_Bits: 64
@@ -13546,7 +13550,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &1278406442 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2692449885117436821, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -16592,7 +16597,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &1467825821 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2971199665800551323, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -17539,7 +17545,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &1515851947 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5905037306365944454, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -18533,7 +18540,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &1611094165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8665695280369147062, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -18768,7 +18776,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &1629608898 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1655041371550637806, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -24783,7 +24792,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
-  alturaMinimaParaRearmar: 0.018
+  multiplicadorSalida: 1.6
+  cederAHandColliders: 1
 --- !u!1 &2007071191
 GameObject:
   m_ObjectHideFlags: 0

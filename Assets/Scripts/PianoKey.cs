@@ -19,9 +19,21 @@ public class PianoKey : MonoBehaviour,
     IPointerClickHandler
 {
     [Header("Física y Movimiento")]
-    public float pressDepth  = 0.008f;
-    public float pressSpeed  = 20f;
-    public float returnSpeed = 8f;
+    public float pressDepth     = 0.008f;
+    public float pressSpeed     = 38f;
+    public float returnSpeed    = 12f;
+    [Tooltip("Ángulo de inclinación local (grados) estilo bisagra trasera de piano real al presionar.")]
+    public float pressTiltAngle = 3.5f;
+
+    [Header("Feedback Visual de Impacto")]
+    [Tooltip("Color del destello breve al presionar la tecla (activo en Modo Libre y Modo Música).")]
+    [ColorUsage(true, true)]
+    public Color colorPulsoImpacto = new Color(0.35f, 0.85f, 1f, 1f);
+    [Tooltip("Duración en segundos del destello inicial al presionar.")]
+    public float duracionPulsoImpacto = 0.22f;
+    [Tooltip("Intensidad sutil de brillo mientras la tecla permanece hundida (0 a 1).")]
+    [Range(0f, 1f)]
+    public float intensidadSostenida = 0.30f;
 
     [Header("Protección al Iniciar la Escena")]
     [Tooltip("Tiempo en segundos tras cargar la escena donde se ignoran colisiones para evitar que las teclas se presionen solas al arrancar.")]
@@ -61,7 +73,10 @@ public class PianoKey : MonoBehaviour,
     BoxCollider boxCollider;
     Vector3     restLocalPosition;
     Vector3     pressedLocalPosition;
+    Quaternion  restLocalRotation;
+    Quaternion  pressedLocalRotation;
     public bool isPressed = false;
+    private float pulsoImpacto = 0f;
 
     Renderer keyRenderer;
     MaterialPropertyBlock propBlock;
@@ -129,6 +144,52 @@ public class PianoKey : MonoBehaviour,
     }
 
     /// <summary>
+    /// Devuelve un identificador canónico por dedo físico completo (mano + dedo),
+    /// de modo que todos los nodos del mismo dedo (tip, distal, etc.) compartan
+    /// el mismo ID y jamás actúen como dos dedos distintos.
+    /// </summary>
+    public static string ObtenerIdDedoFisico(Transform t)
+    {
+        if (t == null) return string.Empty;
+
+        string dedo = null;
+        string lado = null;
+
+        Transform actual = t;
+        int profundidad = 0;
+        while (actual != null && profundidad < 8)
+        {
+            string n = actual.name.ToLowerInvariant();
+
+            if (dedo == null)
+            {
+                if (n.Contains("thumb") || n.Contains("pulgar")) dedo = "Thumb";
+                else if (n.Contains("index") || n.Contains("indice")) dedo = "Index";
+                else if (n.Contains("middle") || n.Contains("medio")) dedo = "Middle";
+                else if (n.Contains("ring") || n.Contains("anular")) dedo = "Ring";
+                else if (n.Contains("pinky") || n.Contains("little") || n.Contains("menique")) dedo = "Pinky";
+            }
+
+            if (lado == null)
+            {
+                if (n.Contains("left") || n.StartsWith("l_") || n.Contains("_l_") || n.Contains("izq"))
+                    lado = "L";
+                else if (n.Contains("right") || n.StartsWith("r_") || n.Contains("_r_") || n.Contains("der"))
+                    lado = "R";
+            }
+
+            if (dedo != null && lado != null) break;
+            actual = actual.parent;
+            profundidad++;
+        }
+
+        if (dedo != null)
+            return (lado ?? "U") + "_" + dedo;
+
+        return "T_" + t.GetInstanceID();
+    }
+
+    /// <summary>
     /// Comprobación de salida compartida por HandColliders y FingerPianoTouch:
     /// el dedo sigue "dentro" si está a menos de 'radio' del collider de la tecla,
     /// evaluado en su posición y en su posición desplazada pressDepth hacia abajo
@@ -163,11 +224,19 @@ public class PianoKey : MonoBehaviour,
 
     void Start()
     {
-        audioSource          = GetComponent<AudioSource>();
-        rb                   = GetComponent<Rigidbody>();
-        boxCollider          = GetComponent<BoxCollider>();
+        audioSource = GetComponent<AudioSource>();
+        rb          = GetComponent<Rigidbody>();
+        boxCollider = GetComponent<BoxCollider>();
+
+        // Garantizar respuesta mecánica firme y natural incluso en teclas con valores antiguos serializados en escena
+        if (pressSpeed <= 20f)  pressSpeed  = 38f;
+        if (returnSpeed <= 8f)  returnSpeed = 12f;
+
         restLocalPosition    = transform.localPosition;
-        pressedLocalPosition = restLocalPosition - new Vector3(0, pressDepth, 0);
+        restLocalRotation    = transform.localRotation;
+        pressedLocalPosition = restLocalPosition - new Vector3(0f, pressDepth, 0f);
+        // Rotación ligera en el eje Z local (bisagra trasera: el frente de la tecla baja más que la parte trasera)
+        pressedLocalRotation = restLocalRotation * Quaternion.Euler(0f, 0f, pressTiltAngle);
 
         int octavaBase = (PianoManager.Instance != null) ? PianoManager.Instance.octavaBaseActual : 3;
         ReconfigurarOctava(octavaBase);
@@ -535,7 +604,9 @@ public class PianoKey : MonoBehaviour,
             }
         }
 
-        ApplyEmission(Color.black, 0f);
+        // Pulso visual inmediato al impacto (visible tanto en Modo Libre como en Modo Música)
+        pulsoImpacto = 1f;
+        ApplyEmission(colorPulsoImpacto, 1f);
 
         EvaluarAciertoNota();
     }
@@ -699,6 +770,12 @@ public class PianoKey : MonoBehaviour,
 
     void Update()
     {
+        if (pulsoImpacto > 0f)
+        {
+            float paso = duracionPulsoImpacto > 0.001f ? Time.deltaTime / duracionPulsoImpacto : 1f;
+            pulsoImpacto = Mathf.Max(0f, pulsoImpacto - paso);
+        }
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         ActualizarMouseEditor();
 #endif
@@ -770,7 +847,12 @@ public class PianoKey : MonoBehaviour,
 
         foreach (var key in todasLasTeclas)
         {
-            key.ApplyEmission(Color.black, 0f);
+            if (key == null) continue;
+            float intensidadPulso = Mathf.Max(key.pulsoImpacto, key.isPressed ? key.intensidadSostenida : 0f);
+            if (intensidadPulso > 0f)
+                key.ApplyEmission(key.colorPulsoImpacto, intensidadPulso);
+            else
+                key.ApplyEmission(Color.black, 0f);
         }
 
         if (notasEnEscena.Count == 0) return;
@@ -810,7 +892,11 @@ public class PianoKey : MonoBehaviour,
 
             float progreso = nota.ObtenerProgreso();
 
-            key.ApplyEmission(baseColor, progreso);
+            // Priorizar el destello breve de impacto sobre el brillo guía; al desvanecerse vuelve el guía
+            if (key.pulsoImpacto <= 0f)
+            {
+                key.ApplyEmission(baseColor, progreso);
+            }
         }
     }
 
@@ -828,19 +914,22 @@ public class PianoKey : MonoBehaviour,
 
     void FixedUpdate()
     {
-        Vector3 targetLocal = isPressed ? pressedLocalPosition : restLocalPosition;
-        float   speed       = isPressed ? pressSpeed : returnSpeed;
-        Vector3 targetWorld = transform.parent != null
-            ? transform.parent.TransformPoint(targetLocal)
-            : targetLocal;
+        Vector3    targetLocalPos = isPressed ? pressedLocalPosition : restLocalPosition;
+        Quaternion targetLocalRot = isPressed ? pressedLocalRotation : restLocalRotation;
+        float      speed          = isPressed ? pressSpeed : returnSpeed;
+        float      t              = 1f - Mathf.Exp(-speed * Time.fixedDeltaTime);
 
         if (rb != null && !rb.isKinematic)
         {
-            rb.MovePosition(Vector3.Lerp(transform.position, targetWorld, Time.fixedDeltaTime * speed));
+            Vector3    targetWorldPos = transform.parent != null ? transform.parent.TransformPoint(targetLocalPos) : targetLocalPos;
+            Quaternion targetWorldRot = transform.parent != null ? transform.parent.rotation * targetLocalRot : targetLocalRot;
+            rb.MovePosition(Vector3.Lerp(transform.position, targetWorldPos, t));
+            rb.MoveRotation(Quaternion.Slerp(transform.rotation, targetWorldRot, t));
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, targetWorld, Time.fixedDeltaTime * speed);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetLocalPos, t);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRot, t);
         }
     }
 
