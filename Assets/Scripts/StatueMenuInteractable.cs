@@ -117,14 +117,30 @@ namespace PianoVR.MainMenu
         [Tooltip("Velocidad de transición hacia la posición de hover.")]
         public float hoverTransitionSpeed = 6f;
 
+        [Header("Feedback Visual en Hover")]
+        [Tooltip("Multiplicador de escala suave al apuntar al busto (ej. 1.06 = +6%).")]
+        public float hoverScaleMultiplier = 1.06f;
+
+        [Tooltip("Color de brillo/emisión sutil al hacer hover sobre el busto.")]
+        [ColorUsage(true, true)]
+        public Color hoverEmissionColor = new Color(0.20f, 0.75f, 1f, 1f);
+
+        [Tooltip("Intensidad de la emisión en hover.")]
+        public float hoverEmissionIntensity = 0.65f;
+
         [Header("Protección de Inicio")]
         [Tooltip("Segundos iniciales tras cargar la escena donde se ignoran toques directos para evitar activaciones en falso.")]
         public float startupGracePeriod = 0.6f;
 
         private Vector3 _basePosition;
+        private Vector3 _baseScale;
         private bool _isHovered = false;
         private float _currentRaise = 0f;
+        private float _currentEmission = 0f;
         private bool _hasTriggered = false;
+        private Renderer[] _bustRenderers;
+        private MaterialPropertyBlock _propBlock;
+        private static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
 
 #if UNITY_XR_INTERACTION_TOOLKIT
         private XRSimpleInteractable _xrInteractable;
@@ -133,6 +149,9 @@ namespace PianoVR.MainMenu
         private void Awake()
         {
             _basePosition = transform.position;
+            _baseScale = transform.localScale;
+            _bustRenderers = GetComponentsInChildren<Renderer>(true);
+            _propBlock = new MaterialPropertyBlock();
 
             var col = GetComponent<Collider>();
             if (col != null) col.isTrigger = true;
@@ -193,9 +212,34 @@ namespace PianoVR.MainMenu
                 _basePosition.y + sinOffset + _currentRaise,
                 _basePosition.z
             );
+
+            // Escala suave (~1.06x) y pulso de emisión en hover
+            Vector3 targetScale = _isHovered ? _baseScale * hoverScaleMultiplier : _baseScale;
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * hoverTransitionSpeed);
+
+            float targetEmission = _isHovered ? hoverEmissionIntensity : 0f;
+            if (Mathf.Abs(_currentEmission - targetEmission) > 0.002f)
+            {
+                _currentEmission = Mathf.Lerp(_currentEmission, targetEmission, Time.deltaTime * (hoverTransitionSpeed * 1.5f));
+                AplicarEmisionBusto(_currentEmission);
+            }
         }
 
-        private void SetHovered(bool hovered)
+        private void AplicarEmisionBusto(float intensidad)
+        {
+            if (_bustRenderers == null || _propBlock == null) return;
+            Color emision = hoverEmissionColor * intensidad;
+            for (int i = 0; i < _bustRenderers.Length; i++)
+            {
+                Renderer r = _bustRenderers[i];
+                if (r == null || r is CanvasRenderer) continue;
+                r.GetPropertyBlock(_propBlock);
+                _propBlock.SetColor(EmissionColorProp, emision);
+                r.SetPropertyBlock(_propBlock);
+            }
+        }
+
+        public void SetHovered(bool hovered)
         {
             if (_isHovered == hovered) return;
 

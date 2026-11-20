@@ -9,6 +9,7 @@ using UnityEngine.XR.Management;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using Unity.XR.CoreUtils;
+using PianoVR.MainMenu;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem.UI;
 #endif
@@ -55,6 +56,8 @@ public class XRUIInteractionEnabler : MonoBehaviour
     private XROrigin xrOrigin;
     private Camera camaraActiva;
     private readonly List<Canvas> canvasesWorldSpace = new List<Canvas>();
+    private readonly List<StatueMenuInteractable> bustosEnEscena = new List<StatueMenuInteractable>();
+    private readonly RaycastHit[] bufferRaycast3D = new RaycastHit[24];
 
     private HandPinchPointer manoIzquierda;
     private HandPinchPointer manoDerecha;
@@ -78,6 +81,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
         public MaterialPropertyBlock reticulaProps = new MaterialPropertyBlock();
 
         public Selectable hoverActual;
+        public StatueMenuInteractable bustoHoverActual;
         public Slider sliderArrastrado;
         public Canvas canvasSlider;
         public PointerEventData pointerData;
@@ -115,6 +119,17 @@ public class XRUIInteractionEnabler : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ConfigurarEscenaActual();
+        StartCoroutine(ReconfigurarTrasCarga());
+    }
+
+    /// <summary>
+    /// Re-vincula cámara, XR Origin, huesos de manos y Canvas un frame después de cargar
+    /// la escena para cubrir objetos inicializados en Start() durante transiciones entre escenas.
+    /// </summary>
+    private IEnumerator ReconfigurarTrasCarga()
+    {
+        yield return null;
+        ConfigurarEscenaActual();
     }
 
     public void ConfigurarEscenaActual()
@@ -126,9 +141,26 @@ public class XRUIInteractionEnabler : MonoBehaviour
         ConfigurarEventSystem();
         DesactivarProximidadUIEnManos();
         ConfigurarCanvases();
+        DetectarBustosEnEscena();
         ConfigurarCamara();
         AsegurarPunterosDeMano();
         LimpiarEstadoPunteros();
+
+        Debug.Log($"[XRUIInteractionEnabler] Escena '{SceneManager.GetActiveScene().name}' configurada: " +
+                  $"{canvasesWorldSpace.Count} Canvas WorldSpace, {bustosEnEscena.Count} bustos 3D, cámara='{(camaraActiva != null ? camaraActiva.name : "null")}', rayo+pellizco activo.");
+    }
+
+    private void DetectarBustosEnEscena()
+    {
+        bustosEnEscena.Clear();
+        StatueMenuInteractable[] bustos = FindObjectsByType<StatueMenuInteractable>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < bustos.Length; i++)
+        {
+            if (bustos[i] != null)
+            {
+                bustosEnEscena.Add(bustos[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -511,6 +543,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
     {
         if (ptr == null) return;
         LimpiarHover(ptr);
+        LimpiarHoverBusto(ptr);
         ptr.sliderArrastrado = null;
         ptr.canvasSlider = null;
         ptr.estaPellizcando = false;
@@ -557,7 +590,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
     private void Update()
     {
-        if (canvasesWorldSpace.Count == 0) return;
+        if (canvasesWorldSpace.Count == 0 && bustosEnEscena.Count == 0) return;
 
         if (handSubsystem == null)
         {
@@ -575,7 +608,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
         if (!ObtenerPosicionesPuntas(ptr, cam, out Vector3 posIndice, out Vector3 posPulgar, out Vector3 dirMano))
         {
-            if (ptr.lineaRayo.enabled || ptr.hoverActual != null || ptr.sliderArrastrado != null)
+            if (ptr.lineaRayo.enabled || ptr.hoverActual != null || ptr.bustoHoverActual != null || ptr.sliderArrastrado != null)
             {
                 ResetearPuntero(ptr);
             }
@@ -639,8 +672,40 @@ public class XRUIInteractionEnabler : MonoBehaviour
             }
         }
 
-        // 4. Buscar impacto del rayo sobre los Canvas World Space activos
-        if (!BuscarImpactoCanvas(rayo, out Canvas canvasHit, out Vector3 puntoImpacto))
+        // 4. Evaluar impacto contra Canvas World Space y contra Bustos 3D (MainMenu_VR), priorizando el más cercano
+        bool hitCanvas = BuscarImpactoCanvas(rayo, out Canvas canvasHit, out Vector3 puntoImpacto, out float distCanvas);
+        StatueMenuInteractable bustoHit = null;
+        Vector3 puntoBusto = Vector3.zero;
+        Vector3 normalBusto = -rayo.direction;
+        float distBusto = float.MaxValue;
+        bool hitBusto = bustosEnEscena.Count > 0 &&
+                        BuscarImpactoBusto(rayo, out bustoHit, out puntoBusto, out normalBusto, out distBusto);
+
+        if (hitBusto && (!hitCanvas || distBusto < distCanvas))
+        {
+            LimpiarHover(ptr);
+
+            if (bustoHit != ptr.bustoHoverActual)
+            {
+                LimpiarHoverBusto(ptr);
+                ptr.bustoHoverActual = bustoHit;
+                ptr.bustoHoverActual.SetHovered(true);
+            }
+
+            if (pinchDown && ptr.bustoHoverActual != null)
+            {
+                Debug.Log($"[XRUIInteractionEnabler] Pellizco sobre busto 3D '{ptr.bustoHoverActual.name}' -> ExecuteAction()");
+                ptr.bustoHoverActual.ExecuteAction();
+            }
+
+            Color colorBusto = ptr.estaPellizcando ? colorRayoPellizco : colorRayoHover;
+            ActualizarVisualesRayo(ptr, rayo.origin, puntoBusto, -normalBusto, colorBusto, ptr.estaPellizcando);
+            return;
+        }
+
+        LimpiarHoverBusto(ptr);
+
+        if (!hitCanvas)
         {
             LimpiarHover(ptr);
             ptr.lineaRayo.enabled = false;
@@ -734,11 +799,11 @@ public class XRUIInteractionEnabler : MonoBehaviour
         return false;
     }
 
-    private bool BuscarImpactoCanvas(Ray rayo, out Canvas mejorCanvas, out Vector3 mejorPunto)
+    private bool BuscarImpactoCanvas(Ray rayo, out Canvas mejorCanvas, out Vector3 mejorPunto, out float menorDist)
     {
         mejorCanvas = null;
         mejorPunto = Vector3.zero;
-        float menorDist = float.MaxValue;
+        menorDist = float.MaxValue;
 
         for (int i = canvasesWorldSpace.Count - 1; i >= 0; i--)
         {
@@ -777,6 +842,40 @@ public class XRUIInteractionEnabler : MonoBehaviour
         }
 
         return mejorCanvas != null;
+    }
+
+    private bool BuscarImpactoBusto(Ray rayo, out StatueMenuInteractable mejorBusto, out Vector3 mejorPunto, out Vector3 mejorNormal, out float menorDist)
+    {
+        mejorBusto  = null;
+        mejorPunto  = Vector3.zero;
+        mejorNormal = -rayo.direction;
+        menorDist   = float.MaxValue;
+
+        int hits = Physics.RaycastNonAlloc(rayo, bufferRaycast3D, alcanceMaximoRayoUI, ~0, QueryTriggerInteraction.Collide);
+        for (int i = 0; i < hits; i++)
+        {
+            RaycastHit h = bufferRaycast3D[i];
+            if (h.collider == null || h.distance < 0.05f || h.distance >= menorDist) continue;
+
+            StatueMenuInteractable busto = h.collider.GetComponentInParent<StatueMenuInteractable>();
+            if (busto == null || !busto.isActiveAndEnabled) continue;
+
+            menorDist   = h.distance;
+            mejorBusto  = busto;
+            mejorPunto  = h.point;
+            mejorNormal = h.normal.sqrMagnitude > 0.001f ? h.normal : -rayo.direction;
+        }
+
+        return mejorBusto != null;
+    }
+
+    private void LimpiarHoverBusto(HandPinchPointer ptr)
+    {
+        if (ptr.bustoHoverActual != null)
+        {
+            ptr.bustoHoverActual.SetHovered(false);
+            ptr.bustoHoverActual = null;
+        }
     }
 
     private static bool IntersectarPlanoCanvas(Ray rayo, Canvas canvas, out Vector3 punto, out float distancia)
