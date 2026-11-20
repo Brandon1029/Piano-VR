@@ -10427,6 +10427,9 @@ MonoBehaviour:
   floatSpeed: 0.9568405
   hoverRaiseAmount: 0.12
   hoverTransitionSpeed: 6
+  hoverScaleMultiplier: 1.06
+  hoverEmissionColor: {r: 0.2, g: 0.75, b: 1, a: 1}
+  hoverEmissionIntensity: 0.65
   startupGracePeriod: 0.6
 --- !u!23 &275995345
 MeshRenderer:
@@ -21660,7 +21663,7 @@ GameObject:
   - component: {fileID: 547807509}
   - component: {fileID: 547807508}
   m_Layer: 0
-  m_Name: Busto_Ajustes
+  m_Name: Busto_Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21692,6 +21695,9 @@ MonoBehaviour:
   floatSpeed: 1.0072278
   hoverRaiseAmount: 0.12
   hoverTransitionSpeed: 6
+  hoverScaleMultiplier: 1.06
+  hoverEmissionColor: {r: 0.2, g: 0.75, b: 1, a: 1}
+  hoverEmissionIntensity: 0.65
   startupGracePeriod: 0.6
 --- !u!23 &547807509
 MeshRenderer:
@@ -23246,7 +23252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ajustes
+  m_text: Tutotial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -37754,6 +37760,9 @@ MonoBehaviour:
   floatSpeed: 1.1119442
   hoverRaiseAmount: 0.12
   hoverTransitionSpeed: 6
+  hoverScaleMultiplier: 1.06
+  hoverEmissionColor: {r: 0.2, g: 0.75, b: 1, a: 1}
+  hoverEmissionIntensity: 0.65
   startupGracePeriod: 0.6
 --- !u!23 &907598950
 MeshRenderer:

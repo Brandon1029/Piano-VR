@@ -19,11 +19,28 @@ public class PianoKey : MonoBehaviour,
     IPointerClickHandler
 {
     [Header("Física y Movimiento")]
-    public float pressDepth     = 0.008f;
-    public float pressSpeed     = 38f;
-    public float returnSpeed    = 12f;
+    public float pressDepth          = 0.008f;
+    public float pressSpeed          = 38f;
+    public float returnSpeed         = 12f;
     [Tooltip("Ángulo de inclinación local (grados) estilo bisagra trasera de piano real al presionar.")]
-    public float pressTiltAngle = 3.5f;
+    public float pressTiltAngle      = 3.5f;
+    [Tooltip("Factor de ancho del BoxCollider estático (0.88 = 88%) para crear un canal de seguridad entre teclas vecinas.")]
+    [Range(0.5f, 1f)]
+    public float factorAnchoCollider = 0.88f;
+    [Tooltip("Recorrido muerto mínimo (metros) de profundidad relativa desde el contacto antes de disparar la nota (3.5 mm).")]
+    public float preTravelMinimo     = 0.0035f;
+
+    [Header("Dinámica de Volumen por Velocidad")]
+    [Tooltip("Volumen mínimo audible para toques suaves.")]
+    [Range(0.05f, 1f)]
+    public float volumenMinimo          = 0.28f;
+    [Tooltip("Volumen máximo para toques rápidos/fuertes.")]
+    [Range(0.1f, 1f)]
+    public float volumenMaximo          = 1.0f;
+    [Tooltip("Velocidad vertical mínima (m/s) mapeada al volumen mínimo.")]
+    public float velocidadImpactoSuave  = 0.12f;
+    [Tooltip("Velocidad vertical fuerte (m/s) mapeada al volumen máximo.")]
+    public float velocidadImpactoFuerte = 0.90f;
 
     [Header("Feedback Visual de Impacto")]
     [Tooltip("Color del destello breve al presionar la tecla (activo en Modo Libre y Modo Música).")]
@@ -77,10 +94,12 @@ public class PianoKey : MonoBehaviour,
     Quaternion  pressedLocalRotation;
     public bool isPressed = false;
     private float pulsoImpacto = 0f;
+    private float preTravelVisualNorm = 0f;
 
     Renderer keyRenderer;
     Transform visualTransform;
     bool visualEsPropio = false;
+    bool anchoColliderAjustado = false;
     MaterialPropertyBlock propBlock;
     static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
 
@@ -116,8 +135,9 @@ public class PianoKey : MonoBehaviour,
     /// <summary>
     /// Intenta presionar la tecla con un dedo. Devuelve true solo si la tecla estaba
     /// libre (ningún dedo ni interactor) y este dedo pasa a ser su dueño.
+    /// Opcionalmente recibe la velocidad vertical de impacto (m/s) para modular el volumen.
     /// </summary>
-    public bool RegistrarToqueDedo(Transform dedo)
+    public bool RegistrarToqueDedo(Transform dedo, float velocidadImpacto = -1f)
     {
         if (dedo == null) return false;
         if (Time.timeSinceLevelLoad < startupGracePeriod) return false;
@@ -127,8 +147,41 @@ public class PianoKey : MonoBehaviour,
         if (isPressed || dedosPresionando.Count > 0 || interactoresActivos > 0) return false;
 
         dedosPresionando.Add(dedo);
-        OnPokeEnter(); // isPressed = true
+        OnPokeEnter(velocidadImpacto); // isPressed = true
         return true;
+    }
+
+    /// <summary>
+    /// Verifica si la punta del dedo ha penetrado al menos 'preTravel' (por defecto 6 mm)
+    /// por debajo de la cara superior del BoxCollider estático de la tecla.
+    /// </summary>
+    public bool CumplePreTravel(Vector3 posicionDedo, float preTravel = -1f)
+    {
+        Collider col = boxCollider != null ? boxCollider : GetComponent<Collider>();
+        if (col == null) return false;
+
+        float umbral = preTravel >= 0f ? preTravel : preTravelMinimo;
+        float caraSuperiorY = col.bounds.max.y;
+        float caraInferiorY = col.bounds.min.y;
+
+        return posicionDedo.y <= (caraSuperiorY - umbral) && posicionDedo.y >= (caraInferiorY - 0.015f);
+    }
+
+    /// <summary>
+    /// Actualiza el hundimiento visual progresivo (pre-travel visual entre 0 mm y 3.5 mm)
+    /// para que la malla visual acompañe la altura del dedo antes de emitir el sonido.
+    /// El BoxCollider raíz permanece 100% estático.
+    /// </summary>
+    public void EstablecerPreTravelVisual(float profundidadMetros, float profundidadDisparoMetros = 0.0035f)
+    {
+        if (isPressed)
+        {
+            preTravelVisualNorm = 0f;
+            return;
+        }
+
+        float denom = profundidadDisparoMetros > 0.0001f ? profundidadDisparoMetros : 0.0035f;
+        preTravelVisualNorm = Mathf.Clamp01(profundidadMetros / denom);
     }
 
     /// <summary>
@@ -330,12 +383,27 @@ public class PianoKey : MonoBehaviour,
     /// </summary>
     public void AsegurarFisicasTecla()
     {
-        // 1. BoxCollider marcado como Is Trigger
+        // 1. BoxCollider marcado como Is Trigger y ajustado al 84% de su ancho entre teclas vecinas
         if (boxCollider == null)
             boxCollider = GetComponent<BoxCollider>();
         if (boxCollider == null)
             boxCollider = gameObject.AddComponent<BoxCollider>();
         boxCollider.isTrigger = true;
+
+        if (!anchoColliderAjustado)
+        {
+            anchoColliderAjustado = true;
+            // Identificar qué eje horizontal local (X o Z) corresponde al ancho entre teclas vecinas
+            // (en este sintetizador rotado 90° en Y, Z local es el ancho y X local es el largo)
+            float tamWorldX = boxCollider.size.x * Mathf.Abs(transform.lossyScale.x);
+            float tamWorldZ = boxCollider.size.z * Mathf.Abs(transform.lossyScale.z);
+            Vector3 sz = boxCollider.size;
+            if (tamWorldZ < tamWorldX)
+                sz.z *= factorAnchoCollider;
+            else
+                sz.x *= factorAnchoCollider;
+            boxCollider.size = sz;
+        }
 
         // 2. Rigidbody marcado como Is Kinematic y sin gravedad
         if (rb == null)
@@ -647,15 +715,31 @@ public class PianoKey : MonoBehaviour,
 
     public void OnPokeEnter()
     {
+        OnPokeEnter(-1f);
+    }
+
+    public void OnPokeEnter(float velocidadImpacto)
+    {
         // Una tecla hundida jamás vuelve a sonar mientras siga presionada
         if (isPressed) return;
         isPressed = true;
-        Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada}");
+        preTravelVisualNorm = 0f;
+        Debug.Log($"[PianoKey] Sonando tecla: '{nombreNotaCompleto}' ({gameObject.name}) | Octava calculada: {octavaCalculada} | vel={velocidadImpacto:F2} m/s");
 
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
 
         if (audioSource != null)
         {
+            if (velocidadImpacto > 0f)
+            {
+                float factor = Mathf.InverseLerp(velocidadImpactoSuave, velocidadImpactoFuerte, velocidadImpacto);
+                audioSource.volume = Mathf.Lerp(volumenMinimo, volumenMaximo, factor);
+            }
+            else
+            {
+                audioSource.volume = volumenMaximo;
+            }
+
             if (audioSource.isPlaying)
             {
                 audioSource.Stop();
@@ -693,6 +777,7 @@ public class PianoKey : MonoBehaviour,
     public void OnPokeExit()
     {
         isPressed = false;
+        preTravelVisualNorm = 0f;
         Debug.Log($"[PianoKey] Reposo de tecla: '{nombreNotaCompleto}' ({gameObject.name})");
     }
 
@@ -858,11 +943,33 @@ public class PianoKey : MonoBehaviour,
         // Animar ÚNICAMENTE la malla visual separada; el Transform raíz y su BoxCollider nunca se mueven ni rotan
         if (visualTransform != null && visualTransform != transform)
         {
-            Vector3    targetLocalPos = isPressed ? pressedLocalPosition : restLocalPosition;
-            Quaternion targetLocalRot = isPressed ? pressedLocalRotation : restLocalRotation;
-            float      speed          = isPressed ? pressSpeed : returnSpeed;
-            float      t              = 1f - Mathf.Exp(-speed * Time.deltaTime);
+            Vector3    targetLocalPos;
+            Quaternion targetLocalRot;
+            float      speed;
 
+            if (isPressed)
+            {
+                targetLocalPos = pressedLocalPosition;
+                targetLocalRot = pressedLocalRotation;
+                speed          = pressSpeed;
+            }
+            else if (preTravelVisualNorm > 0.001f)
+            {
+                // Pre-travel visual progresivo (0 mm a 3.5 mm acompañando la altura del dedo antes del sonido)
+                float ratioPreTravel = Mathf.Clamp01(preTravelMinimo / Mathf.Max(pressDepth, 0.001f));
+                float factorVisual   = preTravelVisualNorm * ratioPreTravel;
+                targetLocalPos = Vector3.Lerp(restLocalPosition, pressedLocalPosition, factorVisual);
+                targetLocalRot = Quaternion.Slerp(restLocalRotation, pressedLocalRotation, factorVisual);
+                speed          = pressSpeed;
+            }
+            else
+            {
+                targetLocalPos = restLocalPosition;
+                targetLocalRot = restLocalRotation;
+                speed          = returnSpeed;
+            }
+
+            float t = 1f - Mathf.Exp(-speed * Time.deltaTime);
             visualTransform.localPosition = Vector3.Lerp(visualTransform.localPosition, targetLocalPos, t);
             visualTransform.localRotation = Quaternion.Slerp(visualTransform.localRotation, targetLocalRot, t);
         }
