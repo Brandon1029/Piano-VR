@@ -44,7 +44,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
     public float distanciaAbrirPellizco = 0.035f;
 
     [Tooltip("Alcance máximo (m) del rayo de mano hacia paneles UI.")]
-    public float alcanceMaximoRayoUI = 3.5f;
+    public float alcanceMaximoRayoUI = 6.0f;
 
     [Header("Apariencia del Rayo y Retícula")]
     public Color colorRayoNormal    = new Color(0.85f, 0.93f, 1f, 0.55f);
@@ -53,6 +53,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
     private XRHandSubsystem handSubsystem;
     private XROrigin xrOrigin;
+    private Camera camaraActiva;
     private readonly List<Canvas> canvasesWorldSpace = new List<Canvas>();
 
     private HandPinchPointer manoIzquierda;
@@ -95,9 +96,15 @@ public class XRUIInteractionEnabler : MonoBehaviour
         Instance.ConfigurarEscenaActual();
     }
 
+    private void Start()
+    {
+        AsignarCamaraACanvasesWorldSpace();
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        AsignarCamaraACanvasesWorldSpace();
     }
 
     private void OnDisable()
@@ -113,6 +120,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
     public void ConfigurarEscenaActual()
     {
         xrOrigin = FindFirstObjectByType<XROrigin>();
+        camaraActiva = ObtenerCamaraActiva();
         ObtenerHandSubsystem();
 
         ConfigurarEventSystem();
@@ -121,6 +129,95 @@ public class XRUIInteractionEnabler : MonoBehaviour
         ConfigurarCamara();
         AsegurarPunterosDeMano();
         LimpiarEstadoPunteros();
+    }
+
+    /// <summary>
+    /// Búsqueda robusta de la cámara activa: Camera.main -> xrOrigin.Camera ->
+    /// primer Camera activo dentro del XR Origin -> FindFirstObjectByType&lt;Camera&gt;().
+    /// </summary>
+    public Camera ObtenerCamaraActiva()
+    {
+        if (Camera.main != null && Camera.main.isActiveAndEnabled)
+        {
+            camaraActiva = Camera.main;
+            return camaraActiva;
+        }
+
+        if (xrOrigin == null)
+        {
+            xrOrigin = FindFirstObjectByType<XROrigin>();
+        }
+
+        if (xrOrigin != null)
+        {
+            if (xrOrigin.Camera != null && xrOrigin.Camera.isActiveAndEnabled)
+            {
+                camaraActiva = xrOrigin.Camera;
+                return camaraActiva;
+            }
+
+            Camera[] camsRig = xrOrigin.GetComponentsInChildren<Camera>(false);
+            for (int i = 0; i < camsRig.Length; i++)
+            {
+                if (camsRig[i] != null && camsRig[i].isActiveAndEnabled)
+                {
+                    camaraActiva = camsRig[i];
+                    return camaraActiva;
+                }
+            }
+        }
+
+        if (camaraActiva != null && camaraActiva.isActiveAndEnabled)
+            return camaraActiva;
+
+        Camera fallback = FindFirstObjectByType<Camera>();
+        if (fallback != null && fallback.isActiveAndEnabled)
+        {
+            camaraActiva = fallback;
+            return camaraActiva;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Devuelve el Transform real del espacio de tracking (CameraFloorOffsetObject / Camera Offset)
+    /// para convertir poses de XRHandSubsystem a coordenadas mundiales inmunes a CameraYOffset.
+    /// </summary>
+    private Transform ObtenerTransformEspacioTracking(Camera cam)
+    {
+        if (xrOrigin == null)
+        {
+            xrOrigin = FindFirstObjectByType<XROrigin>();
+        }
+
+        if (xrOrigin != null && xrOrigin.CameraFloorOffsetObject != null)
+        {
+            return xrOrigin.CameraFloorOffsetObject.transform;
+        }
+
+        if (cam != null && cam.transform.parent != null)
+        {
+            return cam.transform.parent;
+        }
+
+        return xrOrigin != null && xrOrigin.Origin != null ? xrOrigin.Origin.transform : null;
+    }
+
+    private void AsignarCamaraACanvasesWorldSpace()
+    {
+        Camera cam = ObtenerCamaraActiva();
+        if (cam == null) return;
+
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            Canvas c = canvases[i];
+            if (c != null && c.renderMode == RenderMode.WorldSpace)
+            {
+                c.worldCamera = cam;
+            }
+        }
     }
 
     private void ObtenerHandSubsystem()
@@ -225,7 +322,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
     {
         canvasesWorldSpace.Clear();
         Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        Camera mainCam = Camera.main;
+        Camera mainCam = ObtenerCamaraActiva();
 
         foreach (Canvas canvas in canvases)
         {
@@ -235,18 +332,19 @@ public class XRUIInteractionEnabler : MonoBehaviour
             {
                 canvasesWorldSpace.Add(canvas);
 
-                if (canvas.worldCamera == null && mainCam != null)
+                if (mainCam != null)
                 {
                     canvas.worldCamera = mainCam;
                 }
 
-                // Raycaster para mandos físicos XR (ignorar cara trasera)
+                // Raycaster para mandos físicos XR (ignorar cara trasera y sin oclusión 3D por teclado/manos)
                 var trackedRaycaster = canvas.GetComponent<TrackedDeviceGraphicRaycaster>();
                 if (trackedRaycaster == null)
                 {
                     trackedRaycaster = canvas.gameObject.AddComponent<TrackedDeviceGraphicRaycaster>();
                 }
                 trackedRaycaster.ignoreReversedGraphics = true;
+                trackedRaycaster.checkFor3DOcclusion = false;
 
                 // Raycaster para ratón en PC Editor
                 var graphicRaycaster = canvas.GetComponent<GraphicRaycaster>();
@@ -334,7 +432,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
     private void ConfigurarCamara()
     {
-        Camera mainCam = Camera.main;
+        Camera mainCam = ObtenerCamaraActiva();
         if (mainCam != null && mainCam.GetComponent<PhysicsRaycaster>() == null)
         {
             mainCam.gameObject.AddComponent<PhysicsRaycaster>();
@@ -472,10 +570,10 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
     private void ActualizarPunteroMano(HandPinchPointer ptr)
     {
-        Camera cam = Camera.main;
+        Camera cam = ObtenerCamaraActiva();
         if (cam == null) return;
 
-        if (!ObtenerPosicionesPuntas(ptr, out Vector3 posIndice, out Vector3 posPulgar))
+        if (!ObtenerPosicionesPuntas(ptr, cam, out Vector3 posIndice, out Vector3 posPulgar, out Vector3 dirMano))
         {
             if (ptr.lineaRayo.enabled || ptr.hoverActual != null || ptr.sliderArrastrado != null)
             {
@@ -500,12 +598,15 @@ public class XRUIInteractionEnabler : MonoBehaviour
             pinchUp = true;
         }
 
-        // 2. Calcular origen (punto medio índice-pulgar) y dirección estable desde el hombro hacia el punto de pellizco
+        // 2. Calcular origen (punto medio índice-pulgar en espacio mundial real) y dirección estable
         Vector3 origenCrudo = (posIndice + posPulgar) * 0.5f;
         Vector3 hombroAprox = cam.transform.position
                               + cam.transform.right * (ptr.esDerecha ? 0.16f : -0.16f)
-                              + Vector3.down * 0.22f;
-        Vector3 dirCruda = (origenCrudo - hombroAprox).normalized;
+                              + Vector3.down * 0.20f;
+        Vector3 dirDesdeHombro = (origenCrudo - hombroAprox).normalized;
+        Vector3 dirCruda = dirMano.sqrMagnitude > 0.01f
+            ? Vector3.Slerp(dirDesdeHombro, dirMano.normalized, 0.30f).normalized
+            : dirDesdeHombro;
 
         if (!ptr.rayoInicializado)
         {
@@ -587,12 +688,13 @@ public class XRUIInteractionEnabler : MonoBehaviour
         ActualizarVisualesRayo(ptr, rayo.origin, puntoImpacto, canvasHit.transform.forward, colorActual, ptr.estaPellizcando);
     }
 
-    private bool ObtenerPosicionesPuntas(HandPinchPointer ptr, out Vector3 posIndice, out Vector3 posPulgar)
+    private bool ObtenerPosicionesPuntas(HandPinchPointer ptr, Camera cam, out Vector3 posIndice, out Vector3 posPulgar, out Vector3 dirMano)
     {
         posIndice = Vector3.zero;
         posPulgar = Vector3.zero;
+        dirMano   = Vector3.zero;
 
-        // Fuente principal: XRHandSubsystem (OpenXR / Meta Quest Hand Tracking)
+        // Fuente principal: XRHandSubsystem convertido con el espacio de tracking real (CameraFloorOffsetObject)
         if (handSubsystem != null)
         {
             XRHand hand = ptr.esDerecha ? handSubsystem.rightHand : handSubsystem.leftHand;
@@ -600,14 +702,20 @@ public class XRUIInteractionEnabler : MonoBehaviour
                 hand.GetJoint(XRHandJointID.IndexTip).TryGetPose(out Pose idxPose) &&
                 hand.GetJoint(XRHandJointID.ThumbTip).TryGetPose(out Pose thmPose))
             {
-                Transform originTf = xrOrigin != null && xrOrigin.Origin != null ? xrOrigin.Origin.transform : null;
-                posIndice = originTf != null ? originTf.TransformPoint(idxPose.position) : idxPose.position;
-                posPulgar = originTf != null ? originTf.TransformPoint(thmPose.position) : thmPose.position;
+                Transform trackingTf = ObtenerTransformEspacioTracking(cam);
+                posIndice = trackingTf != null ? trackingTf.TransformPoint(idxPose.position) : idxPose.position;
+                posPulgar = trackingTf != null ? trackingTf.TransformPoint(thmPose.position) : thmPose.position;
+
+                if (hand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose palmPose))
+                {
+                    Quaternion palmRotWorld = trackingTf != null ? trackingTf.rotation * palmPose.rotation : palmPose.rotation;
+                    dirMano = palmRotWorld * Vector3.forward;
+                }
                 return true;
             }
         }
 
-        // Fallback: huesos Transform del XR Origin (Editor / simulador / rigs con huesos)
+        // Fallback: huesos Transform reales del XR Origin en coordenadas mundiales
         if (ptr.fallbackIndexTip == null || ptr.fallbackThumbTip == null)
         {
             BuscarHuesosFallback(ptr);
@@ -619,6 +727,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
         {
             posIndice = ptr.fallbackIndexTip.position;
             posPulgar = ptr.fallbackThumbTip.position;
+            dirMano   = ptr.fallbackIndexTip.forward;
             return true;
         }
 
@@ -647,7 +756,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
             if (cg != null && (!cg.blocksRaycasts || cg.alpha < 0.05f)) continue;
 
             if (!IntersectarPlanoCanvas(rayo, c, out Vector3 punto, out float dist)) continue;
-            if (dist < 0.05f || dist > alcanceMaximoRayoUI || dist >= menorDist) continue;
+            if (dist < 0.02f || dist > alcanceMaximoRayoUI || dist >= menorDist) continue;
 
             RectTransform rt = c.GetComponent<RectTransform>();
             if (rt == null) continue;

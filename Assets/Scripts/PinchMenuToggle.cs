@@ -34,12 +34,15 @@ public class PinchMenuToggle : MonoBehaviour
     [Tooltip("Tiempo en segundos sosteniendo la palma izquierda mirando al rostro para alternar el menú.")]
     public float tiempoSostenerGesto = 0.5f;
 
-    [Tooltip("Producto punto mínimo entre la normal de la palma y la dirección al rostro (0.68 ≈ cono de 47°).")]
+    [Tooltip("Producto punto mínimo entre la normal de la palma y la dirección al rostro (0.60 ≈ cono de 53°).")]
     [Range(0.4f, 0.95f)]
-    public float umbralAlineacionPalma = 0.68f;
+    public float umbralAlineacionPalma = 0.60f;
 
     [Tooltip("Distancia máxima (metros) entre la palma izquierda y el rostro para reconocer el gesto.")]
-    public float distanciaMaximaAlRostro = 0.75f;
+    public float distanciaMaximaAlRostro = 1.05f;
+
+    [Tooltip("Margen vertical máximo (metros) por debajo de la cámara donde aún se reconoce el gesto de palma.")]
+    public float margenAlturaBajoCamara = 0.60f;
 
     [Header("Animación de Aparición / Ocultamiento")]
     [Tooltip("Duración en segundos de la transición suave de escala y opacidad.")]
@@ -50,6 +53,7 @@ public class PinchMenuToggle : MonoBehaviour
 
     private XRHandSubsystem handSubsystem;
     private XROrigin xrOrigin;
+    private Camera camaraActiva;
     private CanvasGroup canvasGroup;
     private Vector3 escalaBase = Vector3.one;
     private bool escalaBaseCapturada = false;
@@ -84,6 +88,7 @@ public class PinchMenuToggle : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        AsignarCamaraACanvasesWorldSpace();
     }
 
     private void OnDisable()
@@ -100,6 +105,96 @@ public class PinchMenuToggle : MonoBehaviour
     {
         if (instance == null) instance = this;
         ConfigurarEnEscenaActual();
+        AsignarCamaraACanvasesWorldSpace();
+    }
+
+    /// <summary>
+    /// Búsqueda robusta de la cámara activa: Camera.main -> xrOrigin.Camera ->
+    /// primer Camera activo dentro del XR Origin -> FindFirstObjectByType&lt;Camera&gt;().
+    /// </summary>
+    private Camera ObtenerCamaraActiva()
+    {
+        if (Camera.main != null && Camera.main.isActiveAndEnabled)
+        {
+            camaraActiva = Camera.main;
+            return camaraActiva;
+        }
+
+        if (xrOrigin == null)
+        {
+            xrOrigin = FindFirstObjectByType<XROrigin>();
+        }
+
+        if (xrOrigin != null)
+        {
+            if (xrOrigin.Camera != null && xrOrigin.Camera.isActiveAndEnabled)
+            {
+                camaraActiva = xrOrigin.Camera;
+                return camaraActiva;
+            }
+
+            Camera[] camsRig = xrOrigin.GetComponentsInChildren<Camera>(false);
+            for (int i = 0; i < camsRig.Length; i++)
+            {
+                if (camsRig[i] != null && camsRig[i].isActiveAndEnabled)
+                {
+                    camaraActiva = camsRig[i];
+                    return camaraActiva;
+                }
+            }
+        }
+
+        if (camaraActiva != null && camaraActiva.isActiveAndEnabled)
+            return camaraActiva;
+
+        Camera fallback = FindFirstObjectByType<Camera>();
+        if (fallback != null && fallback.isActiveAndEnabled)
+        {
+            camaraActiva = fallback;
+            return camaraActiva;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Devuelve el Transform real del espacio de tracking (CameraFloorOffsetObject / Camera Offset)
+    /// para convertir poses de XRHandSubsystem a coordenadas mundiales inmunes a CameraYOffset.
+    /// </summary>
+    private Transform ObtenerTransformEspacioTracking(Camera cam)
+    {
+        if (xrOrigin == null)
+        {
+            xrOrigin = FindFirstObjectByType<XROrigin>();
+        }
+
+        if (xrOrigin != null && xrOrigin.CameraFloorOffsetObject != null)
+        {
+            return xrOrigin.CameraFloorOffsetObject.transform;
+        }
+
+        if (cam != null && cam.transform.parent != null)
+        {
+            return cam.transform.parent;
+        }
+
+        return xrOrigin != null && xrOrigin.Origin != null ? xrOrigin.Origin.transform : null;
+    }
+
+    private void AsignarCamaraACanvasesWorldSpace()
+    {
+        Camera cam = ObtenerCamaraActiva();
+        if (cam == null) return;
+
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            Canvas c = canvases[i];
+            if (c != null && c.renderMode == RenderMode.WorldSpace)
+            {
+                c.worldCamera = cam;
+            }
+        }
     }
 
     public void ConfigurarEnEscenaActual()
@@ -238,7 +333,7 @@ public class PinchMenuToggle : MonoBehaviour
             if (handSubsystem == null) return;
         }
 
-        Camera cam = Camera.main;
+        Camera cam = ObtenerCamaraActiva();
         if (cam == null) return;
 
         try
@@ -257,14 +352,14 @@ public class PinchMenuToggle : MonoBehaviour
                 return;
             }
 
-            // Convertir la pose de XR Origin local a espacio mundial
-            Transform originTf = xrOrigin != null && xrOrigin.Origin != null ? xrOrigin.Origin.transform : null;
-            Vector3 palmWorldPos = originTf != null ? originTf.TransformPoint(palmPoseLocal.position) : palmPoseLocal.position;
-            Quaternion palmWorldRot = originTf != null ? originTf.rotation * palmPoseLocal.rotation : palmPoseLocal.rotation;
+            // Convertir la pose del espacio de tracking real (CameraFloorOffsetObject) a espacio mundial
+            Transform trackingTf = ObtenerTransformEspacioTracking(cam);
+            Vector3 palmWorldPos = trackingTf != null ? trackingTf.TransformPoint(palmPoseLocal.position) : palmPoseLocal.position;
+            Quaternion palmWorldRot = trackingTf != null ? trackingTf.rotation * palmPoseLocal.rotation : palmPoseLocal.rotation;
 
-            // Verificar que la mano esté elevada (por encima del piano) y cerca del rostro
+            // Verificar que la mano esté en un rango cómodo frente al rostro (inmune al ajuste de altura de cámara)
             float distancia = Vector3.Distance(palmWorldPos, cam.transform.position);
-            bool alturaValida = palmWorldPos.y > (cam.transform.position.y - 0.38f);
+            bool alturaValida = palmWorldPos.y > (cam.transform.position.y - margenAlturaBajoCamara);
 
             // En OpenXR / XR Hands, -Up de la articulación Palm apunta hacia afuera de la palma
             Vector3 normalPalma = -(palmWorldRot * Vector3.up);
@@ -275,7 +370,7 @@ public class PinchMenuToggle : MonoBehaviour
             bool manoAbierta = true;
             if (leftHand.GetJoint(XRHandJointID.MiddleTip).TryGetPose(out Pose middlePoseLocal))
             {
-                manoAbierta = Vector3.Distance(middlePoseLocal.position, palmPoseLocal.position) > 0.075f;
+                manoAbierta = Vector3.Distance(middlePoseLocal.position, palmPoseLocal.position) > 0.065f;
             }
 
             bool gestoActivo = alturaValida && distancia <= distanciaMaximaAlRostro &&
@@ -284,7 +379,7 @@ public class PinchMenuToggle : MonoBehaviour
             if (esperandoBajarPalma)
             {
                 // Re-armar el gesto cuando el usuario gire o baje la palma
-                if (alineacion < 0.45f || !alturaValida)
+                if (alineacion < 0.40f || !alturaValida)
                 {
                     esperandoBajarPalma = false;
                     tiempoGestoPalma = 0f;

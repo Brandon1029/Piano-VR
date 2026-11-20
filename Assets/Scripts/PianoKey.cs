@@ -79,6 +79,8 @@ public class PianoKey : MonoBehaviour,
     private float pulsoImpacto = 0f;
 
     Renderer keyRenderer;
+    Transform visualTransform;
+    bool visualEsPropio = false;
     MaterialPropertyBlock propBlock;
     static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
 
@@ -208,8 +210,9 @@ public class PianoKey : MonoBehaviour,
 
     void Awake()
     {
-        keyRenderer = GetComponent<Renderer>();
         propBlock = new MaterialPropertyBlock();
+        SepararMallaVisual();
+
         if (!todasLasTeclas.Contains(this))
             todasLasTeclas.Add(this);
 
@@ -217,9 +220,82 @@ public class PianoKey : MonoBehaviour,
         AsegurarFisicasTecla();
     }
 
+    /// <summary>
+    /// Separa dinámicamente la malla visual (MeshFilter + MeshRenderer) en un objeto visual
+    /// independiente sin colliders para que el BoxCollider de la tecla permanezca 100% estático
+    /// en el mundo mientras la malla baja y rota al ser presionada.
+    /// Se coloca como hermano bajo transform.parent (misma escala/rotación local) para evitar
+    /// deformaciones (shear) por escala no uniforme al rotar.
+    /// </summary>
+    private void SepararMallaVisual()
+    {
+        if (visualTransform != null) return;
+
+        MeshFilter   rootFilter   = GetComponent<MeshFilter>();
+        MeshRenderer rootRenderer = GetComponent<MeshRenderer>();
+
+        if (rootFilter != null && rootRenderer != null)
+        {
+            GameObject visualObj = new GameObject(gameObject.name + "_Visual");
+            visualObj.layer = gameObject.layer;
+
+            Transform vtf = visualObj.transform;
+            vtf.SetParent(transform.parent, false);
+            vtf.localPosition = transform.localPosition;
+            vtf.localRotation = transform.localRotation;
+            vtf.localScale    = transform.localScale;
+
+            MeshFilter childFilter = visualObj.AddComponent<MeshFilter>();
+            childFilter.sharedMesh = rootFilter.sharedMesh;
+
+            MeshRenderer childRenderer = visualObj.AddComponent<MeshRenderer>();
+            childRenderer.sharedMaterials        = rootRenderer.sharedMaterials;
+            childRenderer.shadowCastingMode      = rootRenderer.shadowCastingMode;
+            childRenderer.receiveShadows         = rootRenderer.receiveShadows;
+            childRenderer.lightProbeUsage        = rootRenderer.lightProbeUsage;
+            childRenderer.reflectionProbeUsage   = rootRenderer.reflectionProbeUsage;
+
+            // Ocultar el renderer en la raíz física (conservando el BoxCollider estático en la raíz)
+            rootRenderer.enabled = false;
+
+            visualTransform = vtf;
+            keyRenderer     = childRenderer;
+            visualEsPropio  = true;
+        }
+        else
+        {
+            // Si la tecla ya tiene un hijo visual separado, animar solo ese hijo
+            Renderer childRend = GetComponentInChildren<Renderer>();
+            if (childRend != null && childRend.transform != transform)
+            {
+                keyRenderer     = childRend;
+                visualTransform = childRend.transform;
+            }
+            else
+            {
+                keyRenderer     = GetComponent<Renderer>();
+                visualTransform = transform;
+            }
+        }
+    }
+
+    void OnEnable()
+    {
+        if (visualEsPropio && visualTransform != null)
+            visualTransform.gameObject.SetActive(true);
+    }
+
+    void OnDisable()
+    {
+        if (visualEsPropio && visualTransform != null)
+            visualTransform.gameObject.SetActive(false);
+    }
+
     void OnDestroy()
     {
         todasLasTeclas.Remove(this);
+        if (visualEsPropio && visualTransform != null)
+            Destroy(visualTransform.gameObject);
     }
 
     void Start()
@@ -228,12 +304,15 @@ public class PianoKey : MonoBehaviour,
         rb          = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
 
+        if (visualTransform == null)
+            SepararMallaVisual();
+
         // Garantizar respuesta mecánica firme y natural incluso en teclas con valores antiguos serializados en escena
         if (pressSpeed <= 20f)  pressSpeed  = 38f;
         if (returnSpeed <= 8f)  returnSpeed = 12f;
 
-        restLocalPosition    = transform.localPosition;
-        restLocalRotation    = transform.localRotation;
+        restLocalPosition    = visualTransform.localPosition;
+        restLocalRotation    = visualTransform.localRotation;
         pressedLocalPosition = restLocalPosition - new Vector3(0f, pressDepth, 0f);
         // Rotación ligera en el eje Z local (bisagra trasera: el frente de la tecla baja más que la parte trasera)
         pressedLocalRotation = restLocalRotation * Quaternion.Euler(0f, 0f, pressTiltAngle);
@@ -776,6 +855,18 @@ public class PianoKey : MonoBehaviour,
             pulsoImpacto = Mathf.Max(0f, pulsoImpacto - paso);
         }
 
+        // Animar ÚNICAMENTE la malla visual separada; el Transform raíz y su BoxCollider nunca se mueven ni rotan
+        if (visualTransform != null && visualTransform != transform)
+        {
+            Vector3    targetLocalPos = isPressed ? pressedLocalPosition : restLocalPosition;
+            Quaternion targetLocalRot = isPressed ? pressedLocalRotation : restLocalRotation;
+            float      speed          = isPressed ? pressSpeed : returnSpeed;
+            float      t              = 1f - Mathf.Exp(-speed * Time.deltaTime);
+
+            visualTransform.localPosition = Vector3.Lerp(visualTransform.localPosition, targetLocalPos, t);
+            visualTransform.localRotation = Quaternion.Slerp(visualTransform.localRotation, targetLocalRot, t);
+        }
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         ActualizarMouseEditor();
 #endif
@@ -914,23 +1005,17 @@ public class PianoKey : MonoBehaviour,
 
     void FixedUpdate()
     {
+        // Si la malla visual fue separada (caso normal), el Transform raíz y su BoxCollider
+        // permanecen 100% estáticos y la animación visual ocurre en Update() sin mover físicas.
+        if (visualTransform != null && visualTransform != transform) return;
+
         Vector3    targetLocalPos = isPressed ? pressedLocalPosition : restLocalPosition;
         Quaternion targetLocalRot = isPressed ? pressedLocalRotation : restLocalRotation;
         float      speed          = isPressed ? pressSpeed : returnSpeed;
         float      t              = 1f - Mathf.Exp(-speed * Time.fixedDeltaTime);
 
-        if (rb != null && !rb.isKinematic)
-        {
-            Vector3    targetWorldPos = transform.parent != null ? transform.parent.TransformPoint(targetLocalPos) : targetLocalPos;
-            Quaternion targetWorldRot = transform.parent != null ? transform.parent.rotation * targetLocalRot : targetLocalRot;
-            rb.MovePosition(Vector3.Lerp(transform.position, targetWorldPos, t));
-            rb.MoveRotation(Quaternion.Slerp(transform.rotation, targetWorldRot, t));
-        }
-        else
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, targetLocalPos, t);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRot, t);
-        }
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetLocalPos, t);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRot, t);
     }
 
 #if UNITY_EDITOR || UNITY_STANDALONE
