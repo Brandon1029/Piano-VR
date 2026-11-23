@@ -332,8 +332,17 @@ namespace PianoVR.MainMenu
 
         public void ExecuteAction()
         {
-            if (_hasTriggered && action != MenuAction.ShowSettings)
-                return;
+            if (action != MenuAction.ShowSettings)
+            {
+                if (_hasTriggered)
+                    return;
+
+                if (SceneTransitionManager.Instance != null && SceneTransitionManager.Instance.IsTransitioning)
+                {
+                    Debug.LogWarning($"[StatueMenu] Activación ignorada en '{gameObject.name}': transición de escena ya en curso.");
+                    return;
+                }
+            }
 
             string escenaFinal = (escenaDestino != null && !string.IsNullOrEmpty(escenaDestino.SceneName))
                 ? escenaDestino.SceneName

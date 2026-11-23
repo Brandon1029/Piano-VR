@@ -2,13 +2,15 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.XR.CoreUtils;
 
 namespace PianoVR
 {
     /// <summary>
     /// Gestor reutilizable de transiciones entre escenas con fundido a negro (Fade) en VR y PC.
     /// Funciona de forma totalmente autónoma: persiste entre escenas (DontDestroyOnLoad),
-    /// busca dinámicamente la cámara VR (Main Camera) y expone el método público TransitionToScene().
+    /// prioriza la cámara VR del XROrigin (ajustando planeDistance por delante del nearClipPlane
+    /// para evitar recortes del frustum) y expone TransitionToScene().
     /// </summary>
     public class SceneTransitionManager : MonoBehaviour
     {
@@ -25,15 +27,26 @@ namespace PianoVR
         private CanvasGroup _canvasGroup;
         private Image _fadeImage;
         private bool _isTransitioning = false;
+        private Coroutine _activeFadeCoroutine;
+
+        public bool IsTransitioning => _isTransitioning;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void AutoInicializar()
         {
             if (Instance == null)
             {
-                GameObject managerObj = new GameObject("[SceneTransitionManager]");
-                Instance = managerObj.AddComponent<SceneTransitionManager>();
-                DontDestroyOnLoad(managerObj);
+                var existente = FindFirstObjectByType<SceneTransitionManager>();
+                if (existente != null)
+                {
+                    Instance = existente;
+                }
+                else
+                {
+                    GameObject managerObj = new GameObject("[SceneTransitionManager]");
+                    Instance = managerObj.AddComponent<SceneTransitionManager>();
+                    DontDestroyOnLoad(managerObj);
+                }
             }
         }
 
@@ -61,8 +74,13 @@ namespace PianoVR
         private void Start()
         {
             VincularCamaraActual();
-            // Aclarado suave inicial al arrancar
-            StartCoroutine(FadeRoutine(1f, 0f, fadeDuration));
+
+            // Aclarado suave inicial al arrancar (solo si no se disparó ya una transición)
+            if (!_isTransitioning)
+            {
+                if (_activeFadeCoroutine != null) StopCoroutine(_activeFadeCoroutine);
+                _activeFadeCoroutine = StartCoroutine(FadeRoutine(1f, 0f, fadeDuration));
+            }
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -75,6 +93,8 @@ namespace PianoVR
         /// </summary>
         private void ConstruirCanvasFade()
         {
+            if (_fadeCanvas != null) return;
+
             GameObject canvasObj = new GameObject("FadeCanvas");
             canvasObj.transform.SetParent(transform, false);
 
@@ -92,7 +112,7 @@ namespace PianoVR
             imageObj.transform.SetParent(canvasObj.transform, false);
 
             _fadeImage = imageObj.AddComponent<Image>();
-            _fadeImage.color = fadeColor;
+            _fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, 1f);
             _fadeImage.raycastTarget = false;
 
             RectTransform rect = _fadeImage.rectTransform;
@@ -105,20 +125,61 @@ namespace PianoVR
         }
 
         /// <summary>
-        /// Vincula el canvas de fundido a la cámara principal activa en la escena VR.
+        /// Localiza la cámara VR activa priorizando XROrigin.Camera sobre cámaras sueltas en escena,
+        /// y ajusta planeDistance siempre por delante de cam.nearClipPlane para que jamás se recorte.
         /// </summary>
         public void VincularCamaraActual()
         {
-            Camera cam = Camera.main;
-            if (cam == null)
-            {
-                cam = FindFirstObjectByType<Camera>();
-            }
+            Camera cam = ObtenerCamaraVRActiva();
 
             if (_fadeCanvas != null && cam != null)
             {
+                _fadeCanvas.renderMode = RenderMode.ScreenSpaceCamera;
                 _fadeCanvas.worldCamera = cam;
+                // Garantizar que planeDistance supere siempre el nearClipPlane de la cámara activa
+                _fadeCanvas.planeDistance = Mathf.Clamp(cam.nearClipPlane + 0.08f, 0.12f, 0.55f);
+                _fadeCanvas.sortingOrder = 32767;
             }
+        }
+
+        private Camera ObtenerCamaraVRActiva()
+        {
+            // 1. Priorizar la cámara del XROrigin activo en la escena VR
+            XROrigin xrOrigin = FindFirstObjectByType<XROrigin>();
+            if (xrOrigin != null)
+            {
+                if (xrOrigin.Camera != null && xrOrigin.Camera.isActiveAndEnabled)
+                {
+                    return xrOrigin.Camera;
+                }
+
+                Camera[] camsRig = xrOrigin.GetComponentsInChildren<Camera>(false);
+                for (int i = 0; i < camsRig.Length; i++)
+                {
+                    if (camsRig[i] != null && camsRig[i].isActiveAndEnabled)
+                    {
+                        return camsRig[i];
+                    }
+                }
+            }
+
+            // 2. Respaldo: Camera.main activa
+            if (Camera.main != null && Camera.main.isActiveAndEnabled)
+            {
+                return Camera.main;
+            }
+
+            // 3. Respaldo final: cualquier cámara activa en la escena
+            Camera[] todas = FindObjectsByType<Camera>(FindObjectsSortMode.None);
+            for (int i = 0; i < todas.Length; i++)
+            {
+                if (todas[i] != null && todas[i].isActiveAndEnabled)
+                {
+                    return todas[i];
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -140,6 +201,12 @@ namespace PianoVR
                 return;
             }
 
+            if (_activeFadeCoroutine != null)
+            {
+                StopCoroutine(_activeFadeCoroutine);
+                _activeFadeCoroutine = null;
+            }
+
             StartCoroutine(TransicionRoutine(sceneName));
         }
 
@@ -148,10 +215,22 @@ namespace PianoVR
             _isTransitioning = true;
             Debug.Log($"[SceneTransitionManager] Iniciando transición hacia la escena '{sceneName}'...");
 
+            if (_fadeCanvas == null)
+            {
+                ConstruirCanvasFade();
+            }
+
+            if (_fadeImage != null)
+            {
+                _fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, 1f);
+            }
+
             VincularCamaraActual();
 
             // 1. Fundido a negro (Fade Out)
-            yield return StartCoroutine(FadeRoutine(0f, 1f, fadeDuration));
+            _activeFadeCoroutine = StartCoroutine(FadeRoutine(0f, 1f, fadeDuration));
+            yield return _activeFadeCoroutine;
+            _activeFadeCoroutine = null;
 
             // 2. Carga asíncrona de la nueva escena
             AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
@@ -165,9 +244,12 @@ namespace PianoVR
 
             VincularCamaraActual();
             yield return null; // Espera un fotograma para que se asienten los objetos de la nueva escena
+            VincularCamaraActual();
 
             // 3. Aclarado de negro a transparente (Fade In)
-            yield return StartCoroutine(FadeRoutine(1f, 0f, fadeDuration));
+            _activeFadeCoroutine = StartCoroutine(FadeRoutine(1f, 0f, fadeDuration));
+            yield return _activeFadeCoroutine;
+            _activeFadeCoroutine = null;
 
             _isTransitioning = false;
             Debug.Log($"[SceneTransitionManager] Transición a '{sceneName}' completada exitosamente.");
@@ -182,8 +264,13 @@ namespace PianoVR
 
             while (elapsed < duration)
             {
+                if (_fadeCanvas != null && _fadeCanvas.worldCamera == null)
+                {
+                    VincularCamaraActual();
+                }
+
                 elapsed += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsed / duration);
+                float t = Mathf.Clamp01(elapsed / Mathf.Max(0.05f, duration));
                 _canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, t);
                 yield return null;
             }

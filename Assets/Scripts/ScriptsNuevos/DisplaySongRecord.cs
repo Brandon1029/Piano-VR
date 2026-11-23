@@ -14,9 +14,9 @@ public class DisplaySongRecord : MonoBehaviour
     {
         if (song == null) return;
 
-        // 1. Obtener la precisión guardada y las estrellas
-        float mejorPrecision = ScoreManager.GetBestAccuracy(song.songName);
-        int mejoresEstrellas = ScoreManager.GetBestStars(song.songName);
+        // 1. Obtener la precisión guardada y las estrellas desde SaveManager
+        float mejorPrecision = SaveManager.GetBestAccuracy(song.SongId);
+        int mejoresEstrellas = SaveManager.GetBestStars(song.SongId);
 
         // 2. Mostrar Porcentaje o "Sin Récord"
         if (recordText != null)

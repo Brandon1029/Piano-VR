@@ -26,6 +26,20 @@ public class PinchMenuToggle : MonoBehaviour
 {
     private static PinchMenuToggle instance;
 
+    public static PinchMenuToggle Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<PinchMenuToggle>();
+            }
+            return instance;
+        }
+    }
+
+    public bool MenuVisible => menuVisible;
+
     [Header("Referencias")]
     [Tooltip("Canvas principal del menú a mostrar/ocultar. Si está vacío se busca automáticamente.")]
     public GameObject menuCanvas;
@@ -99,6 +113,11 @@ public class PinchMenuToggle : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ConfigurarEnEscenaActual();
+    }
+
+    private void Awake()
+    {
+        if (instance == null) instance = this;
     }
 
     private void Start()
@@ -412,8 +431,13 @@ public class PinchMenuToggle : MonoBehaviour
 
     public void MostrarMenu(bool mostrar, string origen = "Manual")
     {
-        if (menuCanvas == null) return;
+        if (menuCanvas == null)
+        {
+            ConfigurarEnEscenaActual();
+            if (menuCanvas == null) return;
+        }
 
+        bool cambioEstado = (menuVisible != mostrar);
         menuVisible = mostrar;
 
         if (animacionActual != null)
@@ -423,6 +447,11 @@ public class PinchMenuToggle : MonoBehaviour
         animacionActual = StartCoroutine(AnimarVisibilidad(menuVisible));
 
         Debug.Log($"[PinchMenuToggle] Menú '{menuCanvas.name}' -> {(menuVisible ? "DESPLEGADO" : "OCULTO")} (Origen: {origen})");
+
+        if (cambioEstado && NoteSpawner.Instance != null)
+        {
+            NoteSpawner.Instance.NotificarCambioVisibilidadMenu(menuVisible, origen);
+        }
     }
 
     private void AplicarEstadoInmediato(bool visible)

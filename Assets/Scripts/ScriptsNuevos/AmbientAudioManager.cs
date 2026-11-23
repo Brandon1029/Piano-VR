@@ -41,6 +41,8 @@ public class AmbientAudioManager : MonoBehaviour
 
     void Start()
     {
+        ambientHabilitado = SaveManager.GetAmbientMusicEnabled();
+
         if (audioSource.clip != null)
         {
             audioSource.loop = true;

@@ -71,11 +71,16 @@ public class NoteSpawner : MonoBehaviour
 
     private Dictionary<string, Transform> keyMap = new Dictionary<string, Transform>();
     private List<GameObject> activeNotes = new List<GameObject>();
+    private readonly List<AudioSource> audiosPausados = new List<AudioSource>();
     private Coroutine spawnCoroutine;
     private float startTime;
+    private float relojCancionSegundos = 0f;
     private bool cancionEnCurso = false;
+    private bool cancionPausada = false;
 
     public bool CancionEnCurso => cancionEnCurso || PianoKey.notasEnEscena.Count > 0;
+    public bool CancionPausada => cancionPausada;
+    public float RelojCancionActual => relojCancionSegundos;
 
     // Geometría calculada de la pista frontal
     private GameObject pistaRaizGO;
@@ -107,6 +112,14 @@ public class NoteSpawner : MonoBehaviour
         if (usarPistaFrontal)
         {
             StartCoroutine(InicializarPistaDiferida());
+        }
+    }
+
+    void Update()
+    {
+        if (cancionEnCurso && !cancionPausada)
+        {
+            relojCancionSegundos += Time.deltaTime;
         }
     }
 
@@ -310,6 +323,28 @@ public class NoteSpawner : MonoBehaviour
         }
 
         pistaInicializada = true;
+
+        // Mantener la pista frontal oculta durante la práctica libre (sin canción en curso)
+        pistaRaizGO.SetActive(cancionEnCurso);
+    }
+
+    /// <summary>
+    /// Muestra u oculta el objeto padre de la pista frontal (carril guía, líneas divisoras y línea de impacto).
+    /// </summary>
+    public void EstablecerVisibilidadPistaFrontal(bool visible)
+    {
+        if (!usarPistaFrontal) return;
+
+        if (visible && (!pistaInicializada || pistaRaizGO == null))
+        {
+            MapPianoKeys();
+            ConstruirOPosicionarPistaVisual();
+        }
+
+        if (pistaRaizGO != null)
+        {
+            pistaRaizGO.SetActive(visible);
+        }
     }
 
     private void CrearCuboDecorativo(string nombre, Transform padre, Vector3 localPos, Vector3 localScale, Material mat)
@@ -411,12 +446,14 @@ public class NoteSpawner : MonoBehaviour
 
         song = newSong;
         startTime = Time.time;
+        relojCancionSegundos = 0f;
         cancionEnCurso = true;
+        cancionPausada = false;
 
         // 1. OBTENER TOTAL DE NOTAS REALES DE LA CANCIÓN
         int totalNotas = (song.notes != null) ? song.notes.Length : 0;
 
-        // 2. INICIALIZAR SESIÓN EN SCOREMANAGER
+        // 2. INICIALIZAR SESIÓN EN SCOREMANAGER (reinicia el contador de aciertos)
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.IniciarSesion(song.songName, totalNotas);
@@ -427,9 +464,16 @@ public class NoteSpawner : MonoBehaviour
             PianoManager.Instance.IniciarModoCancion(PianoManager.Instance.octavaBaseActual);
         }
 
+        if (SongSelectionMenu.Instance != null)
+        {
+            SongSelectionMenu.Instance.NotificarCancionIniciada(song);
+        }
+
+        bool esModoLibre = SceneManager.GetActiveScene().name == "ModoLibreMenu";
+
         // En ModoLibreMenu, asegurar que el AutoPlayer permanezca desactivado al iniciar canción
         // a menos que el usuario lo haya activado explícitamente en el Toggle de Ajustes/Opciones.
-        if (SceneManager.GetActiveScene().name == "ModoLibreMenu" && AutoPlayManager.Instance != null)
+        if (esModoLibre && AutoPlayManager.Instance != null)
         {
             bool activadoEnUI = UIConfiguracionManager.Instance != null &&
                                 UIConfiguracionManager.Instance.toggleAutoplayer != null &&
@@ -444,21 +488,29 @@ public class NoteSpawner : MonoBehaviour
             }
         }
 
-        if (usarPistaFrontal && !pistaInicializada)
+        // 3. Mostrar automáticamente la pista frontal y ocultar el menú (desactivando raycast de UI) en ModoLibreMenu
+        if (usarPistaFrontal)
         {
-            MapPianoKeys();
-            ConstruirOPosicionarPistaVisual();
+            EstablecerVisibilidadPistaFrontal(true);
+        }
+
+        if (esModoLibre && PinchMenuToggle.Instance != null)
+        {
+            PinchMenuToggle.Instance.MostrarMenu(false, "Inicio de Canción");
         }
 
         spawnCoroutine = StartCoroutine(SpawnNotes());
     }
 
     /// <summary>
-    /// Detiene la canción activa, destruye las notas flotantes y regresa a Modo Libre.
+    /// Detiene la canción activa, destruye las notas flotantes, oculta la pista frontal y regresa a Modo Libre.
     /// </summary>
     public void StopCurrentSong()
     {
         cancionEnCurso = false;
+        cancionPausada = false;
+        relojCancionSegundos = 0f;
+        audiosPausados.Clear();
 
         if (spawnCoroutine != null)
         {
@@ -471,11 +523,69 @@ public class NoteSpawner : MonoBehaviour
             if (note != null) Destroy(note);
         }
         activeNotes.Clear();
+        PianoKey.notasEnEscena.Clear();
+
+        EstablecerVisibilidadPistaFrontal(false);
 
         if (PianoManager.Instance != null)
         {
             PianoManager.Instance.TerminarModoCancion();
         }
+    }
+
+    /// <summary>
+    /// Sincroniza la pausa y reanudación de la canción con la apertura/cierre del menú en ModoLibreMenu.
+    /// </summary>
+    public void NotificarCambioVisibilidadMenu(bool menuAbierto, string origen = "")
+    {
+        if (SceneManager.GetActiveScene().name != "ModoLibreMenu") return;
+        if (!cancionEnCurso) return;
+
+        if (menuAbierto)
+        {
+            PausarCancion();
+        }
+        else
+        {
+            ReanudarCancion();
+        }
+    }
+
+    public void PausarCancion()
+    {
+        if (!cancionEnCurso || cancionPausada) return;
+        cancionPausada = true;
+
+        audiosPausados.Clear();
+        foreach (var key in PianoKey.todasLasTeclas)
+        {
+            if (key == null) continue;
+            AudioSource src = key.GetComponent<AudioSource>();
+            if (src != null && src.isPlaying)
+            {
+                src.Pause();
+                audiosPausados.Add(src);
+            }
+        }
+
+        Debug.Log($"[NoteSpawner] Canción PAUSADA en t={relojCancionSegundos:F2}s al abrir el menú.");
+    }
+
+    public void ReanudarCancion()
+    {
+        if (!cancionEnCurso || !cancionPausada) return;
+        cancionPausada = false;
+
+        for (int i = 0; i < audiosPausados.Count; i++)
+        {
+            if (audiosPausados[i] != null)
+            {
+                audiosPausados[i].UnPause();
+            }
+        }
+        audiosPausados.Clear();
+
+        Debug.Log($"[NoteSpawner] Canción REANUDADA desde t={relojCancionSegundos:F2}s al cerrar el menú.");
     }
 
     /// <summary>
@@ -508,13 +618,12 @@ public class NoteSpawner : MonoBehaviour
                 SongData.NoteEvent note = song.notes[i];
                 if (note == null || string.IsNullOrEmpty(note.key)) continue;
 
-                float timestampImpacto = startTime + offsetArranque + note.time;
+                float timestampImpacto = offsetArranque + note.time;
                 float timestampSpawn   = timestampImpacto - anticipacion;
 
-                float espera = timestampSpawn - Time.time;
-                if (espera > 0f)
+                while (relojCancionSegundos < timestampSpawn || cancionPausada)
                 {
-                    yield return new WaitForSeconds(espera);
+                    yield return null;
                 }
 
                 string claveNota = note.key.Trim();
@@ -561,8 +670,10 @@ public class NoteSpawner : MonoBehaviour
             // Modo vertical clásico (utilizado por las notas invisibles de audio en ModoMusica)
             foreach (var note in song.notes)
             {
-                float delay = note.time - (Time.time - startTime);
-                if (delay > 0) yield return new WaitForSeconds(delay);
+                while (relojCancionSegundos < note.time || cancionPausada)
+                {
+                    yield return null;
+                }
 
                 if (keyMap.TryGetValue(note.key.Trim(), out Transform keyTransform) && keyTransform != null)
                 {
@@ -589,16 +700,31 @@ public class NoteSpawner : MonoBehaviour
             }
         }
 
-        // Espera a que las últimas barras terminen de recorrer la pista y cruzar la línea de impacto
+        // Espera a que las últimas barras terminen de recorrer la pista y cruzar la línea de impacto (respetando pausa)
         float tiempoMaxEspera = usarPistaFrontal ? (ObtenerTiempoAnticipacionActivo() + 2.5f) : 3.5f;
         float tiempoEsperaFinal = 0f;
         while (PianoKey.notasEnEscena.Count > 0 && tiempoEsperaFinal < tiempoMaxEspera)
         {
-            tiempoEsperaFinal += 0.1f;
-            yield return new WaitForSeconds(0.1f);
+            if (!cancionPausada)
+            {
+                tiempoEsperaFinal += Time.deltaTime;
+            }
+            yield return null;
         }
-        yield return new WaitForSeconds(0.6f);
+
+        float esperaCierre = 0f;
+        while (esperaCierre < 0.6f)
+        {
+            if (!cancionPausada)
+            {
+                esperaCierre += Time.deltaTime;
+            }
+            yield return null;
+        }
+
         cancionEnCurso = false;
+        cancionPausada = false;
+        EstablecerVisibilidadPistaFrontal(false);
 
         // 1. Guardar resultados en el ScoreManager
         if (ScoreManager.Instance != null)
@@ -739,7 +865,7 @@ public class NoteSpawner : MonoBehaviour
         if (SceneManager.GetActiveScene().name != "ModoLibreMenu")
             return false;
 
-        if (!CancionEnCurso || PianoKey.notasEnEscena.Count == 0)
+        if (!CancionEnCurso || cancionPausada || PianoKey.notasEnEscena.Count == 0)
             return false;
 
         if (AutoPlayManager.Instance != null &&
@@ -749,7 +875,7 @@ public class NoteSpawner : MonoBehaviour
             return false;
         }
 
-        float ahora  = Time.time;
+        float ahora   = relojCancionSegundos;
         float ventana = Mathf.Max(0.05f, ventanaTiempoAsistencia);
 
         // a) Verificar primero si la tecla física presionada coincide exactamente con una nota esperada dentro de la ventana

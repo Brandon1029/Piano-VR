@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using PianoVR;
@@ -179,8 +180,8 @@ public class SongSelectionMenu : MonoBehaviour
     {
         if (selectedSong == null) return;
 
-        float mejorPrecision = ScoreManager.GetBestAccuracy(selectedSong.songName);
-        int mejoresEstrellas = ScoreManager.GetBestStars(selectedSong.songName);
+        float mejorPrecision = SaveManager.GetBestAccuracy(selectedSong.SongId);
+        int mejoresEstrellas = SaveManager.GetBestStars(selectedSong.SongId);
 
         if (txtRecord != null)
         {
@@ -237,26 +238,36 @@ public class SongSelectionMenu : MonoBehaviour
     {
         if (selectedSong == null || noteSpawner == null) return;
 
-        if (isPlaying && playingSong == selectedSong)
+        bool esModoLibre = SceneManager.GetActiveScene().name == "ModoLibreMenu";
+
+        if (!esModoLibre && isPlaying && playingSong == selectedSong)
         {
             Debug.Log($"[SongSelectionMenu] [UI] Botón Play pulsado -> Deteniendo canción '{selectedSong.songName}'");
             DetenerModoCancion();
         }
         else
         {
-            Debug.Log($"[SongSelectionMenu] [UI] Botón Play pulsado -> Iniciando canción '{selectedSong.songName}' ({selectedSong.bpm} BPM)");
+            Debug.Log($"[SongSelectionMenu] [UI] Botón Play pulsado -> Iniciando/Reiniciando canción '{selectedSong.songName}' ({selectedSong.bpm} BPM)");
 
             if (noteSpawner != null)
             {
                 noteSpawner.StopCurrentSong();
             }
 
-            noteSpawner.StartSong(selectedSong);
             playingSong = selectedSong;
             isPlaying = true;
-
             ActualizarTextoBoton(true);
+
+            noteSpawner.StartSong(selectedSong);
         }
+    }
+
+    public void NotificarCancionIniciada(SongData cancion)
+    {
+        if (cancion == null) return;
+        playingSong = cancion;
+        isPlaying = true;
+        ActualizarTextoBoton(selectedSong == playingSong);
     }
 
     public void DetenerModoCancion()
@@ -279,7 +290,15 @@ public class SongSelectionMenu : MonoBehaviour
         TextMeshProUGUI btnText = btnPlay.GetComponentInChildren<TextMeshProUGUI>();
         if (btnText != null)
         {
-            btnText.text = estaSonandoEstaCancion ? "Detener la canción" : "Comenzar a Tocar";
+            bool esModoLibre = SceneManager.GetActiveScene().name == "ModoLibreMenu";
+            if (estaSonandoEstaCancion)
+            {
+                btnText.text = esModoLibre ? "Reintentar" : "Detener la canción";
+            }
+            else
+            {
+                btnText.text = "Comenzar a Tocar";
+            }
         }
     }
 
@@ -291,6 +310,11 @@ public class SongSelectionMenu : MonoBehaviour
 
         ActualizarTextoBoton(false);
         ActualizarRécordUI();
+
+        if (SongResultsAnimator.Instance != null)
+        {
+            SongResultsAnimator.Instance.SincronizarTarjetasDeLista();
+        }
     }
 
     public void SalirAEscenaDestino()

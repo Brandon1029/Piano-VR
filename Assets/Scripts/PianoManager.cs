@@ -35,7 +35,8 @@ public class PianoManager : MonoBehaviour
 
     void Start()
     {
-        // Aplica la octava inicial configurada al arrancar la escena
+        // Carga y aplica la octava base guardada por el usuario al arrancar la escena
+        octavaBaseActual = SaveManager.GetBaseOctave();
         AplicarOctavaBase(octavaBaseActual);
     }
 

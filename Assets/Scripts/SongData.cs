@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum DifficultyLevel
@@ -8,6 +7,11 @@ public enum DifficultyLevel
     Avanzado
 }
 
+/// <summary>
+/// ScriptableObject de solo lectura con los metadatos estáticos y partitura de una canción.
+/// Los récords y estrellas del jugador NUNCA se almacenan en este asset; se gestionan
+/// de forma independiente en almacenamiento local a través de SaveManager.
+/// </summary>
 [CreateAssetMenu(fileName = "SongData", menuName = "Piano/SongData")]
 public class SongData : ScriptableObject
 {
@@ -18,13 +22,13 @@ public class SongData : ScriptableObject
         public string key;
     }
 
-    [Header("Información General")]
+    [Header("Información General (Solo Lectura)")]
     public string songName;
     public string composer = "Desconocido";
     public DifficultyLevel difficulty = DifficultyLevel.Principiante;
 
     [Header("UI Visual")]
-    public Sprite coverImage; // <--- Imagen de portada para el menú
+    public Sprite coverImage;
 
     [Header("Parámetros Musicales")]
     public float bpm;
@@ -33,4 +37,9 @@ public class SongData : ScriptableObject
 
     [Header("Notas")]
     public NoteEvent[] notes;
+
+    /// <summary>
+    /// Identificador único de solo lectura usado como clave en SaveManager.
+    /// </summary>
+    public string SongId => !string.IsNullOrEmpty(songName) ? songName.Trim() : name.Trim();
 }

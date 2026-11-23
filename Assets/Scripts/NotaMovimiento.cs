@@ -231,11 +231,16 @@ public class NotaMovimiento : MonoBehaviour
         targetSet = true;
     }
 
+    private float ObtenerTiempoRelojPista()
+    {
+        return NoteSpawner.Instance != null ? NoteSpawner.Instance.RelojCancionActual : Time.time;
+    }
+
     public float ObtenerProgreso()
     {
         if (modoPistaFrontal)
         {
-            float distFrente = (tiempoImpactoExacto - Time.time) * velocidadPista;
+            float distFrente = (tiempoImpactoExacto - ObtenerTiempoRelojPista()) * velocidadPista;
             float progLineal = 1f - Mathf.Clamp01(distFrente / Mathf.Max(0.1f, distanciaTotalPista));
             return Mathf.Pow(progLineal, curvaGlow);
         }
@@ -250,6 +255,7 @@ public class NotaMovimiento : MonoBehaviour
     void FixedUpdate()
     {
         if (modoPistaFrontal) return;
+        if (NoteSpawner.Instance != null && NoteSpawner.Instance.CancionPausada) return;
 
         if (rb != null && !rb.isKinematic && rb.linearVelocity.y < -velocidadMaxima)
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, -velocidadMaxima, rb.linearVelocity.z);
@@ -257,6 +263,11 @@ public class NotaMovimiento : MonoBehaviour
 
     void Update()
     {
+        if (NoteSpawner.Instance != null && NoteSpawner.Instance.CancionPausada)
+        {
+            return;
+        }
+
         if (modoPistaFrontal)
         {
             ActualizarPosicionEnPista();
@@ -279,7 +290,7 @@ public class NotaMovimiento : MonoBehaviour
 
     private void ActualizarPosicionEnPista()
     {
-        float ahora = Time.time;
+        float ahora = ObtenerTiempoRelojPista();
 
         // Distancia del borde frontal (inicio de nota) y borde trasero (fin de duración) a la línea de impacto
         float distFrente = (tiempoImpactoExacto - ahora) * velocidadPista;

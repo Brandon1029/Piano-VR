@@ -92,25 +92,8 @@ public class ScoreManager : MonoBehaviour
         float precisionActual = ObtenerPorcentajePrecision();
         int estrellasObtenidas = CalcularEstrellas(precisionActual);
 
-        float mejorPrecisionPrevia = GetBestAccuracy(idCancionActual);
-        int mejoresEstrellasPrevias = GetBestStars(idCancionActual);
-
-        bool superoPrecision = precisionActual > (mejorPrecisionPrevia + 0.01f);
-        bool superoEstrellas = estrellasObtenidas > mejoresEstrellasPrevias;
-        UltimoFueNuevoRecord = superoPrecision || superoEstrellas;
-
-        // Conservar siempre la marca más alta en PlayerPrefs
-        if (precisionActual > mejorPrecisionPrevia)
-        {
-            PlayerPrefs.SetFloat("Accuracy_" + idCancionActual, precisionActual);
-        }
-        if (estrellasObtenidas > mejoresEstrellasPrevias)
-        {
-            PlayerPrefs.SetInt("Stars_" + idCancionActual, estrellasObtenidas);
-        }
-
-        PlayerPrefs.SetInt("Completed_" + idCancionActual, 1);
-        PlayerPrefs.Save();
+        SaveManager.SaveSongResult(idCancionActual, precisionActual, estrellasObtenidas, out bool esNuevoRecord);
+        UltimoFueNuevoRecord = esNuevoRecord;
 
         Debug.Log($"[ScoreManager] '{idCancionActual}' finalizada. Precisión: {precisionActual:F1}% | Estrellas: {estrellasObtenidas}/4 | NuevoRécord: {UltimoFueNuevoRecord}");
 
@@ -118,18 +101,21 @@ public class ScoreManager : MonoBehaviour
         {
             SongSelectionMenu.Instance.ActualizarRécordUI();
         }
+
+        if (SongResultsAnimator.Instance != null)
+        {
+            SongResultsAnimator.Instance.SincronizarTarjetasDeLista();
+        }
     }
 
     public static float GetBestAccuracy(string nombreCancion)
     {
-        if (string.IsNullOrEmpty(nombreCancion)) return 0f;
-        return PlayerPrefs.GetFloat("Accuracy_" + nombreCancion, 0f);
+        return SaveManager.GetBestAccuracy(nombreCancion);
     }
 
     public static int GetBestStars(string nombreCancion)
     {
-        if (string.IsNullOrEmpty(nombreCancion)) return 0;
-        return PlayerPrefs.GetInt("Stars_" + nombreCancion, 0);
+        return SaveManager.GetBestStars(nombreCancion);
     }
 
     private void ActualizarUI()

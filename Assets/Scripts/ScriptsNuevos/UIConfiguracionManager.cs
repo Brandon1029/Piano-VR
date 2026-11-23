@@ -44,11 +44,32 @@ public class UIConfiguracionManager : MonoBehaviour
         if (btnSubirOctava != null)
             btnSubirOctava.onClick.AddListener(BotonSubirOctava);
 
+        // Cargar y sincronizar preferencias guardadas en SaveManager
+        bool popUpGuardado = SaveManager.GetShowNotePopups();
+        bool ambientGuardado = SaveManager.GetAmbientMusicEnabled();
+        int octavaGuardada = SaveManager.GetBaseOctave();
+
+        if (PianoManager.Instance != null && !PianoManager.Instance.modoCancionActivo)
+        {
+            PianoManager.Instance.AplicarOctavaBase(octavaGuardada);
+        }
+
         if (togglePopUpNotas != null)
+        {
+            togglePopUpNotas.SetIsOnWithoutNotify(popUpGuardado);
+            AplicarEstadoPopUpNotas(popUpGuardado);
             togglePopUpNotas.onValueChanged.AddListener(OnTogglePopUpChanged);
+        }
 
         if (toggleMusicaAmbiental != null)
+        {
+            toggleMusicaAmbiental.SetIsOnWithoutNotify(ambientGuardado);
+            if (AmbientAudioManager.Instance != null)
+            {
+                AmbientAudioManager.Instance.SetAmbientHabilitado(ambientGuardado);
+            }
             toggleMusicaAmbiental.onValueChanged.AddListener(OnToggleMusicaAmbientalChanged);
+        }
 
         if (toggleAutoplayer != null)
         {
@@ -63,7 +84,7 @@ public class UIConfiguracionManager : MonoBehaviour
         }
 
         ActualizarTextoOctava();
-        Debug.Log("[UIConfiguracionManager] Gestor de configuración UI inicializado.");
+        Debug.Log("[UIConfiguracionManager] Gestor de configuración UI inicializado y sincronizado con SaveManager.");
     }
 
     public void AbrirConfiguracion()
@@ -86,8 +107,9 @@ public class UIConfiguracionManager : MonoBehaviour
         if (PianoManager.Instance != null)
         {
             PianoManager.Instance.SubirOctava();
+            SaveManager.SetBaseOctave(PianoManager.Instance.octavaBaseActual);
             ActualizarTextoOctava();
-            Debug.Log($"[UIConfiguracionManager] [UI] Botón Subir Octava (+) presionado. Nueva octava base: {PianoManager.Instance.octavaBaseActual}");
+            Debug.Log($"[UIConfiguracionManager] [UI] Botón Subir Octava (+) presionado. Nueva octava base guardada: {PianoManager.Instance.octavaBaseActual}");
         }
     }
 
@@ -96,8 +118,9 @@ public class UIConfiguracionManager : MonoBehaviour
         if (PianoManager.Instance != null)
         {
             PianoManager.Instance.BajarOctava();
+            SaveManager.SetBaseOctave(PianoManager.Instance.octavaBaseActual);
             ActualizarTextoOctava();
-            Debug.Log($"[UIConfiguracionManager] [UI] Botón Bajar Octava (-) presionado. Nueva octava base: {PianoManager.Instance.octavaBaseActual}");
+            Debug.Log($"[UIConfiguracionManager] [UI] Botón Bajar Octava (-) presionado. Nueva octava base guardada: {PianoManager.Instance.octavaBaseActual}");
         }
     }
 
@@ -112,7 +135,13 @@ public class UIConfiguracionManager : MonoBehaviour
 
     private void OnTogglePopUpChanged(bool estado)
     {
-        Debug.Log($"[UIConfiguracionManager] [UI] Toggle PopUp Notas cambiado a: {estado}");
+        Debug.Log($"[UIConfiguracionManager] [UI] Toggle PopUp Notas cambiado y guardado: {estado}");
+        SaveManager.SetShowNotePopups(estado);
+        AplicarEstadoPopUpNotas(estado);
+    }
+
+    private void AplicarEstadoPopUpNotas(bool estado)
+    {
         foreach (var key in PianoKey.todasLasTeclas)
         {
             if (key != null)
@@ -124,7 +153,8 @@ public class UIConfiguracionManager : MonoBehaviour
 
     private void OnToggleMusicaAmbientalChanged(bool estado)
     {
-        Debug.Log($"[UIConfiguracionManager] [UI] Toggle Música Ambiental cambiado a: {estado}");
+        Debug.Log($"[UIConfiguracionManager] [UI] Toggle Música Ambiental cambiado y guardado: {estado}");
+        SaveManager.SetAmbientMusicEnabled(estado);
         if (AmbientAudioManager.Instance != null)
         {
             AmbientAudioManager.Instance.SetAmbientHabilitado(estado);

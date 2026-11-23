@@ -16,22 +16,27 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        float volGuardado = SaveManager.GetMasterVolume();
+        AudioListener.volume = volGuardado;
+
         if (volumenSlider != null)
         {
-            volumenSlider.value = 0.5f;
+            volumenSlider.SetValueWithoutNotify(volGuardado);
             volumenSlider.onValueChanged.AddListener(CambiarVolumen);
         }
+        CambiarVolumen(volGuardado);
         Debug.Log("[MenuManager] Menú principal inicializado.");
     }
 
     public void CambiarVolumen(float valor)
     {
+        SaveManager.SetMasterVolume(valor);
         float volumenDB = Mathf.Lerp(-30f, 0f, valor);
         if (audioMixer != null)
         {
             audioMixer.SetFloat("Volume", volumenDB);
         }
-        Debug.Log($"[MenuManager] [UI] Volumen modificado a {valor:F2} ({volumenDB:F1} dB)");
+        Debug.Log($"[MenuManager] [UI] Volumen modificado y guardado a {valor:F2} ({volumenDB:F1} dB)");
     }
 
     // --- Botones ---
