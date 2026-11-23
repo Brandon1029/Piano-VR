@@ -51,7 +51,16 @@ public class UIConfiguracionManager : MonoBehaviour
             toggleMusicaAmbiental.onValueChanged.AddListener(OnToggleMusicaAmbientalChanged);
 
         if (toggleAutoplayer != null)
+        {
+            // Garantizar que al arrancar la escena el Toggle y el AutoPlayManager inicien desactivados por defecto
+            toggleAutoplayer.SetIsOnWithoutNotify(false);
+            AplicarEstadoAutoplayer(false);
             toggleAutoplayer.onValueChanged.AddListener(OnToggleAutoplayerChanged);
+        }
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "ModoLibreMenu")
+        {
+            AplicarEstadoAutoplayer(false);
+        }
 
         ActualizarTextoOctava();
         Debug.Log("[UIConfiguracionManager] Gestor de configuración UI inicializado.");
@@ -125,15 +134,20 @@ public class UIConfiguracionManager : MonoBehaviour
     private void OnToggleAutoplayerChanged(bool estado)
     {
         Debug.Log($"[UIConfiguracionManager] [UI] Toggle Autoplayer cambiado a: {estado}");
+        AplicarEstadoAutoplayer(estado);
+    }
+
+    private void AplicarEstadoAutoplayer(bool estado)
+    {
         if (PianoManager.Instance != null)
         {
             PianoManager.Instance.autoplayerHabilitado = estado;
         }
 
-        if (autoPlayManager != null)
+        AutoPlayManager targetAutoPlay = autoPlayManager != null ? autoPlayManager : AutoPlayManager.Instance;
+        if (targetAutoPlay != null)
         {
-            autoPlayManager.isAutoPlayEnabled = estado; 
-            autoPlayManager.enabled = estado; 
+            targetAutoPlay.ToggleAutoPlay(estado);
         }
     }
 }
