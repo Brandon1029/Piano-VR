@@ -10,6 +10,8 @@ using System.Collections.Generic;
 /// </summary>
 public class NoteSpawner : MonoBehaviour
 {
+    public static NoteSpawner Instance { get; private set; }
+
     [Header("Configuración de la Canción")]
     public SongData song;
     public GameObject notePrefab;
@@ -46,6 +48,24 @@ public class NoteSpawner : MonoBehaviour
     [Tooltip("Desplazamiento vertical sobre el centro de las teclas blancas para asentar la pista.")]
     public float offsetYLineaImpacto = 0.008f;
 
+    [Header("Asistencia de Precisión / Magnetismo de Tecla (Smart Snap)")]
+    [Tooltip("Activa la redirección magnética hacia la tecla de la nota esperada cuando hay una canción en curso y el AutoPlayer está desactivado.")]
+    public bool usarAsistenciaPrecision = true;
+
+    [Tooltip("Tolerancia máxima en semitonos entre la tecla física tocada y la nota esperada (por defecto 2 o 3).")]
+    [Range(0, 6)]
+    public int toleranciaSemitonos = 2;
+
+    [Tooltip("Ventana de tiempo en segundos antes/después del timestamp de impacto de la nota para aplicar la asistencia.")]
+    [Range(0.05f, 0.80f)]
+    public float ventanaTiempoAsistencia = 0.30f;
+
+    [Tooltip("Si está activo, ajusta toleranciaSemitonos automáticamente según la dificultad de la canción (3 en Principiante, 2 en Intermedio, 1 en Avanzado).")]
+    public bool ajustarToleranciaPorDificultad = true;
+    public int toleranciaPrincipiante = 3;
+    public int toleranciaIntermedio   = 2;
+    public int toleranciaAvanzado     = 1;
+
     [Header("Parámetros de Spawning (Fallback Vertical)")]
     public float spawnAlturaExtra = 0.5f;
 
@@ -53,6 +73,9 @@ public class NoteSpawner : MonoBehaviour
     private List<GameObject> activeNotes = new List<GameObject>();
     private Coroutine spawnCoroutine;
     private float startTime;
+    private bool cancionEnCurso = false;
+
+    public bool CancionEnCurso => cancionEnCurso || PianoKey.notasEnEscena.Count > 0;
 
     // Geometría calculada de la pista frontal
     private GameObject pistaRaizGO;
@@ -61,6 +84,16 @@ public class NoteSpawner : MonoBehaviour
     private float zLineaImpacto = 2.533f;
     private float yLineaImpacto = 1.178f;
     private bool pistaInicializada = false;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
 
     void Start()
     {
@@ -378,6 +411,7 @@ public class NoteSpawner : MonoBehaviour
 
         song = newSong;
         startTime = Time.time;
+        cancionEnCurso = true;
 
         // 1. OBTENER TOTAL DE NOTAS REALES DE LA CANCIÓN
         int totalNotas = (song.notes != null) ? song.notes.Length : 0;
@@ -424,6 +458,8 @@ public class NoteSpawner : MonoBehaviour
     /// </summary>
     public void StopCurrentSong()
     {
+        cancionEnCurso = false;
+
         if (spawnCoroutine != null)
         {
             StopCoroutine(spawnCoroutine);
@@ -562,6 +598,7 @@ public class NoteSpawner : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0.6f);
+        cancionEnCurso = false;
 
         // 1. Guardar resultados en el ScoreManager
         if (ScoreManager.Instance != null)
@@ -620,5 +657,169 @@ public class NoteSpawner : MonoBehaviour
         }
 
         return duracion;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Asistencia de Precisión / Magnetismo de Tecla (Input Magnetism / Smart Snap)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Devuelve la tolerancia activa en semitonos según la dificultad de la canción o el valor del Inspector.
+    /// </summary>
+    public int ObtenerToleranciaSemitonosActiva()
+    {
+        if (!ajustarToleranciaPorDificultad || song == null)
+            return Mathf.Max(0, toleranciaSemitonos);
+
+        switch (song.difficulty)
+        {
+            case DifficultyLevel.Principiante:
+                return Mathf.Max(0, toleranciaPrincipiante);
+            case DifficultyLevel.Intermedio:
+                return Mathf.Max(0, toleranciaIntermedio);
+            case DifficultyLevel.Avanzado:
+                return Mathf.Max(0, toleranciaAvanzado);
+            default:
+                return Mathf.Max(0, toleranciaSemitonos);
+        }
+    }
+
+    /// <summary>
+    /// Evalúa si una nota activa está dentro de ventanaTiempoAsistencia respecto al instante actual.
+    /// </summary>
+    private bool EstaNotaDentroDeVentanaAsistencia(NotaMovimiento nota, float ahora, float ventana, out float deltaTiempo)
+    {
+        deltaTiempo = float.MaxValue;
+        if (nota == null || nota.targetKey == null) return false;
+
+        if (nota.EsModoPistaFrontal)
+        {
+            float tImpacto = nota.TiempoImpactoExacto;
+            if (ahora < tImpacto)
+            {
+                deltaTiempo = tImpacto - ahora;
+                return deltaTiempo <= ventana;
+            }
+            else
+            {
+                // Permitir acierto dentro de ventanaTiempoAsistencia después del impacto
+                // o mientras la primera mitad de la barra de duración sigue cruzando la línea
+                float margenPosterior = Mathf.Max(ventana, nota.DuracionNotaSeg * 0.55f);
+                deltaTiempo = ahora - tImpacto;
+                return deltaTiempo <= margenPosterior;
+            }
+        }
+        else
+        {
+            float distY = Mathf.Abs(nota.transform.position.y - nota.targetKey.transform.position.y);
+            deltaTiempo = distY;
+            return distY <= nota.targetKey.rangoToleranciaHit;
+        }
+    }
+
+    /// <summary>
+    /// Resuelve qué tecla y nota deben activarse cuando el jugador presiona 'teclaFisicaTocada' en ModoLibreMenu:
+    ///   a) Si 'teclaFisicaTocada' tiene una nota esperada dentro de 'ventanaTiempoAsistencia', devuelve coincidencia exacta.
+    ///   b) Si no coincide exactamente, busca entre las notas pendientes dentro de 'ventanaTiempoAsistencia' la más cercana
+    ///      en índice de semitono (Mathf.Abs(indiceTocado - indiceEsperado) <= toleranciaSemitonos) y redirige hacia ella.
+    ///   c) Si no hay canción activa, el AutoPlayer está encendido, o ninguna nota entra en el rango, devuelve false.
+    /// </summary>
+    public bool IntentarResolverNotaConAsistencia(
+        PianoKey teclaFisicaTocada,
+        out PianoKey teclaObjetivo,
+        out NotaMovimiento notaObjetivo)
+    {
+        teclaObjetivo = teclaFisicaTocada;
+        notaObjetivo  = null;
+
+        if (teclaFisicaTocada == null || !usarAsistenciaPrecision)
+            return false;
+
+        // Solo aplica en ModoLibreMenu con canción en curso y AutoPlayer desactivado
+        if (SceneManager.GetActiveScene().name != "ModoLibreMenu")
+            return false;
+
+        if (!CancionEnCurso || PianoKey.notasEnEscena.Count == 0)
+            return false;
+
+        if (AutoPlayManager.Instance != null &&
+            AutoPlayManager.Instance.isActiveAndEnabled &&
+            AutoPlayManager.Instance.isAutoPlayEnabled)
+        {
+            return false;
+        }
+
+        float ahora  = Time.time;
+        float ventana = Mathf.Max(0.05f, ventanaTiempoAsistencia);
+
+        // a) Verificar primero si la tecla física presionada coincide exactamente con una nota esperada dentro de la ventana
+        NotaMovimiento mejorNotaExacta = null;
+        float menorDeltaExacto = float.MaxValue;
+
+        for (int i = 0; i < PianoKey.notasEnEscena.Count; i++)
+        {
+            NotaMovimiento nota = PianoKey.notasEnEscena[i];
+            if (nota == null || nota.targetKey != teclaFisicaTocada) continue;
+
+            if (EstaNotaDentroDeVentanaAsistencia(nota, ahora, ventana, out float dt))
+            {
+                if (dt < menorDeltaExacto)
+                {
+                    menorDeltaExacto = dt;
+                    mejorNotaExacta  = nota;
+                }
+            }
+        }
+
+        if (mejorNotaExacta != null)
+        {
+            teclaObjetivo = teclaFisicaTocada;
+            notaObjetivo  = mejorNotaExacta;
+            return true;
+        }
+
+        // b) Buscar entre las notas pendientes dentro de ventanaTiempoAsistencia la más cercana en semitonos
+        int toleranciaActiva = ObtenerToleranciaSemitonosActiva();
+        if (toleranciaActiva <= 0)
+            return false;
+
+        int indiceTocado = teclaFisicaTocada.ObtenerIndiceSemitono();
+        NotaMovimiento mejorNotaCercana = null;
+        int menorDistanciaSemitonos = int.MaxValue;
+        float menorDeltaCercano = float.MaxValue;
+
+        for (int i = 0; i < PianoKey.notasEnEscena.Count; i++)
+        {
+            NotaMovimiento nota = PianoKey.notasEnEscena[i];
+            if (nota == null || nota.targetKey == null) continue;
+
+            if (!EstaNotaDentroDeVentanaAsistencia(nota, ahora, ventana, out float dt))
+                continue;
+
+            int indiceEsperado = nota.targetKey.ObtenerIndiceSemitono();
+            int distSemitonos  = Mathf.Abs(indiceTocado - indiceEsperado);
+
+            if (distSemitonos <= toleranciaActiva)
+            {
+                if (distSemitonos < menorDistanciaSemitonos ||
+                    (distSemitonos == menorDistanciaSemitonos && dt < menorDeltaCercano))
+                {
+                    menorDistanciaSemitonos = distSemitonos;
+                    menorDeltaCercano       = dt;
+                    mejorNotaCercana        = nota;
+                }
+            }
+        }
+
+        // c) Redirigir hacia la PianoKey de la nota esperada cercana
+        if (mejorNotaCercana != null && mejorNotaCercana.targetKey != null)
+        {
+            teclaObjetivo = mejorNotaCercana.targetKey;
+            notaObjetivo  = mejorNotaCercana;
+            Debug.Log($"[NoteSpawner] [Smart Snap] '{teclaFisicaTocada.nombreNotaCompleto}' redirigida -> '{teclaObjetivo.nombreNotaCompleto}' (Δ={menorDistanciaSemitonos} semitonos, Δt={menorDeltaCercano:F2}s)");
+            return true;
+        }
+
+        return false;
     }
 }

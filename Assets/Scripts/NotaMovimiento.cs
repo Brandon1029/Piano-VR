@@ -47,6 +47,10 @@ public class NotaMovimiento : MonoBehaviour
     private float altoBarra = 0.014f;
     private bool impactoIniciado = false;
 
+    public bool EsModoPistaFrontal => modoPistaFrontal;
+    public float TiempoImpactoExacto => tiempoImpactoExacto;
+    public float DuracionNotaSeg => duracionNotaSeg;
+
     private Transform contenedorVisualTransform;
     private Transform barraVisualTransform;
     private Renderer barraRenderer;
