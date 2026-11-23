@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ModoLibreMenu.unity
     guid: 996164ca57c8ad74aa1e228f0e6b2807
+  - enabled: 1
+    path: Assets/Scenes/ModoTutorial.unity
+    guid: 1cdbc9b77aeeaf64180df5727f53e1e5
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d5a2e405fb725de4e887867956718d32, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

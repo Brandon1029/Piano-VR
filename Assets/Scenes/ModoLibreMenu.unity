@@ -219,6 +219,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -485,7 +491,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &38379291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5098559829858595995, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -586,6 +593,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -729,6 +742,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -872,6 +891,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -1173,6 +1198,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -1316,6 +1347,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -1535,6 +1572,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -1674,7 +1717,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &163451800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1771,7 +1815,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &178382767 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7019669058519504798, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -1872,6 +1917,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -2101,6 +2152,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -2244,6 +2301,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -2387,6 +2450,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -2605,6 +2674,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -2918,6 +2993,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -3061,6 +3142,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -3460,6 +3547,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.356
       objectReference: {fileID: 0}
+    - target: {fileID: 1387652107619923731, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1387652107619923731, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2100502279935181459, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3723,6 +3818,10 @@ PrefabInstance:
     - target: {fileID: 4750419575962273167, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -23
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290230600193736210, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5484926215961174693, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
@@ -4239,6 +4338,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -4382,6 +4487,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -4658,7 +4769,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &479215333
 GameObject:
   m_ObjectHideFlags: 0
@@ -6374,6 +6486,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -6517,6 +6635,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -6660,6 +6784,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -7212,6 +7342,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -7364,6 +7500,8 @@ MonoBehaviour:
   teclasMask:
     serializedVersion: 2
     m_Bits: 64
+  velocidadMinimaDescenso: -0.12
+  preTravelMinimo: 0.006
   startupGracePeriod: 0.5
 --- !u!1 &902728310 stripped
 GameObject:
@@ -7465,6 +7603,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -7608,6 +7752,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -8053,6 +8203,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -8282,6 +8438,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -8425,6 +8587,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -8909,6 +9077,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -9052,6 +9226,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -9195,6 +9375,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -9877,7 +10063,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &1278406442 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2692449885117436821, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -9978,6 +10165,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -10121,6 +10314,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -10379,6 +10578,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -10714,6 +10919,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -10862,6 +11073,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -11005,6 +11222,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -11402,6 +11625,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -11714,6 +11943,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -11853,7 +12088,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &1467825821 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2971199665800551323, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -11954,6 +12190,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -12097,6 +12339,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -12240,6 +12488,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -12383,6 +12637,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -12522,7 +12782,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &1515851947 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5905037306365944454, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -12623,6 +12884,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -13030,6 +13297,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -13169,7 +13442,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &1611094165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8665695280369147062, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -13270,6 +13544,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -13409,7 +13689,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &1629608898 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1655041371550637806, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -13527,6 +13808,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -13715,6 +14002,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -13858,6 +14151,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -14065,6 +14364,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -14208,6 +14513,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -14488,6 +14799,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -14706,6 +15023,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -15184,6 +15507,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -15327,6 +15656,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -15519,6 +15854,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -15662,6 +16003,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -15805,6 +16152,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -16068,6 +16421,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -19124,6 +19483,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -19267,6 +19632,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -19410,6 +19781,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -19707,7 +20084,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FingerPianoTouch
   radioYema: 0.005
   multiplicadorSalida: 1.6
-  cederAHandColliders: 1
+  profundidadDisparo: 0.0035
+  ventanaDedoLider: 0.045
 --- !u!1 &2007071191
 GameObject:
   m_ObjectHideFlags: 0
@@ -20180,6 +20558,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
@@ -20460,6 +20844,12 @@ MonoBehaviour:
   pressSpeed: 20
   returnSpeed: 8
   pressTiltAngle: 3.5
+  factorAnchoCollider: 0.88
+  preTravelMinimo: 0.0035
+  volumenMinimo: 0.28
+  volumenMaximo: 1
+  velocidadImpactoSuave: 0.12
+  velocidadImpactoFuerte: 0.9
   colorPulsoImpacto: {r: 0.35, g: 0.85, b: 1, a: 1}
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
