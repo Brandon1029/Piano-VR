@@ -100,6 +100,7 @@ public class PianoKey : MonoBehaviour,
     Transform visualTransform;
     bool visualEsPropio = false;
     bool anchoColliderAjustado = false;
+    bool teclaOcultaEnEscena = false;
     MaterialPropertyBlock propBlock;
     static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
 
@@ -287,6 +288,31 @@ public class PianoKey : MonoBehaviour,
         MeshFilter   rootFilter   = GetComponent<MeshFilter>();
         MeshRenderer rootRenderer = GetComponent<MeshRenderer>();
 
+        // En 'ModoMusica' (o si el MeshRenderer de la tecla estaba desactivado en la escena),
+        // el piano es solo para reproducción de audio: no crear mallas visuales ni activar renderers.
+        bool esEscenaModoMusica = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "ModoMusica";
+        if (esEscenaModoMusica || (rootRenderer != null && !rootRenderer.enabled))
+        {
+            teclaOcultaEnEscena = true;
+            if (rootRenderer != null) rootRenderer.enabled = false;
+
+            if (esEscenaModoMusica && transform.parent != null)
+            {
+                // Asegurar que la carcasa/soporte del piano tampoco sea visible ni colisionable en ModoMusica
+                MeshRenderer[] renderersPadre = transform.parent.GetComponents<MeshRenderer>();
+                for (int i = 0; i < renderersPadre.Length; i++)
+                    if (renderersPadre[i] != null) renderersPadre[i].enabled = false;
+
+                Collider[] collidersPadre = transform.parent.GetComponents<Collider>();
+                for (int i = 0; i < collidersPadre.Length; i++)
+                    if (collidersPadre[i] != null) collidersPadre[i].enabled = false;
+            }
+
+            visualTransform = transform;
+            keyRenderer = null;
+            return;
+        }
+
         if (rootFilter != null && rootRenderer != null)
         {
             GameObject visualObj = new GameObject(gameObject.name + "_Visual");
@@ -383,11 +409,24 @@ public class PianoKey : MonoBehaviour,
     /// </summary>
     public void AsegurarFisicasTecla()
     {
-        // 1. BoxCollider marcado como Is Trigger y ajustado al 84% de su ancho entre teclas vecinas
         if (boxCollider == null)
             boxCollider = GetComponent<BoxCollider>();
         if (boxCollider == null)
             boxCollider = gameObject.AddComponent<BoxCollider>();
+
+        // Si la tecla está oculta (ej. ModoMusica, donde solo suena el audio), desactivar su Collider
+        if (teclaOcultaEnEscena || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "ModoMusica")
+        {
+            teclaOcultaEnEscena = true;
+            boxCollider.isTrigger = true;
+            boxCollider.enabled = false;
+
+            MeshRenderer mr = GetComponent<MeshRenderer>();
+            if (mr != null) mr.enabled = false;
+            return;
+        }
+
+        // 1. BoxCollider marcado como Is Trigger y ajustado al 88% de su ancho entre teclas vecinas
         boxCollider.isTrigger = true;
 
         if (!anchoColliderAjustado)
@@ -445,6 +484,13 @@ public class PianoKey : MonoBehaviour,
 
     private void ConfigurarInteraccionVR()
     {
+        if (teclaOcultaEnEscena)
+        {
+            var interactableExistente = GetComponent<XRSimpleInteractable>();
+            if (interactableExistente != null) interactableExistente.enabled = false;
+            return;
+        }
+
         var simpleInteractable = GetComponent<XRSimpleInteractable>();
         if (simpleInteractable == null)
         {

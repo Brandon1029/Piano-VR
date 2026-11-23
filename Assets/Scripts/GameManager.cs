@@ -19,24 +19,27 @@ public class GameManager : MonoBehaviour
     private string nombreCancionActiva = "";
 
     void Start()
-{
-    noteSpawner.enabled = false;
-    if (resultsPanel != null) resultsPanel.SetActive(false);
-
-    if (noteSpawner != null && noteSpawner.song != null)
     {
-        nombreCancionActiva = noteSpawner.song.songName;
-        
-        int totalNotas = noteSpawner.song.notes != null ? noteSpawner.song.notes.Length : 1;
+        if (resultsPanel != null) resultsPanel.SetActive(false);
 
-        if (scoreManager != null)
+        if (noteSpawner != null && noteSpawner.song != null)
         {
-            scoreManager.IniciarSesion(nombreCancionActiva, totalNotas);
+            nombreCancionActiva = noteSpawner.song.songName;
+            int totalNotas = noteSpawner.song.notes != null ? noteSpawner.song.notes.Length : 1;
+
+            if (scoreManager != null)
+            {
+                scoreManager.IniciarSesion(nombreCancionActiva, totalNotas);
+            }
+        }
+
+        // Solo ejecutar cuenta regresiva bloqueante si hay un countdownText asignado en la escena
+        if (countdownText != null && noteSpawner != null)
+        {
+            noteSpawner.enabled = false;
+            StartCoroutine(StartCountdown());
         }
     }
-
-    StartCoroutine(StartCountdown());
-}
 
     IEnumerator StartCountdown()
     {
@@ -55,32 +58,57 @@ public class GameManager : MonoBehaviour
             countdownText.gameObject.SetActive(false);
         }
 
-        noteSpawner.enabled = true;
+        if (noteSpawner != null) noteSpawner.enabled = true;
     }
 
     public void ShowResults()
-{
-    if (resultsPanel != null) resultsPanel.SetActive(true);
-
-    if (scoreManager != null)
     {
-        float precision = scoreManager.ObtenerPorcentajePrecision();
-        int estrellas = scoreManager.CalcularEstrellas(precision);
+        if (scoreManager == null)
+        {
+            scoreManager = ScoreManager.Instance;
+        }
 
-        if (finalScoreText != null)
-            finalScoreText.text = $"Precisión: {precision:F1}%\nEstrellas: {estrellas}★";
+        if (scoreManager != null)
+        {
+            float precision = scoreManager.ObtenerPorcentajePrecision();
+            int estrellas = scoreManager.CalcularEstrellas(precision);
 
-        scoreManager.GuardarResultado();
+            if (finalScoreText != null)
+                finalScoreText.text = $"Precisión: {precision:F1}%\nEstrellas: {estrellas}★";
+
+            scoreManager.GuardarResultado();
+        }
+
+        // En ModoLibreMenu, delegar la animación visual de resultados a SongResultsAnimator
+        if (SongResultsAnimator.Instance != null)
+        {
+            SongResultsAnimator.Instance.MostrarResultadosFinales();
+            return;
+        }
+
+        if (resultsPanel != null)
+        {
+            resultsPanel.SetActive(true);
+        }
     }
-}
 
     public void RetryLevel()
     {
+        if (SongResultsAnimator.Instance != null)
+        {
+            SongResultsAnimator.Instance.ReintentarCancion();
+            return;
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ExitToMenu()
     {
+        if (SongResultsAnimator.Instance != null)
+        {
+            SongResultsAnimator.Instance.VolverAlMenu();
+            return;
+        }
         SceneManager.LoadScene("ModoLibreMenu");
     }
 }

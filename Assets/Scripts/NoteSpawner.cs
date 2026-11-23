@@ -144,8 +144,14 @@ public class NoteSpawner : MonoBehaviour
         }
     }
 
-    // Espera a que las últimas notas caigan por completo
-    yield return new WaitForSeconds(2.0f);
+    // Espera a que las últimas notas caigan por completo o sean tocadas por el jugador
+    float tiempoEsperaFinal = 0f;
+    while (PianoKey.notasEnEscena.Count > 0 && tiempoEsperaFinal < 3.5f)
+    {
+        tiempoEsperaFinal += 0.1f;
+        yield return new WaitForSeconds(0.1f);
+    }
+    yield return new WaitForSeconds(0.6f);
 
     // 1. Guardar resultados en el ScoreManager
     if (ScoreManager.Instance != null)
@@ -165,11 +171,15 @@ public class NoteSpawner : MonoBehaviour
         PianoManager.Instance.TerminarModoCancion();
     }
 
-    // 4. Muestra la pantalla de resultados si el GameManager está configurado
+    // 4. Muestra la pantalla de resultados si el GameManager o SongResultsAnimator está activo en la escena
     GameManager gm = Object.FindAnyObjectByType<GameManager>();
     if (gm != null)
     {
         gm.ShowResults();
+    }
+    else if (SongResultsAnimator.Instance != null)
+    {
+        SongResultsAnimator.Instance.MostrarResultadosFinales();
     }
 }
 }
