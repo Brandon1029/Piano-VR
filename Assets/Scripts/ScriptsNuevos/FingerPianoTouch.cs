@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Detección táctil por profundidad relativa desde el contacto + Pre-travel visual + Dedo Líder.
+/// Detección táctil por profundidad relativa desde el contacto + Pre-travel visual + Dedo Líder + Anti-Rebote.
 ///
 /// 1. Permite posar los dedos sobre las teclas sin exigir velocidad inicial: OnTriggerEnter
 ///    registra 'entryY'.
@@ -11,7 +11,9 @@ using System.Collections.Generic;
 /// 3. Al alcanzar 3.5 mm (0.0035 m) bajando (deltaY <= 0), entra en la ventana de "Dedo Líder"
 ///    de 45 ms por mano: si varios dedos de la misma mano bajan por simpatía, dispara únicamente
 ///    el que bajó con mayor amplitud.
-/// 4. Una vez disparada, la tecla permanece bloqueada hasta salir físicamente de DedoDentroDeVolumen.
+/// 4. Una vez disparada, aplica bloqueo por histéresis espacial (histeresisElevacionReentrada = 2.5 mm
+///    o salida completa del collider) y bloqueo temporal por dedo (cooldownReentradaDedo = 0.14 s)
+///    para eliminar dobles clics por micro-temblor del Hand Tracking en el borde del collider.
 /// </summary>
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -32,6 +34,13 @@ public class FingerPianoTouch : MonoBehaviour
     [Tooltip("Ventana de tiempo (segundos) para comparar dedos de la misma mano y elegir solo el líder (45 ms).")]
     public float ventanaDedoLider = 0.045f;
 
+    [Header("Anti-Rebote e Histéresis de Re-Entrada por Dedo")]
+    [Tooltip("Tiempo mínimo (segundos) tras un disparo antes de que este mismo dedo pueda volver a activar una pulsación (140 ms).")]
+    public float cooldownReentradaDedo = 0.14f;
+
+    [Tooltip("Elevación mínima hacia arriba (metros) desde el punto más bajo del toque requerida para re-armar el dedo sin salir del trigger (2.5 mm).")]
+    public float histeresisElevacionReentrada = 0.0025f;
+
     private struct CandidatoDedo
     {
         public FingerPianoTouch dedo;
@@ -50,6 +59,7 @@ public class FingerPianoTouch : MonoBehaviour
     // Exclusividad 1 dedo físico = 1 tecla y ventanas de Dedo Líder independientes por mano ("L" / "R")
     private static readonly Dictionary<string, FingerPianoTouch> dedosFisicosActivos = new Dictionary<string, FingerPianoTouch>();
     private static readonly Dictionary<string, VentanaMano> ventanasPorMano = new Dictionary<string, VentanaMano>();
+    private static readonly Dictionary<string, float> ultimoTiempoDisparoPorDedoFisico = new Dictionary<string, float>();
 
     private string   idDedoFisico = string.Empty;
     private string   ladoMano     = "U";
@@ -60,6 +70,13 @@ public class FingerPianoTouch : MonoBehaviour
     private float    velocidadDescensoMax = 0f;
     private bool     enVentanaLider = false;
     private bool     descartadoPorSimpatia = false;
+
+    // Estado de histéresis y bloqueo de re-entrada por dedo
+    private float    ultimoTiempoDisparoLocal = -10f;
+    private float    ultimoTiempoLiberacionLocal = -10f;
+    private float    alturaMinimaToqueActual = 0f;
+    private bool     requiereSeparacionHisteresis = false;
+    private PianoKey ultimaTeclaDisparada = null;
 
     private void Awake()
     {
@@ -83,8 +100,32 @@ public class FingerPianoTouch : MonoBehaviour
         if (hc != null && hc.enabled)
         {
             hc.enabled = false;
-            Debug.Log("[FingerPianoTouch] Control táctil por profundidad relativa y Dedo Líder activo (HandColliders pausado para evitar duplicados).");
+            Debug.Log("[FingerPianoTouch] Control táctil por profundidad relativa, Dedo Líder y Anti-Rebote activo (HandColliders pausado para evitar duplicados).");
         }
+    }
+
+    /// <summary>
+    /// Verifica si este dedo físico aún se encuentra dentro de la ventana temporal de bloqueo
+    /// (cooldownReentradaDedo = 0.14s) desde su última pulsación.
+    /// </summary>
+    private bool DedoEnCooldownReentrada()
+    {
+        float ahora = Time.time;
+        if ((ahora - ultimoTiempoDisparoLocal) < cooldownReentradaDedo)
+            return true;
+
+        // Pequeño margen tras soltar el volumen de la tecla para absorber micro-temblor en el borde del collider
+        if ((ahora - ultimoTiempoLiberacionLocal) < (cooldownReentradaDedo * 0.45f))
+            return true;
+
+        if (!string.IsNullOrEmpty(idDedoFisico) &&
+            ultimoTiempoDisparoPorDedoFisico.TryGetValue(idDedoFisico, out float tGlobal) &&
+            (ahora - tGlobal) < cooldownReentradaDedo)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -95,7 +136,11 @@ public class FingerPianoTouch : MonoBehaviour
             return;
 
         PianoKey key = other.GetComponentInParent<PianoKey>();
-        if (key == null || key.isPressed) return;
+        if (key == null || key.isPressed || key.EstaEnCooldownRebote()) return;
+
+        // Si el mismo dedo acaba de pulsar esta tecla y re-entra por micro-temblor antes del cooldown, bloquear
+        if (DedoEnCooldownReentrada() && key == ultimaTeclaDisparada)
+            return;
 
         // Si estaba en pre-travel en otra tecla distinta, limpiar su pre-travel visual
         if (teclaContacto != null && teclaContacto != key)
@@ -121,6 +166,35 @@ public class FingerPianoTouch : MonoBehaviour
 
         PianoKey key = other.GetComponentInParent<PianoKey>();
         if (key == null) return;
+
+        // Si el dedo sigue en cooldown o la tecla está en cooldown anti-rebote, mantener pre-travel en 0 y esperar
+        if (DedoEnCooldownReentrada() || key.EstaEnCooldownRebote())
+        {
+            if (teclaContacto != null)
+            {
+                teclaContacto.EstablecerPreTravelVisual(0f, profundidadDisparo);
+            }
+            prevY = transform.position.y;
+            return;
+        }
+
+        // Si este dedo acaba de disparar esta misma tecla y no ha salido completamente del trigger,
+        // exigir que suba claramente al menos 'histeresisElevacionReentrada' (2.5 mm) desde el fondo del toque
+        if (requiereSeparacionHisteresis && key == ultimaTeclaDisparada)
+        {
+            if (transform.position.y >= (alturaMinimaToqueActual + histeresisElevacionReentrada))
+            {
+                requiereSeparacionHisteresis = false;
+                entryY = transform.position.y;
+                prevY  = entryY;
+                velocidadDescensoMax = 0f;
+            }
+            else
+            {
+                prevY = transform.position.y;
+                return;
+            }
+        }
 
         if (teclaContacto == null)
         {
@@ -180,18 +254,22 @@ public class FingerPianoTouch : MonoBehaviour
     {
         if (other == null) return;
 
+        PianoKey key = other.GetComponentInParent<PianoKey>();
+
+        // Si el dedo salió físicamente del trigger de la última tecla disparada, cumple la separación espacial
+        if (key != null && key == ultimaTeclaDisparada)
+        {
+            requiereSeparacionHisteresis = false;
+        }
+
         // NUNCA desbloquear 'teclaActiva' por OnTriggerExit (evita falsos releases).
         // Solo limpiar el pre-travel si el dedo salió antes de activar la nota.
-        if (teclaActiva == null && teclaContacto != null)
+        if (teclaActiva == null && teclaContacto != null && key == teclaContacto)
         {
-            PianoKey key = other.GetComponentInParent<PianoKey>();
-            if (key == teclaContacto)
-            {
-                teclaContacto.EstablecerPreTravelVisual(0f, profundidadDisparo);
-                teclaContacto = null;
-                enVentanaLider = false;
-                descartadoPorSimpatia = false;
-            }
+            teclaContacto.EstablecerPreTravelVisual(0f, profundidadDisparo);
+            teclaContacto = null;
+            enVentanaLider = false;
+            descartadoPorSimpatia = false;
         }
     }
 
@@ -204,8 +282,19 @@ public class FingerPianoTouch : MonoBehaviour
     {
         if (teclaActiva == null) return;
 
-        // Bloqueado hasta que el dedo salga físicamente del volumen estático de la tecla
-        if (!teclaActiva.DedoDentroDeVolumen(transform.position, radioYema * multiplicadorSalida))
+        float currentY = transform.position.y;
+        if (currentY < alturaMinimaToqueActual)
+        {
+            alturaMinimaToqueActual = currentY;
+        }
+
+        // Liberar la tecla cuando el dedo salga del volumen expandido o se eleve claramente con histéresis
+        // después de haber cumplido el tiempo mínimo de cooldownReentradaDedo
+        bool salioDeVolumen = !teclaActiva.DedoDentroDeVolumen(transform.position, radioYema * multiplicadorSalida);
+        bool elevoConHisteresis = (Time.time - ultimoTiempoDisparoLocal) >= cooldownReentradaDedo &&
+                                  currentY >= (alturaMinimaToqueActual + histeresisElevacionReentrada + 0.001f);
+
+        if (salioDeVolumen || elevoConHisteresis)
         {
             LiberarTeclaActual();
         }
@@ -213,6 +302,9 @@ public class FingerPianoTouch : MonoBehaviour
 
     private void RegistrarEnVentanaDedoLider(PianoKey tecla, float amplitud, float velocidad)
     {
+        if (tecla == null || tecla.EstaEnCooldownRebote() || DedoEnCooldownReentrada())
+            return;
+
         if (!ventanasPorMano.TryGetValue(ladoMano, out VentanaMano ventana))
         {
             ventana = new VentanaMano();
@@ -267,7 +359,8 @@ public class FingerPianoTouch : MonoBehaviour
         {
             CandidatoDedo c = ventana.candidatos[i];
             if (c.dedo == null || c.tecla == null || !c.dedo.isActiveAndEnabled) continue;
-            if (c.dedo.teclaActiva != null || c.tecla.isPressed) continue;
+            if (c.dedo.teclaActiva != null || c.tecla.isPressed || c.tecla.EstaEnCooldownRebote()) continue;
+            if (c.dedo.DedoEnCooldownReentrada()) continue;
 
             if (c.amplitudDescenso > mejorAmplitud + 0.0002f ||
                 (Mathf.Abs(c.amplitudDescenso - mejorAmplitud) <= 0.0002f && c.velocidadImpacto > mejorVelocidad))
@@ -303,11 +396,23 @@ public class FingerPianoTouch : MonoBehaviour
     private void ConfirmarDisparoLider(PianoKey tecla, float velocidadImpacto)
     {
         if (tecla == null || teclaActiva != null) return;
+        if (tecla.EstaEnCooldownRebote() || DedoEnCooldownReentrada()) return;
         if (dedosFisicosActivos.TryGetValue(idDedoFisico, out FingerPianoTouch dueno) && dueno != null)
             return;
 
         if (tecla.RegistrarToqueDedo(transform, velocidadImpacto))
         {
+            float ahora = Time.time;
+            ultimoTiempoDisparoLocal = ahora;
+            if (!string.IsNullOrEmpty(idDedoFisico))
+            {
+                ultimoTiempoDisparoPorDedoFisico[idDedoFisico] = ahora;
+            }
+
+            alturaMinimaToqueActual = transform.position.y;
+            ultimaTeclaDisparada = tecla;
+            requiereSeparacionHisteresis = true;
+
             teclaActiva = tecla;
             teclaContacto = null;
             dedosFisicosActivos[idDedoFisico] = this;
@@ -336,6 +441,7 @@ public class FingerPianoTouch : MonoBehaviour
         {
             teclaActiva.LiberarToqueDedo(transform);
             teclaActiva = null;
+            ultimoTiempoLiberacionLocal = Time.time;
         }
 
         if (!string.IsNullOrEmpty(idDedoFisico) &&

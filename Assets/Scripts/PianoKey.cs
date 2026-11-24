@@ -56,6 +56,10 @@ public class PianoKey : MonoBehaviour,
     [Tooltip("Tiempo en segundos tras cargar la escena donde se ignoran colisiones para evitar que las teclas se presionen solas al arrancar.")]
     public float startupGracePeriod = 0.25f;
 
+    [Header("Anti-Rebote (Debounce Hand Tracking)")]
+    [Tooltip("Tiempo mínimo en segundos entre activaciones físicas consecutivas de la misma tecla (160 ms).")]
+    public float cooldownRebote = 0.16f;
+
     [Header("Configuración de Impacto")]
     [Tooltip("Distancia vertical máxima (en metros) entre la nota y la tecla para considerar un acierto.")]
     public float rangoToleranciaHit = 0.08f;
@@ -95,6 +99,7 @@ public class PianoKey : MonoBehaviour,
     public bool isPressed = false;
     private float pulsoImpacto = 0f;
     private float preTravelVisualNorm = 0f;
+    private float ultimoTiempoToque = -10f;
 
     // Estado de redirección inteligente (Smart Snap / Magnetismo de Tecla)
     private PianoKey teclaRedirigidaActiva = null;
@@ -139,8 +144,17 @@ public class PianoKey : MonoBehaviour,
     private readonly HashSet<Transform> dedosPresionando = new HashSet<Transform>();
 
     /// <summary>
+    /// Indica si la tecla se encuentra aún dentro de la ventana anti-rebote (cooldownRebote)
+    /// tras su última activación física.
+    /// </summary>
+    public bool EstaEnCooldownRebote()
+    {
+        return (Time.time - ultimoTiempoToque) < cooldownRebote;
+    }
+
+    /// <summary>
     /// Intenta presionar la tecla con un dedo. Devuelve true solo si la tecla estaba
-    /// libre (ningún dedo ni interactor) y este dedo pasa a ser su dueño.
+    /// libre (ningún dedo ni interactor), fuera del cooldown anti-rebote y este dedo pasa a ser su dueño.
     /// Opcionalmente recibe la velocidad vertical de impacto (m/s) para modular el volumen.
     /// </summary>
     public bool RegistrarToqueDedo(Transform dedo, float velocidadImpacto = -1f)
@@ -149,11 +163,20 @@ public class PianoKey : MonoBehaviour,
         if (Time.timeSinceLevelLoad < startupGracePeriod) return false;
         if (dedosPresionando.Contains(dedo)) return true; // ya es el dueño, no vuelve a sonar
 
-        // Tecla ocupada (hundida, otro dedo o un interactor/rayo) -> rechazar
+        // Tecla ocupada o dentro del tiempo anti-rebote (cooldownRebote) -> rechazar por completo
         if (isPressed || dedosPresionando.Count > 0 || interactoresActivos > 0) return false;
+        if (EstaEnCooldownRebote()) return false;
 
         dedosPresionando.Add(dedo);
         OnPokeEnter(velocidadImpacto); // isPressed = true
+
+        // Si OnPokeEnter rechazó el toque (ej. tecla destino en Smart Snap aún en cooldownRebote), liberar dueño
+        if (!isPressed)
+        {
+            dedosPresionando.Remove(dedo);
+            return false;
+        }
+
         return true;
     }
 
@@ -180,7 +203,7 @@ public class PianoKey : MonoBehaviour,
     /// </summary>
     public void EstablecerPreTravelVisual(float profundidadMetros, float profundidadDisparoMetros = 0.0035f)
     {
-        if (isPressed)
+        if (isPressed || EstaEnCooldownRebote())
         {
             preTravelVisualNorm = 0f;
             return;
@@ -745,6 +768,7 @@ public class PianoKey : MonoBehaviour,
     private void RegistrarEntradaInteractuador()
     {
         if (Time.timeSinceLevelLoad < startupGracePeriod) return;
+        if (!isPressed && EstaEnCooldownRebote()) return;
 
         interactoresActivos++;
 
@@ -771,8 +795,9 @@ public class PianoKey : MonoBehaviour,
 
     public void OnPokeEnter(float velocidadImpacto)
     {
-        // Una tecla hundida jamás vuelve a sonar mientras siga presionada
+        // Una tecla hundida o dentro de la ventana anti-rebote jamás vuelve a sonar
         if (isPressed) return;
+        if (EstaEnCooldownRebote()) return;
 
         // Asistencia de Precisión / Magnetismo de Tecla (Smart Snap) en ModoLibreMenu:
         // Si hay una canción activa (con AutoPlayer desactivado) y el jugador toca una tecla vecina
@@ -783,6 +808,13 @@ public class PianoKey : MonoBehaviour,
         {
             if (teclaAsistida != null && teclaAsistida != this && notaAsistida != null)
             {
+                // Si la tecla destino redirigida acaba de sonar dentro de su cooldownRebote, ignorar el rebote
+                if (teclaAsistida.EstaEnCooldownRebote())
+                {
+                    return;
+                }
+
+                ultimoTiempoToque = Time.time;
                 isPressed = true;
                 preTravelVisualNorm = 0f;
                 teclaRedirigidaActiva = teclaAsistida;
@@ -795,6 +827,7 @@ public class PianoKey : MonoBehaviour,
             }
         }
 
+        ultimoTiempoToque = Time.time;
         isPressed = true;
         preTravelVisualNorm = 0f;
         teclaRedirigidaActiva = null;
@@ -810,6 +843,9 @@ public class PianoKey : MonoBehaviour,
     /// </summary>
     public void ActivarPorRedireccionMagnetica(float velocidadImpacto, NotaMovimiento notaObjetivo)
     {
+        if (EstaEnCooldownRebote()) return;
+
+        ultimoTiempoToque = Time.time;
         presionadaPorRedireccion = true;
         tiempoExpiraRedireccion = Time.time + 0.55f;
         preTravelVisualNorm = 0f;

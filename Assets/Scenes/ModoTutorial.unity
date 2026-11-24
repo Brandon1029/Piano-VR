@@ -229,6 +229,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -493,6 +494,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &38379291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5098559829858595995, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -603,6 +606,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -752,6 +756,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -901,6 +906,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -1208,6 +1214,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -1357,6 +1364,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -1582,6 +1590,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -1719,6 +1728,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &163451800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1817,6 +1828,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &178382767 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7019669058519504798, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -1927,6 +1940,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -2162,6 +2176,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -2311,6 +2326,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -2460,6 +2476,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -2684,6 +2701,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -3003,6 +3021,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -3152,6 +3171,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -3277,9 +3297,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a6f67c89dfe6f044683c89ade12bdb8a, type: 2}
   - {fileID: 11400000, guid: c8c6c2bc325156d43ae396d8ef93d660, type: 2}
   - {fileID: 11400000, guid: fbb786dc66f07a74eb22672a6760aa74, type: 2}
-  - {fileID: 11400000, guid: 1c770dabb4698ba46ab8ffeb4bfac676, type: 2}
-  - {fileID: 11400000, guid: e7c8b79ae93e53d44b0ce4b67a0e7772, type: 2}
-  - {fileID: 11400000, guid: 9c142043d82e31b4295024f051d53227, type: 2}
+  - {fileID: 11400000, guid: cbb5dc00ef219cd4c8087a8071563f1c, type: 2}
+  - {fileID: 11400000, guid: 575c8005f9d546e4da7de3ffce931692, type: 2}
+  - {fileID: 11400000, guid: 60313b0988ae0c447a2472f18bfecb9e, type: 2}
   - {fileID: 11400000, guid: 5addf67d1d1ddb6438bfe30a80f873d2, type: 2}
   - {fileID: 11400000, guid: b561cf85f87557945b59c5b48ee92240, type: 2}
   - {fileID: 11400000, guid: 6902117365e8d434c8265ede4ce4e2e8, type: 2}
@@ -3293,6 +3313,10 @@ MonoBehaviour:
   btnAvanzado: {fileID: 1765943379}
   songListContainer: {fileID: 2007071192}
   songItemButtonPrefab: {fileID: 8578940008605540889, guid: a3c79acca1f21d747901a3816062a969, type: 3}
+  scrollRectCanciones: {fileID: 0}
+  btnSubirLista: {fileID: 0}
+  btnBajarLista: {fileID: 0}
+  pasoNavegacionVertical: 0.38
   txtTitle: {fileID: 1722343817}
   txtComposer: {fileID: 2076684125}
   txtBPM: {fileID: 925187007}
@@ -3897,7 +3921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.909
+      value: 1.809
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3932,8 +3956,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9059786329452581396, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_CameraYOffset
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059786329452581396, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_RequestedTrackingOriginMode
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9192499159982884221, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
@@ -4340,6 +4368,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -4489,6 +4518,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -4763,6 +4793,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &479215333
 GameObject:
   m_ObjectHideFlags: 0
@@ -6488,6 +6520,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -6637,6 +6670,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -6786,6 +6820,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -7344,6 +7379,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -7605,6 +7641,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -7754,6 +7791,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -8205,6 +8243,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -8440,6 +8479,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -8589,6 +8629,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -9079,6 +9120,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -9228,6 +9270,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -9377,6 +9420,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -10057,6 +10101,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &1278406442 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2692449885117436821, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -10167,6 +10213,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -10316,6 +10363,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -10389,6 +10437,7 @@ MonoBehaviour:
   umbralEstrella1: 50
   umbralEstrella2: 70
   umbralEstrella3: 85
+  umbralEstrella4: 95
 --- !u!4 &1296886052
 Transform:
   m_ObjectHideFlags: 0
@@ -10580,6 +10629,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -10921,6 +10971,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -11075,6 +11126,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -11224,6 +11276,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -11627,6 +11680,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -11945,6 +11999,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -12082,6 +12137,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &1467825821 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2971199665800551323, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -12192,6 +12249,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -12341,6 +12399,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -12490,6 +12549,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -12639,6 +12699,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -12776,6 +12837,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &1515851947 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5905037306365944454, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -12886,6 +12949,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -13299,6 +13363,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -13436,6 +13501,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &1611094165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8665695280369147062, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -13546,6 +13613,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -13683,6 +13751,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &1629608898 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1655041371550637806, guid: 7cb6b36dce0914e5990a48faf94c595e, type: 3}
@@ -13810,6 +13880,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -14004,6 +14075,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -14153,6 +14225,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -14366,6 +14439,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -14515,6 +14589,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -14801,6 +14876,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -15025,6 +15101,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -15509,6 +15586,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -15658,6 +15736,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -15856,6 +15935,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -16005,6 +16085,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -16154,6 +16235,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -16423,6 +16505,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -19185,6 +19268,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -19334,6 +19418,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -19483,6 +19568,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -19828,6 +19914,8 @@ MonoBehaviour:
   multiplicadorSalida: 1.6
   profundidadDisparo: 0.0035
   ventanaDedoLider: 0.045
+  cooldownReentradaDedo: 0.14
+  histeresisElevacionReentrada: 0.0025
 --- !u!1 &2007071191
 GameObject:
   m_ObjectHideFlags: 0
@@ -20310,6 +20398,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -20596,6 +20685,7 @@ MonoBehaviour:
   duracionPulsoImpacto: 0.22
   intensidadSostenida: 0.3
   startupGracePeriod: 0.25
+  cooldownRebote: 0.16
   rangoToleranciaHit: 0.1
   colorTurnoActual: {r: 1, g: 0.92, b: 0.016, a: 1}
   colorEnEspera: {r: 0, g: 0.6, b: 1, a: 1}
@@ -20729,6 +20819,23 @@ MonoBehaviour:
   - {fileID: 1291421225}
   - {fileID: 1125341017}
   - {fileID: 1611094166}
+  usarPistaFrontal: 1
+  distanciaPista: 2.2
+  anguloInclinacionPista: 13
+  tiempoAnticipacion: 2.5
+  ajustarAnticipacionPorDificultad: 1
+  anticipacionPrincipiante: 3
+  anticipacionIntermedio: 2.3
+  anticipacionAvanzado: 1.7
+  offsetZLineaImpacto: 0.068
+  offsetYLineaImpacto: 0.008
+  usarAsistenciaPrecision: 1
+  toleranciaSemitonos: 2
+  ventanaTiempoAsistencia: 0.3
+  ajustarToleranciaPorDificultad: 1
+  toleranciaPrincipiante: 3
+  toleranciaIntermedio: 2
+  toleranciaAvanzado: 1
   spawnAlturaExtra: 1
 --- !u!4 &2123653680
 Transform:

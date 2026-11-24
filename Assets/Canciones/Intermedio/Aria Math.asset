@@ -1,0 +1,5264 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baae0a6077bab4b7491102c03de941b1, type: 3}
+  m_Name: Cancion_Aria Math
+  m_EditorClassIdentifier: Assembly-CSharp::SongData
+  songName: Aria Math
+  composer: C418
+  difficulty: 2
+  coverImage: {fileID: 0}
+  bpm: 92
+  notes:
+  - time: 0.00
+    key: C4
+  - time: 0.18
+    key: B4
+  - time: 0.54
+    key: E5
+  - time: 0.72
+    key: E4
+  - time: 1.08
+    key: B4
+  - time: 1.43
+    key: E4
+  - time: 1.79
+    key: G4
+  - time: 1.97
+    key: C5
+  - time: 2.15
+    key: B4
+  - time: 2.51
+    key: G4
+  - time: 2.87
+    key: C4
+  - time: 3.05
+    key: B4
+  - time: 3.41
+    key: E5
+  - time: 3.59
+    key: E4
+  - time: 3.95
+    key: B4
+  - time: 4.30
+    key: E4
+  - time: 4.66
+    key: G4
+  - time: 4.84
+    key: C5
+  - time: 5.02
+    key: B4
+  - time: 5.38
+    key: G4
+  - time: 5.74
+    key: C4
+  - time: 5.92
+    key: B4
+  - time: 6.28
+    key: E5
+  - time: 6.46
+    key: E4
+  - time: 6.82
+    key: B4
+  - time: 7.17
+    key: E4
+  - time: 7.53
+    key: G4
+  - time: 7.71
+    key: C5
+  - time: 7.89
+    key: B4
+  - time: 8.25
+    key: G4
+  - time: 8.61
+    key: C4
+  - time: 8.79
+    key: B4
+  - time: 9.15
+    key: E5
+  - time: 9.33
+    key: E4
+  - time: 9.68
+    key: B4
+  - time: 10.04
+    key: E4
+  - time: 10.40
+    key: G4
+  - time: 10.58
+    key: C5
+  - time: 10.76
+    key: B4
+  - time: 11.12
+    key: G4
+  - time: 11.48
+    key: C4
+  - time: 11.66
+    key: B4
+  - time: 12.02
+    key: E5
+  - time: 12.20
+    key: E4
+  - time: 12.55
+    key: B4
+  - time: 12.91
+    key: E4
+  - time: 13.27
+    key: G4
+  - time: 13.45
+    key: C5
+  - time: 13.63
+    key: B4
+  - time: 13.99
+    key: G4
+  - time: 14.35
+    key: C4
+  - time: 14.53
+    key: B4
+  - time: 14.89
+    key: E5
+  - time: 15.07
+    key: E4
+  - time: 15.42
+    key: B4
+  - time: 15.78
+    key: E4
+  - time: 16.14
+    key: G4
+  - time: 16.32
+    key: C5
+  - time: 16.50
+    key: B4
+  - time: 16.86
+    key: G4
+  - time: 17.22
+    key: C4
+  - time: 17.40
+    key: B4
+  - time: 17.76
+    key: E5
+  - time: 17.93
+    key: E4
+  - time: 18.29
+    key: B4
+  - time: 18.65
+    key: E4
+  - time: 19.01
+    key: G4
+  - time: 19.19
+    key: C5
+  - time: 19.37
+    key: B4
+  - time: 19.73
+    key: G4
+  - time: 20.09
+    key: C4
+  - time: 20.27
+    key: B4
+  - time: 20.63
+    key: E5
+  - time: 20.80
+    key: E4
+  - time: 21.16
+    key: B4
+  - time: 21.52
+    key: E4
+  - time: 21.88
+    key: G4
+  - time: 22.06
+    key: C5
+  - time: 22.24
+    key: B4
+  - time: 22.60
+    key: G4
+  - time: 22.96
+    key: E6
+  - time: 22.96
+    key: C4
+  - time: 23.14
+    key: G5
+  - time: 23.14
+    key: B4
+  - time: 23.32
+    key: E5
+  - time: 23.49
+    key: E6
+  - time: 23.49
+    key: E5
+  - time: 23.67
+    key: E4
+  - time: 23.85
+    key: B5
+  - time: 24.03
+    key: B4
+  - time: 24.21
+    key: B5
+  - time: 24.39
+    key: E6
+  - time: 24.39
+    key: E4
+  - time: 24.75
+    key: E6
+  - time: 24.75
+    key: G4
+  - time: 24.93
+    key: C5
+  - time: 25.11
+    key: E6
+  - time: 25.11
+    key: B4
+  - time: 25.29
+    key: E6
+  - time: 25.47
+    key: E6
+  - time: 25.47
+    key: G4
+  - time: 25.65
+    key: E6
+  - time: 25.83
+    key: E6
+  - time: 25.83
+    key: C4
+  - time: 26.01
+    key: E6
+  - time: 26.01
+    key: B4
+  - time: 26.18
+    key: E6
+  - time: 26.18
+    key: B6
+  - time: 26.36
+    key: E5
+  - time: 26.54
+    key: G5
+  - time: 26.54
+    key: E4
+  - time: 26.90
+    key: B5
+  - time: 26.90
+    key: B4
+  - time: 27.26
+    key: G5
+  - time: 27.26
+    key: E4
+  - time: 27.44
+    key: B5
+  - time: 27.62
+    key: G4
+  - time: 27.80
+    key: C5
+  - time: 27.98
+    key: B4
+  - time: 28.16
+    key: E6
+  - time: 28.34
+    key: B5
+  - time: 28.34
+    key: G4
+  - time: 28.70
+    key: B5
+  - time: 28.70
+    key: C4
+  - time: 28.88
+    key: C6
+  - time: 28.88
+    key: B4
+  - time: 29.05
+    key: B5
+  - time: 29.23
+    key: C6
+  - time: 29.23
+    key: E5
+  - time: 29.41
+    key: B5
+  - time: 29.41
+    key: E4
+  - time: 29.59
+    key: C6
+  - time: 29.77
+    key: B4
+  - time: 29.95
+    key: G5
+  - time: 30.13
+    key: G5
+  - time: 30.13
+    key: E4
+  - time: 30.49
+    key: G5
+  - time: 30.49
+    key: G4
+  - time: 30.67
+    key: C5
+  - time: 30.85
+    key: C6
+  - time: 30.85
+    key: B4
+  - time: 31.21
+    key: G4
+  - time: 31.57
+    key: E6
+  - time: 31.57
+    key: C4
+  - time: 31.74
+    key: B5
+  - time: 31.74
+    key: B4
+  - time: 32.10
+    key: E5
+  - time: 32.10
+    key: E5
+  - time: 32.28
+    key: G5
+  - time: 32.28
+    key: E4
+  - time: 32.64
+    key: G5
+  - time: 32.64
+    key: B4
+  - time: 33.00
+    key: B5
+  - time: 33.00
+    key: E4
+  - time: 33.36
+    key: G4
+  - time: 33.54
+    key: G5
+  - time: 33.54
+    key: C5
+  - time: 33.72
+    key: E5
+  - time: 33.72
+    key: B4
+  - time: 34.08
+    key: E6
+  - time: 34.08
+    key: G4
+  - time: 34.26
+    key: E6
+  - time: 34.43
+    key: C6
+  - time: 34.43
+    key: C4
+  - time: 34.61
+    key: B5
+  - time: 34.61
+    key: B4
+  - time: 34.97
+    key: E5
+  - time: 34.97
+    key: E5
+  - time: 35.15
+    key: G5
+  - time: 35.15
+    key: E4
+  - time: 35.33
+    key: B5
+  - time: 35.51
+    key: E6
+  - time: 35.51
+    key: B4
+  - time: 35.69
+    key: G6
+  - time: 35.87
+    key: E4
+  - time: 36.23
+    key: G4
+  - time: 36.41
+    key: C5
+  - time: 36.59
+    key: C6
+  - time: 36.59
+    key: B4
+  - time: 36.77
+    key: B5
+  - time: 36.95
+    key: G4
+  - time: 37.12
+    key: B5
+  - time: 37.30
+    key: E5
+  - time: 37.30
+    key: C4
+  - time: 37.48
+    key: B4
+  - time: 37.66
+    key: E5
+  - time: 37.84
+    key: E5
+  - time: 37.84
+    key: E5
+  - time: 38.02
+    key: B5
+  - time: 38.02
+    key: E6
+  - time: 38.02
+    key: E4
+  - time: 38.38
+    key: E5
+  - time: 38.38
+    key: B4
+  - time: 38.74
+    key: E4
+  - time: 39.10
+    key: E5
+  - time: 39.10
+    key: G4
+  - time: 39.28
+    key: E5
+  - time: 39.28
+    key: C5
+  - time: 39.46
+    key: B4
+  - time: 39.64
+    key: C6
+  - time: 39.64
+    key: E6
+  - time: 39.82
+    key: B5
+  - time: 39.82
+    key: G4
+  - time: 40.17
+    key: C6
+  - time: 40.17
+    key: C4
+  - time: 40.35
+    key: B5
+  - time: 40.35
+    key: B4
+  - time: 40.71
+    key: E5
+  - time: 40.89
+    key: E5
+  - time: 40.89
+    key: E4
+  - time: 41.25
+    key: B4
+  - time: 41.61
+    key: G5
+  - time: 41.61
+    key: E4
+  - time: 41.97
+    key: G4
+  - time: 42.15
+    key: E5
+  - time: 42.15
+    key: C5
+  - time: 42.33
+    key: E5
+  - time: 42.33
+    key: B4
+  - time: 42.68
+    key: G4
+  - time: 43.04
+    key: C4
+  - time: 43.22
+    key: B4
+  - time: 43.58
+    key: E5
+  - time: 43.76
+    key: E4
+  - time: 44.12
+    key: B4
+  - time: 44.48
+    key: E4
+  - time: 44.84
+    key: G4
+  - time: 45.02
+    key: C5
+  - time: 45.20
+    key: B4
+  - time: 45.55
+    key: G4
+  - time: 45.73
+    key: E5
+  - time: 45.91
+    key: B5
+  - time: 45.91
+    key: C4
+  - time: 46.09
+    key: B4
+  - time: 46.45
+    key: E5
+  - time: 46.63
+    key: B5
+  - time: 46.63
+    key: E4
+  - time: 46.99
+    key: B4
+  - time: 47.17
+    key: E5
+  - time: 47.35
+    key: B5
+  - time: 47.35
+    key: E4
+  - time: 47.53
+    key: E5
+  - time: 47.71
+    key: G4
+  - time: 47.89
+    key: E5
+  - time: 47.89
+    key: C5
+  - time: 48.07
+    key: B5
+  - time: 48.07
+    key: B4
+  - time: 48.42
+    key: G4
+  - time: 48.60
+    key: E5
+  - time: 48.78
+    key: B5
+  - time: 48.78
+    key: C4
+  - time: 48.96
+    key: B4
+  - time: 49.32
+    key: E5
+  - time: 49.50
+    key: B5
+  - time: 49.50
+    key: E4
+  - time: 49.86
+    key: B4
+  - time: 50.04
+    key: E5
+  - time: 50.22
+    key: B5
+  - time: 50.22
+    key: E4
+  - time: 50.58
+    key: G4
+  - time: 50.76
+    key: E5
+  - time: 50.76
+    key: C5
+  - time: 50.93
+    key: E5
+  - time: 50.93
+    key: B4
+  - time: 51.29
+    key: G4
+  - time: 51.65
+    key: C4
+  - time: 51.83
+    key: B4
+  - time: 52.19
+    key: E5
+  - time: 52.37
+    key: E4
+  - time: 52.73
+    key: B4
+  - time: 53.09
+    key: E4
+  - time: 53.45
+    key: G4
+  - time: 53.62
+    key: C5
+  - time: 53.80
+    key: B4
+  - time: 54.16
+    key: G4
+  - time: 54.52
+    key: C4
+  - time: 54.70
+    key: B4
+  - time: 55.06
+    key: E5
+  - time: 55.24
+    key: E4
+  - time: 55.60
+    key: B4
+  - time: 55.96
+    key: E4
+  - time: 56.32
+    key: F#5
+  - time: 56.32
+    key: G4
+  - time: 56.49
+    key: G5
+  - time: 56.49
+    key: C5
+  - time: 56.67
+    key: F#5
+  - time: 56.67
+    key: B4
+  - time: 56.85
+    key: G5
+  - time: 57.03
+    key: F#5
+  - time: 57.03
+    key: G4
+  - time: 57.21
+    key: D5
+  - time: 57.39
+    key: E5
+  - time: 57.39
+    key: C4
+  - time: 57.57
+    key: G5
+  - time: 57.57
+    key: B4
+  - time: 57.75
+    key: E5
+  - time: 57.93
+    key: G5
+  - time: 57.93
+    key: E5
+  - time: 58.11
+    key: E4
+  - time: 58.29
+    key: G5
+  - time: 58.47
+    key: E5
+  - time: 58.47
+    key: B4
+  - time: 58.65
+    key: B5
+  - time: 58.65
+    key: E6
+  - time: 58.83
+    key: E4
+  - time: 59.18
+    key: G4
+  - time: 59.36
+    key: C5
+  - time: 59.54
+    key: B4
+  - time: 59.90
+    key: G4
+  - time: 60.26
+    key: C4
+  - time: 60.44
+    key: B4
+  - time: 60.80
+    key: E5
+  - time: 60.98
+    key: E4
+  - time: 61.34
+    key: B4
+  - time: 61.70
+    key: E4
+  - time: 62.05
+    key: G4
+  - time: 62.23
+    key: C5
+  - time: 62.41
+    key: B4
+  - time: 62.77
+    key: G4
+  - time: 63.13
+    key: C4
+  - time: 63.31
+    key: B4
+  - time: 63.67
+    key: E5
+  - time: 63.85
+    key: E4
+  - time: 64.21
+    key: B4
+  - time: 64.57
+    key: B5
+  - time: 64.57
+    key: E4
+  - time: 64.59
+    key: B6
+  - time: 64.92
+    key: G4
+  - time: 65.10
+    key: C5
+  - time: 65.28
+    key: B4
+  - time: 65.64
+    key: G4
+  - time: 66.00
+    key: C4
+  - time: 66.18
+    key: B4
+  - time: 66.54
+    key: E5
+  - time: 66.72
+    key: E4
+  - time: 67.08
+    key: B4
+  - time: 67.43
+    key: E4
+  - time: 67.79
+    key: G4
+  - time: 67.97
+    key: C5
+  - time: 68.15
+    key: B4
+  - time: 68.51
+    key: G4
+  - time: 68.87
+    key: B5
+  - time: 68.87
+    key: C4
+  - time: 69.05
+    key: B4
+  - time: 69.41
+    key: E5
+  - time: 69.59
+    key: G5
+  - time: 69.59
+    key: E4
+  - time: 69.95
+    key: B4
+  - time: 70.30
+    key: E4
+  - time: 70.66
+    key: G4
+  - time: 70.84
+    key: C5
+  - time: 71.02
+    key: B4
+  - time: 71.38
+    key: G4
+  - time: 71.74
+    key: C4
+  - time: 71.92
+    key: B4
+  - time: 72.28
+    key: E5
+  - time: 72.46
+    key: E4
+  - time: 72.82
+    key: B4
+  - time: 73.17
+    key: E4
+  - time: 73.53
+    key: G4
+  - time: 73.71
+    key: C5
+  - time: 73.89
+    key: D6
+  - time: 73.89
+    key: B4
+  - time: 74.25
+    key: G4
+  - time: 74.61
+    key: F#5
+  - time: 74.61
+    key: C4
+  - time: 74.79
+    key: B4
+  - time: 75.15
+    key: E5
+  - time: 75.33
+    key: E4
+  - time: 75.68
+    key: B4
+  - time: 76.04
+    key: E4
+  - time: 76.40
+    key: G4
+  - time: 76.58
+    key: C5
+  - time: 76.76
+    key: B4
+  - time: 77.12
+    key: G4
+  - time: 77.48
+    key: B5
+  - time: 77.48
+    key: C4
+  - time: 77.66
+    key: B4
+  - time: 78.02
+    key: E5
+  - time: 78.20
+    key: E4
+  - time: 78.55
+    key: B4
+  - time: 78.91
+    key: E4
+  - time: 79.27
+    key: G4
+  - time: 79.45
+    key: C5
+  - time: 79.63
+    key: B4
+  - time: 79.99
+    key: G4
+  - time: 80.35
+    key: B5
+  - time: 80.35
+    key: C4
+  - time: 80.53
+    key: B4
+  - time: 80.89
+    key: E5
+  - time: 81.07
+    key: G5
+  - time: 81.07
+    key: E4
+  - time: 81.42
+    key: B4
+  - time: 81.78
+    key: E4
+  - time: 82.14
+    key: G4
+  - time: 82.32
+    key: C5
+  - time: 82.50
+    key: B4
+  - time: 82.86
+    key: G4
+  - time: 83.22
+    key: C4
+  - time: 83.40
+    key: B4
+  - time: 83.76
+    key: E5
+  - time: 83.93
+    key: E4
+  - time: 84.29
+    key: B4
+  - time: 84.65
+    key: E4
+  - time: 85.01
+    key: G4
+  - time: 85.19
+    key: C5
+  - time: 85.37
+    key: D6
+  - time: 85.37
+    key: B4
+  - time: 85.73
+    key: G4
+  - time: 86.09
+    key: F#5
+  - time: 86.09
+    key: C4
+  - time: 86.27
+    key: B4
+  - time: 86.62
+    key: E5
+  - time: 86.80
+    key: E4
+  - time: 87.16
+    key: B4
+  - time: 87.52
+    key: E4
+  - time: 87.88
+    key: G4
+  - time: 88.06
+    key: C5
+  - time: 88.24
+    key: B4
+  - time: 88.60
+    key: G4
+  - time: 88.96
+    key: B5
+  - time: 88.96
+    key: C4
+  - time: 89.14
+    key: B4
+  - time: 89.49
+    key: E5
+  - time: 89.67
+    key: E4
+  - time: 90.03
+    key: B4
+  - time: 90.39
+    key: E4
+  - time: 90.75
+    key: G4
+  - time: 90.93
+    key: C5
+  - time: 91.11
+    key: B4
+  - time: 91.47
+    key: G4
+  - time: 91.83
+    key: B5
+  - time: 91.83
+    key: C4
+  - time: 92.01
+    key: B4
+  - time: 92.36
+    key: E5
+  - time: 92.54
+    key: G5
+  - time: 92.54
+    key: E4
+  - time: 92.90
+    key: B4
+  - time: 93.26
+    key: E4
+  - time: 93.62
+    key: G4
+  - time: 93.80
+    key: C5
+  - time: 93.98
+    key: B4
+  - time: 94.34
+    key: G4
+  - time: 94.70
+    key: C4
+  - time: 94.87
+    key: B4
+  - time: 95.23
+    key: E5
+  - time: 95.41
+    key: E4
+  - time: 95.77
+    key: B4
+  - time: 96.13
+    key: E4
+  - time: 96.49
+    key: G4
+  - time: 96.67
+    key: C5
+  - time: 96.85
+    key: D6
+  - time: 96.85
+    key: B4
+  - time: 97.21
+    key: G4
+  - time: 97.57
+    key: F#5
+  - time: 97.57
+    key: C4
+  - time: 97.74
+    key: B4
+  - time: 98.10
+    key: E5
+  - time: 98.28
+    key: E4
+  - time: 98.64
+    key: B4
+  - time: 99.00
+    key: E4
+  - time: 99.36
+    key: G4
+  - time: 99.54
+    key: C5
+  - time: 99.72
+    key: B4
+  - time: 100.08
+    key: G4
+  - time: 100.43
+    key: B5
+  - time: 100.43
+    key: C4
+  - time: 100.61
+    key: B4
+  - time: 100.97
+    key: E5
+  - time: 101.15
+    key: E4
+  - time: 101.51
+    key: B4
+  - time: 101.87
+    key: E4
+  - time: 102.23
+    key: G4
+  - time: 102.41
+    key: C5
+  - time: 102.59
+    key: B4
+  - time: 102.95
+    key: G4
+  - time: 103.30
+    key: B5
+  - time: 103.30
+    key: E6
+  - time: 103.30
+    key: C4
+  - time: 103.48
+    key: B4
+  - time: 103.84
+    key: E5
+  - time: 104.02
+    key: G5
+  - time: 104.02
+    key: E4
+  - time: 104.38
+    key: B4
+  - time: 104.74
+    key: E4
+  - time: 105.10
+    key: G4
+  - time: 105.28
+    key: C5
+  - time: 105.46
+    key: B4
+  - time: 105.82
+    key: G4
+  - time: 106.17
+    key: C4
+  - time: 106.35
+    key: B4
+  - time: 106.71
+    key: E5
+  - time: 106.89
+    key: E4
+  - time: 107.25
+    key: B4
+  - time: 107.61
+    key: E4
+  - time: 107.97
+    key: G4
+  - time: 108.15
+    key: C5
+  - time: 108.33
+    key: D6
+  - time: 108.33
+    key: G6
+  - time: 108.33
+    key: B4
+  - time: 108.68
+    key: G4
+  - time: 109.04
+    key: F#5
+  - time: 109.04
+    key: F#6
+  - time: 109.04
+    key: C4
+  - time: 109.22
+    key: B4
+  - time: 109.58
+    key: E5
+  - time: 109.76
+    key: E4
+  - time: 110.12
+    key: B4
+  - time: 110.48
+    key: E4
+  - time: 110.84
+    key: G4
+  - time: 111.02
+    key: C5
+  - time: 111.20
+    key: B4
+  - time: 111.55
+    key: G4
+  - time: 111.91
+    key: B5
+  - time: 111.91
+    key: E6
+  - time: 111.91
+    key: C4
+  - time: 112.09
+    key: B4
+  - time: 112.45
+    key: E5
+  - time: 112.63
+    key: E4
+  - time: 112.99
+    key: B4
+  - time: 113.35
+    key: E4
+  - time: 113.71
+    key: G4
+  - time: 113.89
+    key: C5
+  - time: 114.07
+    key: D6
+  - time: 114.07
+    key: B4
+  - time: 114.42
+    key: G4
+  - time: 114.78
+    key: B5
+  - time: 114.78
+    key: E6
+  - time: 114.78
+    key: C4
+  - time: 114.96
+    key: B4
+  - time: 115.32
+    key: E5
+  - time: 115.50
+    key: G5
+  - time: 115.50
+    key: E4
+  - time: 115.86
+    key: B4
+  - time: 116.22
+    key: E4
+  - time: 116.58
+    key: G4
+  - time: 116.76
+    key: C5
+  - time: 116.93
+    key: B4
+  - time: 117.29
+    key: G4
+  - time: 117.65
+    key: C4
+  - time: 117.83
+    key: B4
+  - time: 118.19
+    key: E5
+  - time: 118.37
+    key: E4
+  - time: 118.73
+    key: B4
+  - time: 119.09
+    key: G6
+  - time: 119.09
+    key: E4
+  - time: 119.45
+    key: G4
+  - time: 119.62
+    key: C5
+  - time: 119.80
+    key: D6
+  - time: 119.80
+    key: G6
+  - time: 119.80
+    key: B4
+  - time: 120.16
+    key: A6
+  - time: 120.16
+    key: G4
+  - time: 120.34
+    key: G6
+  - time: 120.52
+    key: F#5
+  - time: 120.52
+    key: F#6
+  - time: 120.52
+    key: C4
+  - time: 120.70
+    key: B4
+  - time: 121.06
+    key: E5
+  - time: 121.24
+    key: E4
+  - time: 121.60
+    key: B4
+  - time: 121.96
+    key: D6
+  - time: 121.96
+    key: E4
+  - time: 122.32
+    key: G4
+  - time: 122.49
+    key: C5
+  - time: 122.67
+    key: B4
+  - time: 123.03
+    key: G4
+  - time: 123.39
+    key: B5
+  - time: 123.39
+    key: E6
+  - time: 123.39
+    key: C4
+  - time: 123.57
+    key: B4
+  - time: 123.93
+    key: E5
+  - time: 124.11
+    key: E4
+  - time: 124.47
+    key: B4
+  - time: 124.83
+    key: E4
+  - time: 125.18
+    key: G4
+  - time: 125.36
+    key: C5
+  - time: 125.54
+    key: D6
+  - time: 125.54
+    key: B6
+  - time: 125.54
+    key: B4
+  - time: 125.90
+    key: G4
+  - time: 126.26
+    key: B5
+  - time: 126.26
+    key: E6
+  - time: 126.26
+    key: C4
+  - time: 126.44
+    key: B4
+  - time: 126.80
+    key: E5
+  - time: 126.98
+    key: G5
+  - time: 126.98
+    key: E4
+  - time: 127.34
+    key: B4
+  - time: 127.70
+    key: E4
+  - time: 128.05
+    key: G4
+  - time: 128.23
+    key: C5
+  - time: 128.41
+    key: B4
+  - time: 128.77
+    key: G4
+  - time: 129.13
+    key: C4
+  - time: 129.31
+    key: B4
+  - time: 129.67
+    key: E5
+  - time: 129.85
+    key: E4
+  - time: 130.21
+    key: B4
+  - time: 130.57
+    key: G6
+  - time: 130.57
+    key: E4
+  - time: 130.92
+    key: G4
+  - time: 131.10
+    key: C5
+  - time: 131.28
+    key: D6
+  - time: 131.28
+    key: G6
+  - time: 131.28
+    key: B4
+  - time: 131.64
+    key: A6
+  - time: 131.64
+    key: G4
+  - time: 131.82
+    key: G6
+  - time: 132.00
+    key: F#5
+  - time: 132.00
+    key: F#6
+  - time: 132.00
+    key: C4
+  - time: 132.18
+    key: B4
+  - time: 132.54
+    key: E5
+  - time: 132.72
+    key: E4
+  - time: 133.08
+    key: B4
+  - time: 133.43
+    key: D6
+  - time: 133.43
+    key: E4
+  - time: 133.79
+    key: G4
+  - time: 133.97
+    key: C5
+  - time: 134.15
+    key: B4
+  - time: 134.51
+    key: G4
+  - time: 134.87
+    key: B5
+  - time: 134.87
+    key: E6
+  - time: 134.87
+    key: C4
+  - time: 135.05
+    key: B4
+  - time: 135.23
+    key: A5
+  - time: 135.41
+    key: D6
+  - time: 135.41
+    key: E5
+  - time: 135.59
+    key: B5
+  - time: 135.59
+    key: E4
+  - time: 135.95
+    key: B4
+  - time: 136.30
+    key: E4
+  - time: 136.66
+    key: A5
+  - time: 136.66
+    key: G4
+  - time: 136.84
+    key: D6
+  - time: 136.84
+    key: C5
+  - time: 137.02
+    key: B5
+  - time: 137.02
+    key: B4
+  - time: 137.38
+    key: A5
+  - time: 137.38
+    key: G4
+  - time: 137.74
+    key: E5
+  - time: 137.74
+    key: B5
+  - time: 137.74
+    key: C4
+  - time: 137.92
+    key: B4
+  - time: 138.10
+    key: A5
+  - time: 138.28
+    key: E5
+  - time: 138.46
+    key: B5
+  - time: 138.46
+    key: E4
+  - time: 138.82
+    key: A5
+  - time: 138.82
+    key: B4
+  - time: 139.17
+    key: B5
+  - time: 139.17
+    key: E4
+  - time: 139.53
+    key: A5
+  - time: 139.53
+    key: G4
+  - time: 139.71
+    key: C5
+  - time: 139.89
+    key: B5
+  - time: 139.89
+    key: B4
+  - time: 140.25
+    key: A5
+  - time: 140.25
+    key: G4
+  - time: 140.61
+    key: B5
+  - time: 140.61
+    key: C4
+  - time: 140.79
+    key: B4
+  - time: 140.97
+    key: A5
+  - time: 141.15
+    key: E5
+  - time: 141.33
+    key: B5
+  - time: 141.33
+    key: E4
+  - time: 141.68
+    key: A5
+  - time: 141.68
+    key: B4
+  - time: 142.04
+    key: B5
+  - time: 142.04
+    key: E4
+  - time: 142.40
+    key: A5
+  - time: 142.40
+    key: G4
+  - time: 142.58
+    key: C5
+  - time: 142.76
+    key: B5
+  - time: 142.76
+    key: B4
+  - time: 143.12
+    key: A5
+  - time: 143.12
+    key: G4
+  - time: 143.48
+    key: B5
+  - time: 143.48
+    key: C4
+  - time: 143.66
+    key: B4
+  - time: 144.02
+    key: E5
+  - time: 144.20
+    key: E4
+  - time: 144.55
+    key: B4
+  - time: 144.91
+    key: E4
+  - time: 145.27
+    key: G4
+  - time: 145.45
+    key: C5
+  - time: 145.63
+    key: B4
+  - time: 145.99
+    key: G4
+  - time: 146.35
+    key: C4
+  - time: 146.53
+    key: B4
+  - time: 146.89
+    key: E5
+  - time: 147.07
+    key: E4
+  - time: 147.42
+    key: B4
+  - time: 147.78
+    key: E4
+  - time: 148.14
+    key: G4
+  - time: 148.32
+    key: C5
+  - time: 148.50
+    key: B4
+  - time: 148.86
+    key: G4
+  - time: 149.22
+    key: B5
+  - time: 149.22
+    key: C4
+  - time: 149.40
+    key: B4
+  - time: 149.76
+    key: E5
+  - time: 149.93
+    key: G5
+  - time: 149.93
+    key: E4
+  - time: 150.29
+    key: B4
+  - time: 150.65
+    key: E4
+  - time: 151.01
+    key: G4
+  - time: 151.19
+    key: C5
+  - time: 151.37
+    key: B4
+  - time: 151.73
+    key: G4
+  - time: 152.09
+    key: C4
+  - time: 152.27
+    key: B4
+  - time: 152.62
+    key: E5
+  - time: 152.80
+    key: E4
+  - time: 153.16
+    key: B4
+  - time: 153.52
+    key: E4
+  - time: 153.88
+    key: G4
+  - time: 154.06
+    key: C5
+  - time: 154.24
+    key: D6
+  - time: 154.24
+    key: B4
+  - time: 154.60
+    key: B5
+  - time: 154.60
+    key: G4
+  - time: 154.96
+    key: F#5
+  - time: 154.96
+    key: C4
+  - time: 155.14
+    key: B4
+  - time: 155.49
+    key: E5
+  - time: 155.67
+    key: E4
+  - time: 156.03
+    key: B4
+  - time: 156.39
+    key: E4
+  - time: 156.75
+    key: G4
+  - time: 156.93
+    key: C5
+  - time: 157.11
+    key: B4
+  - time: 157.47
+    key: G4
+  - time: 157.83
+    key: C4
+  - time: 158.01
+    key: B4
+  - time: 158.36
+    key: E5
+  - time: 158.54
+    key: E4
+  - time: 158.90
+    key: B4
+  - time: 159.26
+    key: E4
+  - time: 159.62
+    key: G4
+  - time: 159.80
+    key: C5
+  - time: 159.98
+    key: B4
+  - time: 160.34
+    key: G4
+  - time: 160.70
+    key: B5
+  - time: 160.70
+    key: C4
+  - time: 160.76
+    key: B6
+  - time: 160.88
+    key: B4
+  - time: 161.23
+    key: E5
+  - time: 161.41
+    key: G5
+  - time: 161.41
+    key: E4
+  - time: 161.77
+    key: B4
+  - time: 162.13
+    key: E4
+  - time: 162.49
+    key: G4
+  - time: 162.67
+    key: C5
+  - time: 162.85
+    key: B4
+  - time: 163.21
+    key: G4
+  - time: 163.57
+    key: C4
+  - time: 163.74
+    key: B4
+  - time: 164.10
+    key: E5
+  - time: 164.28
+    key: E4
+  - time: 164.64
+    key: B4
+  - time: 165.00
+    key: E4
+  - time: 165.36
+    key: G4
+  - time: 165.54
+    key: C5
+  - time: 165.72
+    key: D6
+  - time: 165.72
+    key: B4
+  - time: 166.08
+    key: B5
+  - time: 166.08
+    key: G4
+  - time: 166.43
+    key: F#5
+  - time: 166.43
+    key: C4
+  - time: 166.61
+    key: B4
+  - time: 166.97
+    key: E5
+  - time: 166.97
+    key: E5
+  - time: 167.15
+    key: E4
+  - time: 167.51
+    key: B4
+  - time: 167.87
+    key: E4
+  - time: 168.23
+    key: G4
+  - time: 168.41
+    key: C5
+  - time: 168.59
+    key: B4
+  - time: 168.95
+    key: G4
+  - time: 169.30
+    key: C4
+  - time: 169.48
+    key: B4
+  - time: 169.84
+    key: E5
+  - time: 170.02
+    key: E4
+  - time: 170.38
+    key: B4
+  - time: 170.74
+    key: E4
+  - time: 171.10
+    key: G4
+  - time: 171.28
+    key: C5
+  - time: 171.46
+    key: B4
+  - time: 171.82
+    key: G4
+  - time: 172.17
+    key: B5
+  - time: 172.17
+    key: B6
+  - time: 172.17
+    key: C4
+  - time: 172.35
+    key: B4
+  - time: 172.71
+    key: E6
+  - time: 172.71
+    key: E5
+  - time: 172.89
+    key: G5
+  - time: 172.89
+    key: G6
+  - time: 172.89
+    key: E4
+  - time: 173.25
+    key: B4
+  - time: 173.61
+    key: E4
+  - time: 173.97
+    key: G4
+  - time: 174.15
+    key: C5
+  - time: 174.33
+    key: B4
+  - time: 174.68
+    key: F#5
+  - time: 174.68
+    key: F#6
+  - time: 174.68
+    key: G4
+  - time: 175.04
+    key: G5
+  - time: 175.04
+    key: G6
+  - time: 175.04
+    key: C4
+  - time: 175.22
+    key: B4
+  - time: 175.40
+    key: B5
+  - time: 175.40
+    key: B6
+  - time: 175.58
+    key: E5
+  - time: 175.58
+    key: E6
+  - time: 175.58
+    key: E5
+  - time: 175.76
+    key: E4
+  - time: 176.12
+    key: B4
+  - time: 176.48
+    key: E4
+  - time: 176.84
+    key: G4
+  - time: 177.02
+    key: C5
+  - time: 177.20
+    key: D6
+  - time: 177.20
+    key: D7
+  - time: 177.20
+    key: B4
+  - time: 177.55
+    key: B5
+  - time: 177.55
+    key: B6
+  - time: 177.55
+    key: G4
+  - time: 177.91
+    key: F#5
+  - time: 177.91
+    key: F#6
+  - time: 177.91
+    key: C4
+  - time: 178.09
+    key: B4
+  - time: 178.45
+    key: E5
+  - time: 178.45
+    key: E6
+  - time: 178.63
+    key: E4
+  - time: 178.99
+    key: B4
+  - time: 179.35
+    key: E4
+  - time: 179.71
+    key: G5
+  - time: 179.71
+    key: G4
+  - time: 179.89
+    key: C6
+  - time: 179.89
+    key: C5
+  - time: 180.07
+    key: B5
+  - time: 180.07
+    key: B4
+  - time: 180.42
+    key: G5
+  - time: 180.42
+    key: G4
+  - time: 180.78
+    key: C5
+  - time: 180.78
+    key: C4
+  - time: 180.96
+    key: B5
+  - time: 180.96
+    key: B4
+  - time: 181.32
+    key: E6
+  - time: 181.32
+    key: E5
+  - time: 181.50
+    key: E5
+  - time: 181.50
+    key: E4
+  - time: 181.86
+    key: B5
+  - time: 181.86
+    key: B4
+  - time: 182.22
+    key: E5
+  - time: 182.22
+    key: E4
+  - time: 182.58
+    key: G5
+  - time: 182.58
+    key: G4
+  - time: 182.76
+    key: C6
+  - time: 182.76
+    key: C5
+  - time: 182.93
+    key: B5
+  - time: 182.93
+    key: B4
+  - time: 183.29
+    key: G5
+  - time: 183.29
+    key: G4
+  - time: 183.65
+    key: B6
+  - time: 183.65
+    key: C5
+  - time: 183.65
+    key: C4
+  - time: 183.83
+    key: B5
+  - time: 183.83
+    key: B4
+  - time: 184.19
+    key: E6
+  - time: 184.19
+    key: E6
+  - time: 184.19
+    key: E5
+  - time: 184.37
+    key: G6
+  - time: 184.37
+    key: E5
+  - time: 184.37
+    key: E4
+  - time: 184.73
+    key: B5
+  - time: 184.73
+    key: B4
+  - time: 185.09
+    key: E5
+  - time: 185.09
+    key: E4
+  - time: 185.45
+    key: G5
+  - time: 185.45
+    key: G4
+  - time: 185.63
+    key: C6
+  - time: 185.63
+    key: C5
+  - time: 185.80
+    key: B5
+  - time: 185.80
+    key: B4
+  - time: 186.16
+    key: F#6
+  - time: 186.16
+    key: G5
+  - time: 186.16
+    key: G4
+  - time: 186.52
+    key: G6
+  - time: 186.52
+    key: C5
+  - time: 186.52
+    key: C4
+  - time: 186.70
+    key: B5
+  - time: 186.70
+    key: B4
+  - time: 186.88
+    key: B6
+  - time: 187.06
+    key: E6
+  - time: 187.06
+    key: E6
+  - time: 187.06
+    key: E5
+  - time: 187.24
+    key: E5
+  - time: 187.24
+    key: E4
+  - time: 187.60
+    key: B5
+  - time: 187.60
+    key: B4
+  - time: 187.96
+    key: E5
+  - time: 187.96
+    key: E4
+  - time: 188.32
+    key: G5
+  - time: 188.32
+    key: G4
+  - time: 188.49
+    key: C6
+  - time: 188.49
+    key: C5
+  - time: 188.67
+    key: D7
+  - time: 188.67
+    key: B5
+  - time: 188.67
+    key: B4
+  - time: 189.03
+    key: B6
+  - time: 189.03
+    key: G5
+  - time: 189.03
+    key: G4
+  - time: 189.39
+    key: F#6
+  - time: 189.39
+    key: C5
+  - time: 189.39
+    key: C4
+  - time: 189.57
+    key: B5
+  - time: 189.57
+    key: B4
+  - time: 189.93
+    key: E6
+  - time: 189.93
+    key: E6
+  - time: 189.93
+    key: E5
+  - time: 190.11
+    key: E5
+  - time: 190.11
+    key: E4
+  - time: 190.47
+    key: B5
+  - time: 190.47
+    key: B4
+  - time: 190.83
+    key: E5
+  - time: 190.83
+    key: E4
+  - time: 191.18
+    key: G5
+  - time: 191.18
+    key: G4
+  - time: 191.36
+    key: C6
+  - time: 191.36
+    key: C5
+  - time: 191.54
+    key: B5
+  - time: 191.54
+    key: B4
+  - time: 191.90
+    key: G5
+  - time: 191.90
+    key: G4
+  - time: 192.26
+    key: C5
+  - time: 192.26
+    key: C4
+  - time: 192.44
+    key: B5
+  - time: 192.44
+    key: B4
+  - time: 192.80
+    key: E6
+  - time: 192.80
+    key: E5
+  - time: 192.98
+    key: E5
+  - time: 192.98
+    key: E4
+  - time: 193.34
+    key: B5
+  - time: 193.34
+    key: B4
+  - time: 193.70
+    key: E5
+  - time: 193.70
+    key: E4
+  - time: 194.05
+    key: G5
+  - time: 194.05
+    key: G4
+  - time: 194.23
+    key: C6
+  - time: 194.23
+    key: C5
+  - time: 194.41
+    key: B5
+  - time: 194.41
+    key: B4
+  - time: 194.77
+    key: G5
+  - time: 194.77
+    key: G4
+  - time: 195.13
+    key: B5
+  - time: 195.13
+    key: B6
+  - time: 195.13
+    key: C5
+  - time: 195.13
+    key: C4
+  - time: 195.31
+    key: B5
+  - time: 195.31
+    key: B4
+  - time: 195.67
+    key: E6
+  - time: 195.67
+    key: E6
+  - time: 195.67
+    key: E5
+  - time: 195.85
+    key: G5
+  - time: 195.85
+    key: G6
+  - time: 195.85
+    key: E5
+  - time: 195.85
+    key: E4
+  - time: 196.21
+    key: B5
+  - time: 196.21
+    key: B4
+  - time: 196.57
+    key: E5
+  - time: 196.57
+    key: E4
+  - time: 196.92
+    key: G5
+  - time: 196.92
+    key: G4
+  - time: 197.10
+    key: C6
+  - time: 197.10
+    key: C5
+  - time: 197.28
+    key: B5
+  - time: 197.28
+    key: B4
+  - time: 197.64
+    key: F#5
+  - time: 197.64
+    key: F#6
+  - time: 197.64
+    key: G5
+  - time: 197.64
+    key: G4
+  - time: 198.00
+    key: G5
+  - time: 198.00
+    key: G6
+  - time: 198.00
+    key: C5
+  - time: 198.00
+    key: C4
+  - time: 198.18
+    key: B5
+  - time: 198.18
+    key: B4
+  - time: 198.36
+    key: B5
+  - time: 198.36
+    key: B6
+  - time: 198.54
+    key: E5
+  - time: 198.54
+    key: E6
+  - time: 198.54
+    key: E6
+  - time: 198.54
+    key: E5
+  - time: 198.72
+    key: E5
+  - time: 198.72
+    key: E4
+  - time: 199.08
+    key: B5
+  - time: 199.08
+    key: B4
+  - time: 199.43
+    key: E5
+  - time: 199.43
+    key: E4
+  - time: 199.79
+    key: G5
+  - time: 199.79
+    key: G4
+  - time: 199.97
+    key: C6
+  - time: 199.97
+    key: C5
+  - time: 200.15
+    key: D6
+  - time: 200.15
+    key: D7
+  - time: 200.15
+    key: B5
+  - time: 200.15
+    key: B4
+  - time: 200.51
+    key: B5
+  - time: 200.51
+    key: B6
+  - time: 200.51
+    key: G5
+  - time: 200.51
+    key: G4
+  - time: 200.87
+    key: F#5
+  - time: 200.87
+    key: F#6
+  - time: 200.87
+    key: C5
+  - time: 200.87
+    key: C4
+  - time: 201.05
+    key: B5
+  - time: 201.05
+    key: B4
+  - time: 201.41
+    key: E5
+  - time: 201.41
+    key: E6
+  - time: 201.41
+    key: E6
+  - time: 201.59
+    key: E5
+  - time: 201.59
+    key: E4
+  - time: 201.95
+    key: B5
+  - time: 201.95
+    key: B4
+  - time: 202.30
+    key: E5
+  - time: 202.30
+    key: E4
+  - time: 202.66
+    key: G5
+  - time: 202.66
+    key: G4
+  - time: 202.84
+    key: C6
+  - time: 202.84
+    key: C5
+  - time: 203.02
+    key: B5
+  - time: 203.02
+    key: B4
+  - time: 203.38
+    key: G5
+  - time: 203.38
+    key: G4
+  - time: 203.74
+    key: C5
+  - time: 203.74
+    key: C4
+  - time: 203.92
+    key: B5
+  - time: 203.92
+    key: B4
+  - time: 204.28
+    key: E6
+  - time: 204.28
+    key: E5
+  - time: 204.46
+    key: E5
+  - time: 204.46
+    key: E4
+  - time: 204.82
+    key: B5
+  - time: 204.82
+    key: B4
+  - time: 205.17
+    key: E5
+  - time: 205.17
+    key: E4
+  - time: 205.53
+    key: G5
+  - time: 205.53
+    key: G4
+  - time: 205.71
+    key: C6
+  - time: 205.71
+    key: C5
+  - time: 205.89
+    key: B5
+  - time: 205.89
+    key: B4
+  - time: 206.25
+    key: G5
+  - time: 206.25
+    key: G4
+  - time: 206.61
+    key: B5
+  - time: 206.61
+    key: B6
+  - time: 206.61
+    key: C5
+  - time: 206.61
+    key: C4
+  - time: 206.79
+    key: B5
+  - time: 206.79
+    key: B4
+  - time: 207.15
+    key: E6
+  - time: 207.15
+    key: E6
+  - time: 207.15
+    key: E5
+  - time: 207.33
+    key: G5
+  - time: 207.33
+    key: G6
+  - time: 207.33
+    key: E5
+  - time: 207.33
+    key: E4
+  - time: 207.68
+    key: B5
+  - time: 207.68
+    key: B4
+  - time: 208.04
+    key: E5
+  - time: 208.04
+    key: E4
+  - time: 208.40
+    key: G5
+  - time: 208.40
+    key: G4
+  - time: 208.58
+    key: C6
+  - time: 208.58
+    key: C5
+  - time: 208.76
+    key: B5
+  - time: 208.76
+    key: B4
+  - time: 209.12
+    key: F#5
+  - time: 209.12
+    key: F#6
+  - time: 209.12
+    key: G5
+  - time: 209.12
+    key: G4
+  - time: 209.48
+    key: G5
+  - time: 209.48
+    key: G6
+  - time: 209.48
+    key: C5
+  - time: 209.48
+    key: C4
+  - time: 209.66
+    key: B5
+  - time: 209.66
+    key: B4
+  - time: 209.84
+    key: B5
+  - time: 209.84
+    key: B6
+  - time: 210.02
+    key: E5
+  - time: 210.02
+    key: E6
+  - time: 210.02
+    key: E6
+  - time: 210.02
+    key: E5
+  - time: 210.20
+    key: E5
+  - time: 210.20
+    key: E4
+  - time: 210.55
+    key: B5
+  - time: 210.55
+    key: B4
+  - time: 210.91
+    key: E5
+  - time: 210.91
+    key: E4
+  - time: 211.27
+    key: G5
+  - time: 211.27
+    key: G4
+  - time: 211.45
+    key: C6
+  - time: 211.45
+    key: C5
+  - time: 211.63
+    key: D6
+  - time: 211.63
+    key: D7
+  - time: 211.63
+    key: B5
+  - time: 211.63
+    key: B4
+  - time: 211.99
+    key: B5
+  - time: 211.99
+    key: B6
+  - time: 211.99
+    key: G5
+  - time: 211.99
+    key: G4
+  - time: 212.35
+    key: F#5
+  - time: 212.35
+    key: F#6
+  - time: 212.35
+    key: C5
+  - time: 212.35
+    key: C4
+  - time: 212.53
+    key: B5
+  - time: 212.53
+    key: B4
+  - time: 212.89
+    key: E5
+  - time: 212.89
+    key: E6
+  - time: 212.89
+    key: E6
+  - time: 213.07
+    key: E5
+  - time: 213.07
+    key: E4
+  - time: 213.42
+    key: B5
+  - time: 213.42
+    key: B4
+  - time: 213.78
+    key: E5
+  - time: 213.78
+    key: E4
+  - time: 214.14
+    key: G5
+  - time: 214.14
+    key: G4
+  - time: 214.32
+    key: C6
+  - time: 214.32
+    key: C5
+  - time: 214.50
+    key: B5
+  - time: 214.50
+    key: B4
+  - time: 214.86
+    key: G5
+  - time: 214.86
+    key: G4
+  - time: 215.22
+    key: C5
+  - time: 215.22
+    key: C4
+  - time: 215.40
+    key: B5
+  - time: 215.40
+    key: B4
+  - time: 215.76
+    key: E6
+  - time: 215.76
+    key: E5
+  - time: 215.93
+    key: E5
+  - time: 215.93
+    key: E4
+  - time: 216.29
+    key: B5
+  - time: 216.29
+    key: B4
+  - time: 216.65
+    key: E5
+  - time: 216.65
+    key: E4
+  - time: 217.01
+    key: G5
+  - time: 217.01
+    key: G4
+  - time: 217.19
+    key: C6
+  - time: 217.19
+    key: C5
+  - time: 217.37
+    key: B5
+  - time: 217.37
+    key: B4
+  - time: 217.73
+    key: G5
+  - time: 217.73
+    key: G4
+  - time: 218.09
+    key: B5
+  - time: 218.09
+    key: B6
+  - time: 218.09
+    key: E5
+  - time: 218.09
+    key: E4
+  - time: 218.09
+    key: E2
+  - time: 218.09
+    key: E2
+  - time: 218.09
+    key: E3
+  - time: 218.27
+    key: B5
+  - time: 218.27
+    key: B4
+  - time: 218.27
+    key: E2
+  - time: 218.27
+    key: E3
+  - time: 218.45
+    key: E2
+  - time: 218.45
+    key: E3
+  - time: 218.63
+    key: E6
+  - time: 218.63
+    key: E6
+  - time: 218.63
+    key: E5
+  - time: 218.63
+    key: E2
+  - time: 218.63
+    key: E3
+  - time: 218.80
+    key: G5
+  - time: 218.80
+    key: G6
+  - time: 218.80
+    key: E5
+  - time: 218.80
+    key: E4
+  - time: 218.80
+    key: E2
+  - time: 218.80
+    key: E3
+  - time: 218.98
+    key: E2
+  - time: 218.98
+    key: E3
+  - time: 219.16
+    key: B5
+  - time: 219.16
+    key: B4
+  - time: 219.16
+    key: E2
+  - time: 219.16
+    key: E3
+  - time: 219.34
+    key: E2
+  - time: 219.34
+    key: E3
+  - time: 219.52
+    key: E5
+  - time: 219.52
+    key: E4
+  - time: 219.52
+    key: E2
+  - time: 219.52
+    key: E3
+  - time: 219.70
+    key: E2
+  - time: 219.70
+    key: E3
+  - time: 219.88
+    key: G5
+  - time: 219.88
+    key: G4
+  - time: 219.88
+    key: E2
+  - time: 219.88
+    key: E3
+  - time: 220.06
+    key: C6
+  - time: 220.06
+    key: C5
+  - time: 220.06
+    key: E2
+  - time: 220.06
+    key: E3
+  - time: 220.24
+    key: B5
+  - time: 220.24
+    key: B4
+  - time: 220.24
+    key: E2
+  - time: 220.24
+    key: E3
+  - time: 220.42
+    key: E2
+  - time: 220.42
+    key: E3
+  - time: 220.60
+    key: F#5
+  - time: 220.60
+    key: F#6
+  - time: 220.60
+    key: G5
+  - time: 220.60
+    key: G4
+  - time: 220.60
+    key: E2
+  - time: 220.60
+    key: E3
+  - time: 220.78
+    key: E2
+  - time: 220.78
+    key: E3
+  - time: 220.96
+    key: G5
+  - time: 220.96
+    key: G6
+  - time: 220.96
+    key: G5
+  - time: 220.96
+    key: G4
+  - time: 220.96
+    key: G2
+  - time: 220.96
+    key: G2
+  - time: 220.96
+    key: G3
+  - time: 221.14
+    key: B5
+  - time: 221.14
+    key: B4
+  - time: 221.14
+    key: G2
+  - time: 221.14
+    key: G3
+  - time: 221.32
+    key: B5
+  - time: 221.32
+    key: B6
+  - time: 221.32
+    key: G2
+  - time: 221.32
+    key: G3
+  - time: 221.49
+    key: E5
+  - time: 221.49
+    key: E6
+  - time: 221.49
+    key: E6
+  - time: 221.49
+    key: E5
+  - time: 221.49
+    key: G2
+  - time: 221.49
+    key: G3
+  - time: 221.67
+    key: G5
+  - time: 221.67
+    key: G4
+  - time: 221.67
+    key: G2
+  - time: 221.67
+    key: G3
+  - time: 221.85
+    key: G2
+  - time: 221.85
+    key: G3
+  - time: 222.03
+    key: B5
+  - time: 222.03
+    key: B4
+  - time: 222.03
+    key: G2
+  - time: 222.03
+    key: G3
+  - time: 222.21
+    key: G2
+  - time: 222.21
+    key: G3
+  - time: 222.39
+    key: G5
+  - time: 222.39
+    key: G4
+  - time: 222.39
+    key: G2
+  - time: 222.39
+    key: G3
+  - time: 222.57
+    key: G2
+  - time: 222.57
+    key: G3
+  - time: 222.75
+    key: G5
+  - time: 222.75
+    key: G4
+  - time: 222.75
+    key: G2
+  - time: 222.75
+    key: G3
+  - time: 222.93
+    key: C6
+  - time: 222.93
+    key: C5
+  - time: 222.93
+    key: G2
+  - time: 222.93
+    key: G3
+  - time: 223.11
+    key: D6
+  - time: 223.11
+    key: D7
+  - time: 223.11
+    key: B5
+  - time: 223.11
+    key: B4
+  - time: 223.11
+    key: G2
+  - time: 223.11
+    key: G3
+  - time: 223.29
+    key: G2
+  - time: 223.29
+    key: G3
+  - time: 223.47
+    key: B5
+  - time: 223.47
+    key: B6
+  - time: 223.47
+    key: G5
+  - time: 223.47
+    key: G4
+  - time: 223.47
+    key: G2
+  - time: 223.47
+    key: G3
+  - time: 223.65
+    key: G2
+  - time: 223.65
+    key: G3
+  - time: 223.83
+    key: F#5
+  - time: 223.83
+    key: F#6
+  - time: 223.83
+    key: D5
+  - time: 223.83
+    key: D4
+  - time: 223.83
+    key: D2
+  - time: 223.83
+    key: D2
+  - time: 223.83
+    key: D3
+  - time: 224.01
+    key: B5
+  - time: 224.01
+    key: B4
+  - time: 224.01
+    key: D2
+  - time: 224.01
+    key: D3
+  - time: 224.18
+    key: D2
+  - time: 224.18
+    key: D3
+  - time: 224.36
+    key: E5
+  - time: 224.36
+    key: E6
+  - time: 224.36
+    key: E6
+  - time: 224.36
+    key: D2
+  - time: 224.36
+    key: D3
+  - time: 224.54
+    key: D5
+  - time: 224.54
+    key: D4
+  - time: 224.54
+    key: D2
+  - time: 224.54
+    key: D3
+  - time: 224.72
+    key: D2
+  - time: 224.72
+    key: D3
+  - time: 224.90
+    key: B5
+  - time: 224.90
+    key: B4
+  - time: 224.90
+    key: D2
+  - time: 224.90
+    key: D3
+  - time: 225.08
+    key: D2
+  - time: 225.08
+    key: D3
+  - time: 225.26
+    key: D5
+  - time: 225.26
+    key: D4
+  - time: 225.26
+    key: D2
+  - time: 225.26
+    key: D3
+  - time: 225.44
+    key: D2
+  - time: 225.44
+    key: D3
+  - time: 225.62
+    key: G5
+  - time: 225.62
+    key: G4
+  - time: 225.62
+    key: D2
+  - time: 225.62
+    key: D3
+  - time: 225.80
+    key: C6
+  - time: 225.80
+    key: C5
+  - time: 225.80
+    key: D2
+  - time: 225.80
+    key: D3
+  - time: 225.98
+    key: B5
+  - time: 225.98
+    key: B4
+  - time: 225.98
+    key: D2
+  - time: 225.98
+    key: D3
+  - time: 226.16
+    key: D2
+  - time: 226.16
+    key: D3
+  - time: 226.34
+    key: G5
+  - time: 226.34
+    key: G4
+  - time: 226.34
+    key: D2
+  - time: 226.34
+    key: D3
+  - time: 226.52
+    key: D2
+  - time: 226.52
+    key: D3
+  - time: 226.70
+    key: C5
+  - time: 226.70
+    key: C4
+  - time: 226.70
+    key: C2
+  - time: 226.70
+    key: C2
+  - time: 226.70
+    key: C3
+  - time: 226.88
+    key: B5
+  - time: 226.88
+    key: B4
+  - time: 226.88
+    key: C2
+  - time: 226.88
+    key: C3
+  - time: 227.05
+    key: C2
+  - time: 227.05
+    key: C3
+  - time: 227.23
+    key: E6
+  - time: 227.23
+    key: E5
+  - time: 227.23
+    key: C2
+  - time: 227.23
+    key: C3
+  - time: 227.41
+    key: E5
+  - time: 227.41
+    key: E4
+  - time: 227.41
+    key: C2
+  - time: 227.41
+    key: C3
+  - time: 227.59
+    key: C2
+  - time: 227.59
+    key: C3
+  - time: 227.77
+    key: B5
+  - time: 227.77
+    key: B4
+  - time: 227.77
+    key: C2
+  - time: 227.77
+    key: C3
+  - time: 227.95
+    key: C2
+  - time: 227.95
+    key: C3
+  - time: 228.13
+    key: E5
+  - time: 228.13
+    key: E4
+  - time: 228.13
+    key: C2
+  - time: 228.13
+    key: C3
+  - time: 228.31
+    key: C2
+  - time: 228.31
+    key: C3
+  - time: 228.49
+    key: G5
+  - time: 228.49
+    key: G4
+  - time: 228.49
+    key: C2
+  - time: 228.49
+    key: C3
+  - time: 228.67
+    key: C6
+  - time: 228.67
+    key: C5
+  - time: 228.67
+    key: C2
+  - time: 228.67
+    key: C3
+  - time: 228.85
+    key: B5
+  - time: 228.85
+    key: B4
+  - time: 228.85
+    key: C2
+  - time: 228.85
+    key: C3
+  - time: 229.03
+    key: C2
+  - time: 229.03
+    key: C3
+  - time: 229.21
+    key: G5
+  - time: 229.21
+    key: G4
+  - time: 229.21
+    key: C2
+  - time: 229.21
+    key: C3
+  - time: 229.39
+    key: C2
+  - time: 229.39
+    key: C3
+  - time: 229.57
+    key: B5
+  - time: 229.57
+    key: B6
+  - time: 229.57
+    key: E5
+  - time: 229.57
+    key: E4
+  - time: 229.57
+    key: E2
+  - time: 229.57
+    key: E2
+  - time: 229.57
+    key: E3
+  - time: 229.74
+    key: B5
+  - time: 229.74
+    key: B4
+  - time: 229.74
+    key: E2
+  - time: 229.74
+    key: E3
+  - time: 229.92
+    key: E2
+  - time: 229.92
+    key: E3
+  - time: 230.10
+    key: E6
+  - time: 230.10
+    key: E6
+  - time: 230.10
+    key: E5
+  - time: 230.10
+    key: E2
+  - time: 230.10
+    key: E3
+  - time: 230.28
+    key: G5
+  - time: 230.28
+    key: G6
+  - time: 230.28
+    key: E5
+  - time: 230.28
+    key: E4
+  - time: 230.28
+    key: E2
+  - time: 230.28
+    key: E3
+  - time: 230.46
+    key: E2
+  - time: 230.46
+    key: E3
+  - time: 230.64
+    key: B5
+  - time: 230.64
+    key: B4
+  - time: 230.64
+    key: E2
+  - time: 230.64
+    key: E3
+  - time: 230.82
+    key: E2
+  - time: 230.82
+    key: E3
+  - time: 231.00
+    key: E5
+  - time: 231.00
+    key: E4
+  - time: 231.00
+    key: E2
+  - time: 231.00
+    key: E3
+  - time: 231.18
+    key: E2
+  - time: 231.18
+    key: E3
+  - time: 231.36
+    key: G5
+  - time: 231.36
+    key: G4
+  - time: 231.36
+    key: E2
+  - time: 231.36
+    key: E3
+  - time: 231.54
+    key: C6
+  - time: 231.54
+    key: C5
+  - time: 231.54
+    key: E2
+  - time: 231.54
+    key: E3
+  - time: 231.72
+    key: B5
+  - time: 231.72
+    key: B4
+  - time: 231.72
+    key: E2
+  - time: 231.72
+    key: E3
+  - time: 231.90
+    key: E2
+  - time: 231.90
+    key: E3
+  - time: 232.08
+    key: F#5
+  - time: 232.08
+    key: F#6
+  - time: 232.08
+    key: G5
+  - time: 232.08
+    key: G4
+  - time: 232.08
+    key: E2
+  - time: 232.08
+    key: E3
+  - time: 232.26
+    key: E2
+  - time: 232.26
+    key: E3
+  - time: 232.43
+    key: G5
+  - time: 232.43
+    key: G6
+  - time: 232.43
+    key: G5
+  - time: 232.43
+    key: G4
+  - time: 232.43
+    key: G2
+  - time: 232.43
+    key: G2
+  - time: 232.43
+    key: G3
+  - time: 232.61
+    key: B5
+  - time: 232.61
+    key: B4
+  - time: 232.61
+    key: G2
+  - time: 232.61
+    key: G3
+  - time: 232.79
+    key: B5
+  - time: 232.79
+    key: B6
+  - time: 232.79
+    key: G2
+  - time: 232.79
+    key: G3
+  - time: 232.97
+    key: E5
+  - time: 232.97
+    key: E6
+  - time: 232.97
+    key: E6
+  - time: 232.97
+    key: E5
+  - time: 232.97
+    key: G2
+  - time: 232.97
+    key: G3
+  - time: 233.15
+    key: G5
+  - time: 233.15
+    key: G4
+  - time: 233.15
+    key: G2
+  - time: 233.15
+    key: G3
+  - time: 233.33
+    key: G2
+  - time: 233.33
+    key: G3
+  - time: 233.51
+    key: B5
+  - time: 233.51
+    key: B4
+  - time: 233.51
+    key: G2
+  - time: 233.51
+    key: G3
+  - time: 233.69
+    key: G2
+  - time: 233.69
+    key: G3
+  - time: 233.87
+    key: G5
+  - time: 233.87
+    key: G4
+  - time: 233.87
+    key: G2
+  - time: 233.87
+    key: G3
+  - time: 234.05
+    key: G2
+  - time: 234.05
+    key: G3
+  - time: 234.23
+    key: G5
+  - time: 234.23
+    key: G4
+  - time: 234.23
+    key: G2
+  - time: 234.23
+    key: G3
+  - time: 234.41
+    key: C6
+  - time: 234.41
+    key: C5
+  - time: 234.41
+    key: G2
+  - time: 234.41
+    key: G3
+  - time: 234.59
+    key: D6
+  - time: 234.59
+    key: D7
+  - time: 234.59
+    key: B5
+  - time: 234.59
+    key: B4
+  - time: 234.59
+    key: G2
+  - time: 234.59
+    key: G3
+  - time: 234.77
+    key: G2
+  - time: 234.77
+    key: G3
+  - time: 234.95
+    key: B5
+  - time: 234.95
+    key: B6
+  - time: 234.95
+    key: G5
+  - time: 234.95
+    key: G4
+  - time: 234.95
+    key: G2
+  - time: 234.95
+    key: G3
+  - time: 235.13
+    key: G2
+  - time: 235.13
+    key: G3
+  - time: 235.30
+    key: F#5
+  - time: 235.30
+    key: F#6
+  - time: 235.30
+    key: D5
+  - time: 235.30
+    key: D4
+  - time: 235.30
+    key: D2
+  - time: 235.30
+    key: D2
+  - time: 235.30
+    key: D3
+  - time: 235.48
+    key: B5
+  - time: 235.48
+    key: B4
+  - time: 235.48
+    key: D2
+  - time: 235.48
+    key: D3
+  - time: 235.66
+    key: D2
+  - time: 235.66
+    key: D3
+  - time: 235.84
+    key: E5
+  - time: 235.84
+    key: E6
+  - time: 235.84
+    key: E6
+  - time: 235.84
+    key: D2
+  - time: 235.84
+    key: D3
+  - time: 236.02
+    key: D5
+  - time: 236.02
+    key: D4
+  - time: 236.02
+    key: D2
+  - time: 236.02
+    key: D3
+  - time: 236.20
+    key: D2
+  - time: 236.20
+    key: D3
+  - time: 236.38
+    key: B5
+  - time: 236.38
+    key: B4
+  - time: 236.38
+    key: D2
+  - time: 236.38
+    key: D3
+  - time: 236.56
+    key: D2
+  - time: 236.56
+    key: D3
+  - time: 236.74
+    key: D5
+  - time: 236.74
+    key: D4
+  - time: 236.74
+    key: D2
+  - time: 236.74
+    key: D3
+  - time: 236.92
+    key: D2
+  - time: 236.92
+    key: D3
+  - time: 237.10
+    key: G5
+  - time: 237.10
+    key: G4
+  - time: 237.10
+    key: D2
+  - time: 237.10
+    key: D3
+  - time: 237.28
+    key: C6
+  - time: 237.28
+    key: C5
+  - time: 237.28
+    key: D2
+  - time: 237.28
+    key: D3
+  - time: 237.46
+    key: B5
+  - time: 237.46
+    key: B4
+  - time: 237.46
+    key: D2
+  - time: 237.46
+    key: D3
+  - time: 237.64
+    key: D2
+  - time: 237.64
+    key: D3
+  - time: 237.82
+    key: G5
+  - time: 237.82
+    key: G4
+  - time: 237.82
+    key: D2
+  - time: 237.82
+    key: D3
+  - time: 237.99
+    key: D2
+  - time: 237.99
+    key: D3
+  - time: 238.17
+    key: C5
+  - time: 238.17
+    key: C4
+  - time: 238.17
+    key: C2
+  - time: 238.17
+    key: C2
+  - time: 238.17
+    key: C3
+  - time: 238.35
+    key: B5
+  - time: 238.35
+    key: B4
+  - time: 238.35
+    key: C2
+  - time: 238.35
+    key: C3
+  - time: 238.53
+    key: C2
+  - time: 238.53
+    key: C3
+  - time: 238.71
+    key: E6
+  - time: 238.71
+    key: E5
+  - time: 238.71
+    key: C2
+  - time: 238.71
+    key: C3
+  - time: 238.89
+    key: E5
+  - time: 238.89
+    key: E4
+  - time: 238.89
+    key: C2
+  - time: 238.89
+    key: C3
+  - time: 239.07
+    key: C2
+  - time: 239.07
+    key: C3
+  - time: 239.25
+    key: B5
+  - time: 239.25
+    key: B4
+  - time: 239.25
+    key: C2
+  - time: 239.25
+    key: C3
+  - time: 239.43
+    key: C2
+  - time: 239.43
+    key: C3
+  - time: 239.61
+    key: E5
+  - time: 239.61
+    key: E4
+  - time: 239.61
+    key: C2
+  - time: 239.61
+    key: C3
+  - time: 239.79
+    key: C2
+  - time: 239.79
+    key: C3
+  - time: 239.97
+    key: G5
+  - time: 239.97
+    key: G4
+  - time: 239.97
+    key: C2
+  - time: 239.97
+    key: C3
+  - time: 240.15
+    key: C6
+  - time: 240.15
+    key: C5
+  - time: 240.15
+    key: C2
+  - time: 240.15
+    key: C3
+  - time: 240.33
+    key: B5
+  - time: 240.33
+    key: B4
+  - time: 240.33
+    key: C2
+  - time: 240.33
+    key: C3
+  - time: 240.51
+    key: C2
+  - time: 240.51
+    key: C3
+  - time: 240.68
+    key: G5
+  - time: 240.68
+    key: G4
+  - time: 240.68
+    key: C2
+  - time: 240.68
+    key: C3
+  - time: 240.86
+    key: C2
+  - time: 240.86
+    key: C3
+  - time: 241.04
+    key: B5
+  - time: 241.04
+    key: B6
+  - time: 241.04
+    key: E4
+  - time: 241.04
+    key: E2
+  - time: 241.04
+    key: E2
+  - time: 241.04
+    key: E3
+  - time: 241.22
+    key: B4
+  - time: 241.22
+    key: E2
+  - time: 241.22
+    key: E3
+  - time: 241.40
+    key: E2
+  - time: 241.40
+    key: E3
+  - time: 241.58
+    key: E6
+  - time: 241.58
+    key: E5
+  - time: 241.58
+    key: E2
+  - time: 241.58
+    key: E3
+  - time: 241.76
+    key: G5
+  - time: 241.76
+    key: G6
+  - time: 241.76
+    key: E4
+  - time: 241.76
+    key: E2
+  - time: 241.76
+    key: E3
+  - time: 241.94
+    key: E2
+  - time: 241.94
+    key: E3
+  - time: 242.12
+    key: B4
+  - time: 242.12
+    key: E2
+  - time: 242.12
+    key: E3
+  - time: 242.30
+    key: E2
+  - time: 242.30
+    key: E3
+  - time: 242.48
+    key: E4
+  - time: 242.48
+    key: E2
+  - time: 242.48
+    key: E3
+  - time: 242.66
+    key: E2
+  - time: 242.66
+    key: E3
+  - time: 242.84
+    key: G4
+  - time: 242.84
+    key: E2
+  - time: 242.84
+    key: E3
+  - time: 243.02
+    key: C5
+  - time: 243.02
+    key: E2
+  - time: 243.02
+    key: E3
+  - time: 243.20
+    key: B4
+  - time: 243.20
+    key: E2
+  - time: 243.20
+    key: E3
+  - time: 243.38
+    key: E2
+  - time: 243.38
+    key: E3
+  - time: 243.55
+    key: F#5
+  - time: 243.55
+    key: F#6
+  - time: 243.55
+    key: G4
+  - time: 243.55
+    key: E2
+  - time: 243.55
+    key: E3
+  - time: 243.73
+    key: E2
+  - time: 243.73
+    key: E3
+  - time: 243.91
+    key: G5
+  - time: 243.91
+    key: G6
+  - time: 243.91
+    key: C7
+  - time: 243.91
+    key: G4
+  - time: 243.91
+    key: G2
+  - time: 243.91
+    key: G2
+  - time: 243.91
+    key: G3
+  - time: 244.09
+    key: B4
+  - time: 244.09
+    key: G2
+  - time: 244.09
+    key: G3
+  - time: 244.27
+    key: B5
+  - time: 244.27
+    key: B6
+  - time: 244.27
+    key: G2
+  - time: 244.27
+    key: G3
+  - time: 244.45
+    key: E5
+  - time: 244.45
+    key: E6
+  - time: 244.45
+    key: E5
+  - time: 244.45
+    key: G2
+  - time: 244.45
+    key: G3
+  - time: 244.63
+    key: G4
+  - time: 244.63
+    key: G2
+  - time: 244.63
+    key: G3
+  - time: 244.81
+    key: G2
+  - time: 244.81
+    key: G3
+  - time: 244.99
+    key: B4
+  - time: 244.99
+    key: G2
+  - time: 244.99
+    key: G3
+  - time: 245.17
+    key: G2
+  - time: 245.17
+    key: G3
+  - time: 245.35
+    key: D7
+  - time: 245.35
+    key: G4
+  - time: 245.35
+    key: G2
+  - time: 245.35
+    key: G3
+  - time: 245.53
+    key: G2
+  - time: 245.53
+    key: G3
+  - time: 245.71
+    key: G4
+  - time: 245.71
+    key: G2
+  - time: 245.71
+    key: G3
+  - time: 245.89
+    key: C5
+  - time: 245.89
+    key: G2
+  - time: 245.89
+    key: G3
+  - time: 246.07
+    key: D6
+  - time: 246.07
+    key: D7
+  - time: 246.07
+    key: B4
+  - time: 246.07
+    key: G2
+  - time: 246.07
+    key: G3
+  - time: 246.24
+    key: G2
+  - time: 246.24
+    key: G3
+  - time: 246.42
+    key: B5
+  - time: 246.42
+    key: B6
+  - time: 246.42
+    key: G4
+  - time: 246.42
+    key: G2
+  - time: 246.42
+    key: G3
+  - time: 246.60
+    key: G2
+  - time: 246.60
+    key: G3
+  - time: 246.78
+    key: F#5
+  - time: 246.78
+    key: F#6
+  - time: 246.78
+    key: D4
+  - time: 246.78
+    key: D2
+  - time: 246.78
+    key: D2
+  - time: 246.78
+    key: D3
+  - time: 246.96
+    key: B4
+  - time: 246.96
+    key: D2
+  - time: 246.96
+    key: D3
+  - time: 247.14
+    key: D2
+  - time: 247.14
+    key: D3
+  - time: 247.32
+    key: E5
+  - time: 247.32
+    key: E6
+  - time: 247.32
+    key: D2
+  - time: 247.32
+    key: D3
+  - time: 247.50
+    key: D4
+  - time: 247.50
+    key: D2
+  - time: 247.50
+    key: D3
+  - time: 247.68
+    key: D2
+  - time: 247.68
+    key: D3
+  - time: 247.86
+    key: B4
+  - time: 247.86
+    key: D2
+  - time: 247.86
+    key: D3
+  - time: 248.04
+    key: D2
+  - time: 248.04
+    key: D3
+  - time: 248.22
+    key: G6
+  - time: 248.22
+    key: D4
+  - time: 248.22
+    key: D2
+  - time: 248.22
+    key: D3
+  - time: 248.40
+    key: D2
+  - time: 248.40
+    key: D3
+  - time: 248.58
+    key: G4
+  - time: 248.58
+    key: D2
+  - time: 248.58
+    key: D3
+  - time: 248.76
+    key: C5
+  - time: 248.76
+    key: D2
+  - time: 248.76
+    key: D3
+  - time: 248.93
+    key: B4
+  - time: 248.93
+    key: D2
+  - time: 248.93
+    key: D3
+  - time: 249.11
+    key: D2
+  - time: 249.11
+    key: D3
+  - time: 249.29
+    key: G4
+  - time: 249.29
+    key: D2
+  - time: 249.29
+    key: D3
+  - time: 249.47
+    key: D2
+  - time: 249.47
+    key: D3
+  - time: 249.65
+    key: E6
+  - time: 249.65
+    key: C4
+  - time: 249.65
+    key: C2
+  - time: 249.65
+    key: C2
+  - time: 249.65
+    key: C3
+  - time: 249.83
+    key: B4
+  - time: 249.83
+    key: C2
+  - time: 249.83
+    key: C3
+  - time: 250.01
+    key: C2
+  - time: 250.01
+    key: C3
+  - time: 250.19
+    key: E5
+  - time: 250.19
+    key: C2
+  - time: 250.19
+    key: C3
+  - time: 250.37
+    key: E4
+  - time: 250.37
+    key: C2
+  - time: 250.37
+    key: C3
+  - time: 250.55
+    key: C2
+  - time: 250.55
+    key: C3
+  - time: 250.73
+    key: B4
+  - time: 250.73
+    key: C2
+  - time: 250.73
+    key: C3
+  - time: 250.91
+    key: C2
+  - time: 250.91
+    key: C3
+  - time: 251.09
+    key: E4
+  - time: 251.09
+    key: C2
+  - time: 251.09
+    key: C3
+  - time: 251.27
+    key: C2
+  - time: 251.27
+    key: C3
+  - time: 251.45
+    key: G4
+  - time: 251.45
+    key: C2
+  - time: 251.45
+    key: C3
+  - time: 251.63
+    key: C5
+  - time: 251.63
+    key: C2
+  - time: 251.63
+    key: C3
+  - time: 251.80
+    key: D6
+  - time: 251.80
+    key: B4
+  - time: 251.80
+    key: C2
+  - time: 251.80
+    key: C3
+  - time: 251.98
+    key: C2
+  - time: 251.98
+    key: C3
+  - time: 252.16
+    key: G4
+  - time: 252.16
+    key: C2
+  - time: 252.16
+    key: C3
+  - time: 252.34
+    key: C2
+  - time: 252.34
+    key: C3
+  - time: 252.52
+    key: B5
+  - time: 252.52
+    key: B6
+  - time: 252.52
+    key: E4
+  - time: 252.52
+    key: E2
+  - time: 252.52
+    key: E2
+  - time: 252.52
+    key: E3
+  - time: 252.70
+    key: B4
+  - time: 252.70
+    key: E2
+  - time: 252.70
+    key: E3
+  - time: 252.88
+    key: E2
+  - time: 252.88
+    key: E3
+  - time: 253.06
+    key: E6
+  - time: 253.06
+    key: E5
+  - time: 253.06
+    key: E2
+  - time: 253.06
+    key: E3
+  - time: 253.24
+    key: G5
+  - time: 253.24
+    key: G6
+  - time: 253.24
+    key: E4
+  - time: 253.24
+    key: E2
+  - time: 253.24
+    key: E3
+  - time: 253.42
+    key: E2
+  - time: 253.42
+    key: E3
+  - time: 253.60
+    key: B4
+  - time: 253.60
+    key: E2
+  - time: 253.60
+    key: E3
+  - time: 253.78
+    key: E2
+  - time: 253.78
+    key: E3
+  - time: 253.96
+    key: E4
+  - time: 253.96
+    key: E2
+  - time: 253.96
+    key: E3
+  - time: 254.14
+    key: E2
+  - time: 254.14
+    key: E3
+  - time: 254.32
+    key: G4
+  - time: 254.32
+    key: E2
+  - time: 254.32
+    key: E3
+  - time: 254.49
+    key: C5
+  - time: 254.49
+    key: E2
+  - time: 254.49
+    key: E3
+  - time: 254.67
+    key: B4
+  - time: 254.67
+    key: E2
+  - time: 254.67
+    key: E3
+  - time: 254.85
+    key: E2
+  - time: 254.85
+    key: E3
+  - time: 255.03
+    key: F#5
+  - time: 255.03
+    key: F#6
+  - time: 255.03
+    key: G4
+  - time: 255.03
+    key: E2
+  - time: 255.03
+    key: E3
+  - time: 255.21
+    key: E2
+  - time: 255.21
+    key: E3
+  - time: 255.39
+    key: G5
+  - time: 255.39
+    key: G6
+  - time: 255.39
+    key: C7
+  - time: 255.39
+    key: G4
+  - time: 255.39
+    key: G2
+  - time: 255.39
+    key: G2
+  - time: 255.39
+    key: G3
+  - time: 255.57
+    key: B4
+  - time: 255.57
+    key: G2
+  - time: 255.57
+    key: G3
+  - time: 255.75
+    key: B5
+  - time: 255.75
+    key: B6
+  - time: 255.75
+    key: G2
+  - time: 255.75
+    key: G3
+  - time: 255.93
+    key: E5
+  - time: 255.93
+    key: E6
+  - time: 255.93
+    key: E5
+  - time: 255.93
+    key: G2
+  - time: 255.93
+    key: G3
+  - time: 256.11
+    key: G4
+  - time: 256.11
+    key: G2
+  - time: 256.11
+    key: G3
+  - time: 256.29
+    key: G2
+  - time: 256.29
+    key: G3
+  - time: 256.47
+    key: B4
+  - time: 256.47
+    key: G2
+  - time: 256.47
+    key: G3
+  - time: 256.65
+    key: G2
+  - time: 256.65
+    key: G3
+  - time: 256.83
+    key: D7
+  - time: 256.83
+    key: G4
+  - time: 256.83
+    key: G2
+  - time: 256.83
+    key: G3
+  - time: 257.01
+    key: G2
+  - time: 257.01
+    key: G3
+  - time: 257.18
+    key: G4
+  - time: 257.18
+    key: G2
+  - time: 257.18
+    key: G3
+  - time: 257.36
+    key: C5
+  - time: 257.36
+    key: G2
+  - time: 257.36
+    key: G3
+  - time: 257.54
+    key: D6
+  - time: 257.54
+    key: D7
+  - time: 257.54
+    key: B4
+  - time: 257.54
+    key: G2
+  - time: 257.54
+    key: G3
+  - time: 257.72
+    key: G2
+  - time: 257.72
+    key: G3
+  - time: 257.90
+    key: B5
+  - time: 257.90
+    key: B6
+  - time: 257.90
+    key: G4
+  - time: 257.90
+    key: G2
+  - time: 257.90
+    key: G3
+  - time: 258.08
+    key: G2
+  - time: 258.08
+    key: G3
+  - time: 258.26
+    key: F#5
+  - time: 258.26
+    key: F#6
+  - time: 258.26
+    key: D6
+  - time: 258.26
+    key: D4
+  - time: 258.26
+    key: D2
+  - time: 258.26
+    key: D2
+  - time: 258.26
+    key: D3
+  - time: 258.44
+    key: B4
+  - time: 258.44
+    key: D2
+  - time: 258.44
+    key: D3
+  - time: 258.62
+    key: D2
+  - time: 258.62
+    key: D3
+  - time: 258.80
+    key: E5
+  - time: 258.80
+    key: E6
+  - time: 258.80
+    key: D2
+  - time: 258.80
+    key: D3
+  - time: 258.98
+    key: D4
+  - time: 258.98
+    key: D2
+  - time: 258.98
+    key: D3
+  - time: 259.16
+    key: D2
+  - time: 259.16
+    key: D3
+  - time: 259.34
+    key: B4
+  - time: 259.34
+    key: D2
+  - time: 259.34
+    key: D3
+  - time: 259.52
+    key: D2
+  - time: 259.52
+    key: D3
+  - time: 259.70
+    key: G6
+  - time: 259.70
+    key: D4
+  - time: 259.70
+    key: D2
+  - time: 259.70
+    key: D3
+  - time: 259.88
+    key: D2
+  - time: 259.88
+    key: D3
+  - time: 260.05
+    key: G4
+  - time: 260.05
+    key: D2
+  - time: 260.05
+    key: D3
+  - time: 260.23
+    key: C5
+  - time: 260.23
+    key: D2
+  - time: 260.23
+    key: D3
+  - time: 260.41
+    key: B4
+  - time: 260.41
+    key: D2
+  - time: 260.41
+    key: D3
+  - time: 260.59
+    key: D2
+  - time: 260.59
+    key: D3
+  - time: 260.77
+    key: G4
+  - time: 260.77
+    key: D2
+  - time: 260.77
+    key: D3
+  - time: 260.95
+    key: D2
+  - time: 260.95
+    key: D3
+  - time: 261.13
+    key: B5
+  - time: 261.13
+    key: E6
+  - time: 261.13
+    key: C4
+  - time: 261.13
+    key: C2
+  - time: 261.13
+    key: C2
+  - time: 261.13
+    key: C3
+  - time: 261.31
+    key: B4
+  - time: 261.31
+    key: C2
+  - time: 261.31
+    key: C3
+  - time: 261.49
+    key: C2
+  - time: 261.49
+    key: C3
+  - time: 261.67
+    key: E5
+  - time: 261.67
+    key: C2
+  - time: 261.67
+    key: C3
+  - time: 261.85
+    key: E4
+  - time: 261.85
+    key: C2
+  - time: 261.85
+    key: C3
+  - time: 262.03
+    key: C2
+  - time: 262.03
+    key: C3
+  - time: 262.21
+    key: B4
+  - time: 262.21
+    key: C2
+  - time: 262.21
+    key: C3
+  - time: 262.39
+    key: C2
+  - time: 262.39
+    key: C3
+  - time: 262.57
+    key: B5
+  - time: 262.57
+    key: D6
+  - time: 262.57
+    key: E4
+  - time: 262.57
+    key: C2
+  - time: 262.57
+    key: C3
+  - time: 262.74
+    key: C2
+  - time: 262.74
+    key: C3
+  - time: 262.92
+    key: G4
+  - time: 262.92
+    key: C2
+  - time: 262.92
+    key: C3
+  - time: 263.10
+    key: C5
+  - time: 263.10
+    key: C2
+  - time: 263.10
+    key: C3
+  - time: 263.28
+    key: B4
+  - time: 263.28
+    key: C2
+  - time: 263.28
+    key: C3
+  - time: 263.46
+    key: C2
+  - time: 263.46
+    key: C3
+  - time: 263.64
+    key: G4
+  - time: 263.64
+    key: C2
+  - time: 263.64
+    key: C3
+  - time: 263.82
+    key: C2
+  - time: 263.82
+    key: C3
+  - time: 264.00
+    key: B5
+  - time: 264.00
+    key: B6
+  - time: 264.00
+    key: B5
+  - time: 264.00
+    key: E6
+  - time: 264.00
+    key: G6
+  - time: 264.00
+    key: E4
+  - time: 264.00
+    key: E2
+  - time: 264.00
+    key: E2
+  - time: 264.00
+    key: E3
+  - time: 264.18
+    key: B4
+  - time: 264.18
+    key: E2
+  - time: 264.18
+    key: E3
+  - time: 264.36
+    key: E2
+  - time: 264.36
+    key: E3
+  - time: 264.54
+    key: E6
+  - time: 264.54
+    key: E5
+  - time: 264.54
+    key: E2
+  - time: 264.54
+    key: E3
+  - time: 264.72
+    key: G5
+  - time: 264.72
+    key: G6
+  - time: 264.72
+    key: E4
+  - time: 264.72
+    key: E2
+  - time: 264.72
+    key: E3
+  - time: 264.90
+    key: E2
+  - time: 264.90
+    key: E3
+  - time: 265.08
+    key: B4
+  - time: 265.08
+    key: E2
+  - time: 265.08
+    key: E3
+  - time: 265.26
+    key: E2
+  - time: 265.26
+    key: E3
+  - time: 265.43
+    key: E4
+  - time: 265.43
+    key: E2
+  - time: 265.43
+    key: E3
+  - time: 265.61
+    key: E2
+  - time: 265.61
+    key: E3
+  - time: 265.79
+    key: G4
+  - time: 265.79
+    key: E2
+  - time: 265.79
+    key: E3
+  - time: 265.97
+    key: C5
+  - time: 265.97
+    key: E2
+  - time: 265.97
+    key: E3
+  - time: 266.15
+    key: F#6
+  - time: 266.15
+    key: B4
+  - time: 266.15
+    key: E2
+  - time: 266.15
+    key: E3
+  - time: 266.33
+    key: E2
+  - time: 266.33
+    key: E3
+  - time: 266.51
+    key: F#5
+  - time: 266.51
+    key: F#6
+  - time: 266.51
+    key: G4
+  - time: 266.51
+    key: E2
+  - time: 266.51
+    key: E3
+  - time: 266.69
+    key: E2
+  - time: 266.69
+    key: E3
+  - time: 266.87
+    key: G5
+  - time: 266.87
+    key: G6
+  - time: 266.87
+    key: C6
+  - time: 266.87
+    key: G6
+  - time: 266.87
+    key: C7
+  - time: 266.87
+    key: G4
+  - time: 266.87
+    key: G2
+  - time: 266.87
+    key: G2
+  - time: 266.87
+    key: G3
+  - time: 267.05
+    key: B4
+  - time: 267.05
+    key: G2
+  - time: 267.05
+    key: G3
+  - time: 267.23
+    key: B5
+  - time: 267.23
+    key: B6
+  - time: 267.23
+    key: G2
+  - time: 267.23
+    key: G3
+  - time: 267.41
+    key: E5
+  - time: 267.41
+    key: E6
+  - time: 267.41
+    key: E5
+  - time: 267.41
+    key: G2
+  - time: 267.41
+    key: G3
+  - time: 267.59
+    key: G4
+  - time: 267.59
+    key: G2
+  - time: 267.59
+    key: G3
+  - time: 267.77
+    key: G2
+  - time: 267.77
+    key: G3
+  - time: 267.95
+    key: B4
+  - time: 267.95
+    key: G2
+  - time: 267.95
+    key: G3
+  - time: 268.13
+    key: G2
+  - time: 268.13
+    key: G3
+  - time: 268.30
+    key: D6
+  - time: 268.30
+    key: D7
+  - time: 268.30
+    key: G4
+  - time: 268.30
+    key: G2
+  - time: 268.30
+    key: G3
+  - time: 268.48
+    key: G2
+  - time: 268.48
+    key: G3
+  - time: 268.66
+    key: G4
+  - time: 268.66
+    key: G2
+  - time: 268.66
+    key: G3
+  - time: 268.84
+    key: C5
+  - time: 268.84
+    key: G2
+  - time: 268.84
+    key: G3
+  - time: 269.02
+    key: D6
+  - time: 269.02
+    key: D7
+  - time: 269.02
+    key: G6
+  - time: 269.02
+    key: B4
+  - time: 269.02
+    key: G2
+  - time: 269.02
+    key: G3
+  - time: 269.20
+    key: G2
+  - time: 269.20
+    key: G3
+  - time: 269.38
+    key: B5
+  - time: 269.38
+    key: B6
+  - time: 269.38
+    key: G4
+  - time: 269.38
+    key: G2
+  - time: 269.38
+    key: G3
+  - time: 269.56
+    key: G2
+  - time: 269.56
+    key: G3
+  - time: 269.74
+    key: F#5
+  - time: 269.74
+    key: F#6
+  - time: 269.74
+    key: D4
+  - time: 269.74
+    key: D2
+  - time: 269.74
+    key: D2
+  - time: 269.74
+    key: D3
+  - time: 269.92
+    key: B4
+  - time: 269.92
+    key: D2
+  - time: 269.92
+    key: D3
+  - time: 270.10
+    key: D2
+  - time: 270.10
+    key: D3
+  - time: 270.28
+    key: E5
+  - time: 270.28
+    key: E6
+  - time: 270.28
+    key: D2
+  - time: 270.28
+    key: D3
+  - time: 270.46
+    key: D4
+  - time: 270.46
+    key: D2
+  - time: 270.46
+    key: D3
+  - time: 270.64
+    key: D2
+  - time: 270.64
+    key: D3
+  - time: 270.82
+    key: B4
+  - time: 270.82
+    key: D2
+  - time: 270.82
+    key: D3
+  - time: 270.99
+    key: D2
+  - time: 270.99
+    key: D3
+  - time: 271.17
+    key: G5
+  - time: 271.17
+    key: E6
+  - time: 271.17
+    key: G6
+  - time: 271.17
+    key: D4
+  - time: 271.17
+    key: D2
+  - time: 271.17
+    key: D3
+  - time: 271.35
+    key: D2
+  - time: 271.35
+    key: D3
+  - time: 271.53
+    key: G4
+  - time: 271.53
+    key: D2
+  - time: 271.53
+    key: D3
+  - time: 271.71
+    key: C5
+  - time: 271.71
+    key: D2
+  - time: 271.71
+    key: D3
+  - time: 271.89
+    key: B4
+  - time: 271.89
+    key: D2
+  - time: 271.89
+    key: D3
+  - time: 272.07
+    key: D2
+  - time: 272.07
+    key: D3
+  - time: 272.25
+    key: G4
+  - time: 272.25
+    key: D2
+  - time: 272.25
+    key: D3
+  - time: 272.43
+    key: D2
+  - time: 272.43
+    key: D3
+  - time: 272.61
+    key: E5
+  - time: 272.61
+    key: G5
+  - time: 272.61
+    key: E6
+  - time: 272.61
+    key: C4
+  - time: 272.61
+    key: C2
+  - time: 272.61
+    key: C2
+  - time: 272.61
+    key: C3
+  - time: 272.79
+    key: B4
+  - time: 272.79
+    key: C2
+  - time: 272.79
+    key: C3
+  - time: 272.97
+    key: C2
+  - time: 272.97
+    key: C3
+  - time: 273.15
+    key: E5
+  - time: 273.15
+    key: C2
+  - time: 273.15
+    key: C3
+  - time: 273.33
+    key: E4
+  - time: 273.33
+    key: C2
+  - time: 273.33
+    key: C3
+  - time: 273.51
+    key: C2
+  - time: 273.51
+    key: C3
+  - time: 273.68
+    key: B4
+  - time: 273.68
+    key: C2
+  - time: 273.68
+    key: C3
+  - time: 273.86
+    key: C2
+  - time: 273.86
+    key: C3
+  - time: 274.04
+    key: G5
+  - time: 274.04
+    key: D6
+  - time: 274.04
+    key: E4
+  - time: 274.04
+    key: C2
+  - time: 274.04
+    key: C3
+  - time: 274.22
+    key: C2
+  - time: 274.22
+    key: C3
+  - time: 274.40
+    key: G4
+  - time: 274.40
+    key: C2
+  - time: 274.40
+    key: C3
+  - time: 274.58
+    key: C5
+  - time: 274.58
+    key: C2
+  - time: 274.58
+    key: C3
+  - time: 274.76
+    key: B4
+  - time: 274.76
+    key: C2
+  - time: 274.76
+    key: C3
+  - time: 274.94
+    key: C2
+  - time: 274.94
+    key: C3
+  - time: 275.12
+    key: G4
+  - time: 275.12
+    key: C2
+  - time: 275.12
+    key: C3
+  - time: 275.30
+    key: C2
+  - time: 275.30
+    key: C3
+  - time: 275.48
+    key: B5
+  - time: 275.48
+    key: B6
+  - time: 275.48
+    key: B5
+  - time: 275.48
+    key: E6
+  - time: 275.48
+    key: G6
+  - time: 275.48
+    key: E4
+  - time: 275.48
+    key: E2
+  - time: 275.48
+    key: E2
+  - time: 275.48
+    key: E3
+  - time: 275.66
+    key: B4
+  - time: 275.66
+    key: E2
+  - time: 275.66
+    key: E3
+  - time: 275.84
+    key: E2
+  - time: 275.84
+    key: E3
+  - time: 276.02
+    key: E6
+  - time: 276.02
+    key: E5
+  - time: 276.02
+    key: E2
+  - time: 276.02
+    key: E3
+  - time: 276.20
+    key: G5
+  - time: 276.20
+    key: G6
+  - time: 276.20
+    key: E4
+  - time: 276.20
+    key: E2
+  - time: 276.20
+    key: E3
+  - time: 276.38
+    key: E2
+  - time: 276.38
+    key: E3
+  - time: 276.55
+    key: B4
+  - time: 276.55
+    key: E2
+  - time: 276.55
+    key: E3
+  - time: 276.73
+    key: E2
+  - time: 276.73
+    key: E3
+  - time: 276.91
+    key: E4
+  - time: 276.91
+    key: E2
+  - time: 276.91
+    key: E3
+  - time: 277.09
+    key: E2
+  - time: 277.09
+    key: E3
+  - time: 277.27
+    key: G4
+  - time: 277.27
+    key: E2
+  - time: 277.27
+    key: E3
+  - time: 277.45
+    key: C5
+  - time: 277.45
+    key: E2
+  - time: 277.45
+    key: E3
+  - time: 277.63
+    key: F#5
+  - time: 277.63
+    key: F#6
+  - time: 277.63
+    key: B4
+  - time: 277.63
+    key: E2
+  - time: 277.63
+    key: E3
+  - time: 277.81
+    key: E2
+  - time: 277.81
+    key: E3
+  - time: 277.99
+    key: F#5
+  - time: 277.99
+    key: F#6
+  - time: 277.99
+    key: G4
+  - time: 277.99
+    key: E2
+  - time: 277.99
+    key: E3
+  - time: 278.17
+    key: E2
+  - time: 278.17
+    key: E3
+  - time: 278.35
+    key: G5
+  - time: 278.35
+    key: G6
+  - time: 278.35
+    key: C6
+  - time: 278.35
+    key: G6
+  - time: 278.35
+    key: C7
+  - time: 278.35
+    key: G4
+  - time: 278.35
+    key: G2
+  - time: 278.35
+    key: G2
+  - time: 278.35
+    key: G3
+  - time: 278.53
+    key: B4
+  - time: 278.53
+    key: G2
+  - time: 278.53
+    key: G3
+  - time: 278.71
+    key: B5
+  - time: 278.71
+    key: B6
+  - time: 278.71
+    key: G2
+  - time: 278.71
+    key: G3
+  - time: 278.89
+    key: E5
+  - time: 278.89
+    key: E6
+  - time: 278.89
+    key: E5
+  - time: 278.89
+    key: G2
+  - time: 278.89
+    key: G3
+  - time: 279.07
+    key: G4
+  - time: 279.07
+    key: G2
+  - time: 279.07
+    key: G3
+  - time: 279.24
+    key: G2
+  - time: 279.24
+    key: G3
+  - time: 279.42
+    key: B4
+  - time: 279.42
+    key: G2
+  - time: 279.42
+    key: G3
+  - time: 279.60
+    key: G2
+  - time: 279.60
+    key: G3
+  - time: 279.78
+    key: D6
+  - time: 279.78
+    key: D7
+  - time: 279.78
+    key: G4
+  - time: 279.78
+    key: G2
+  - time: 279.78
+    key: G3
+  - time: 279.96
+    key: G2
+  - time: 279.96
+    key: G3
+  - time: 280.14
+    key: G4
+  - time: 280.14
+    key: G2
+  - time: 280.14
+    key: G3
+  - time: 280.32
+    key: C5
+  - time: 280.32
+    key: G2
+  - time: 280.32
+    key: G3
+  - time: 280.50
+    key: D6
+  - time: 280.50
+    key: D7
+  - time: 280.50
+    key: G6
+  - time: 280.50
+    key: B4
+  - time: 280.50
+    key: G2
+  - time: 280.50
+    key: G3
+  - time: 280.68
+    key: G2
+  - time: 280.68
+    key: G3
+  - time: 280.86
+    key: B5
+  - time: 280.86
+    key: B6
+  - time: 280.86
+    key: G4
+  - time: 280.86
+    key: G2
+  - time: 280.86
+    key: G3
+  - time: 281.04
+    key: G2
+  - time: 281.04
+    key: G3
+  - time: 281.22
+    key: F#5
+  - time: 281.22
+    key: F#6
+  - time: 281.22
+    key: A5
+  - time: 281.22
+    key: D6
+  - time: 281.22
+    key: F#6
+  - time: 281.22
+    key: D4
+  - time: 281.22
+    key: D2
+  - time: 281.22
+    key: D2
+  - time: 281.22
+    key: D3
+  - time: 281.40
+    key: B4
+  - time: 281.40
+    key: D2
+  - time: 281.40
+    key: D3
+  - time: 281.58
+    key: D2
+  - time: 281.58
+    key: D3
+  - time: 281.76
+    key: E5
+  - time: 281.76
+    key: E6
+  - time: 281.76
+    key: D2
+  - time: 281.76
+    key: D3
+  - time: 281.93
+    key: D4
+  - time: 281.93
+    key: D2
+  - time: 281.93
+    key: D3
+  - time: 282.11
+    key: D2
+  - time: 282.11
+    key: D3
+  - time: 282.29
+    key: B4
+  - time: 282.29
+    key: D2
+  - time: 282.29
+    key: D3
+  - time: 282.47
+    key: D2
+  - time: 282.47
+    key: D3
+  - time: 282.65
+    key: G5
+  - time: 282.65
+    key: D6
+  - time: 282.65
+    key: D4
+  - time: 282.65
+    key: D2
+  - time: 282.65
+    key: D3
+  - time: 282.83
+    key: D2
+  - time: 282.83
+    key: D3
+  - time: 283.01
+    key: G4
+  - time: 283.01
+    key: D2
+  - time: 283.01
+    key: D3
+  - time: 283.19
+    key: C5
+  - time: 283.19
+    key: D2
+  - time: 283.19
+    key: D3
+  - time: 283.37
+    key: B4
+  - time: 283.37
+    key: D2
+  - time: 283.37
+    key: D3
+  - time: 283.55
+    key: D2
+  - time: 283.55
+    key: D3
+  - time: 283.73
+    key: G4
+  - time: 283.73
+    key: D2
+  - time: 283.73
+    key: D3
+  - time: 283.91
+    key: D2
+  - time: 283.91
+    key: D3
+  - time: 284.09
+    key: B4
+  - time: 284.09
+    key: E5
+  - time: 284.09
+    key: G5
+  - time: 284.09
+    key: B5
+  - time: 284.09
+    key: C4
+  - time: 284.09
+    key: C2
+  - time: 284.09
+    key: C2
+  - time: 284.09
+    key: C3
+  - time: 284.27
+    key: B4
+  - time: 284.27
+    key: C2
+  - time: 284.27
+    key: C3
+  - time: 284.45
+    key: C2
+  - time: 284.45
+    key: C3
+  - time: 284.63
+    key: E5
+  - time: 284.63
+    key: C2
+  - time: 284.63
+    key: C3
+  - time: 284.80
+    key: E4
+  - time: 284.80
+    key: C2
+  - time: 284.80
+    key: C3
+  - time: 284.98
+    key: C2
+  - time: 284.98
+    key: C3
+  - time: 285.16
+    key: B4
+  - time: 285.16
+    key: C2
+  - time: 285.16
+    key: C3
+  - time: 285.34
+    key: C2
+  - time: 285.34
+    key: C3
+  - time: 285.52
+    key: C5
+  - time: 285.52
+    key: E5
+  - time: 285.52
+    key: A5
+  - time: 285.52
+    key: E4
+  - time: 285.52
+    key: C2
+  - time: 285.52
+    key: C3
+  - time: 285.70
+    key: C2
+  - time: 285.70
+    key: C3
+  - time: 285.88
+    key: G4
+  - time: 285.88
+    key: C2
+  - time: 285.88
+    key: C3
+  - time: 286.06
+    key: C5
+  - time: 286.06
+    key: C2
+  - time: 286.06
+    key: C3
+  - time: 286.24
+    key: B4
+  - time: 286.24
+    key: C2
+  - time: 286.24
+    key: C3
+  - time: 286.42
+    key: C2
+  - time: 286.42
+    key: C3
+  - time: 286.60
+    key: G4
+  - time: 286.60
+    key: C2
+  - time: 286.60
+    key: C3
+  - time: 286.78
+    key: C2
+  - time: 286.78
+    key: C3
+  - time: 286.96
+    key: B5
+  - time: 286.96
+    key: B6
+  - time: 286.96
+    key: E4
+  - time: 287.14
+    key: B4
+  - time: 287.49
+    key: E6
+  - time: 287.49
+    key: E5
+  - time: 287.67
+    key: G5
+  - time: 287.67
+    key: G6
+  - time: 287.67
+    key: E4
+  - time: 288.03
+    key: B4
+  - time: 288.39
+    key: E4
+  - time: 288.75
+    key: G4
+  - time: 288.93
+    key: C5
+  - time: 289.11
+    key: B4
+  - time: 289.47
+    key: F#5
+  - time: 289.47
+    key: F#6
+  - time: 289.47
+    key: G4
+  - time: 289.83
+    key: G5
+  - time: 289.83
+    key: G6
+  - time: 289.83
+    key: G4
+  - time: 290.01
+    key: B4
+  - time: 290.18
+    key: B5
+  - time: 290.18
+    key: B6
+  - time: 290.36
+    key: E5
+  - time: 290.36
+    key: E6
+  - time: 290.36
+    key: E5
+  - time: 290.54
+    key: G4
+  - time: 290.90
+    key: B4
+  - time: 291.26
+    key: G4
+  - time: 291.62
+    key: G4
+  - time: 291.80
+    key: C5
+  - time: 291.98
+    key: D6
+  - time: 291.98
+    key: D7
+  - time: 291.98
+    key: B4
+  - time: 292.34
+    key: B5
+  - time: 292.34
+    key: B6
+  - time: 292.34
+    key: G4
+  - time: 292.70
+    key: F#5
+  - time: 292.70
+    key: F#6
+  - time: 292.70
+    key: D4
+  - time: 292.88
+    key: B4
+  - time: 293.23
+    key: E5
+  - time: 293.23
+    key: E6
+  - time: 293.41
+    key: D4
+  - time: 293.77
+    key: B4
+  - time: 294.13
+    key: D4
+  - time: 294.49
+    key: G4
+  - time: 294.67
+    key: C5
+  - time: 294.85
+    key: B4
+  - time: 295.21
+    key: G4
+  - time: 295.57
+    key: C4
+  - time: 295.74
+    key: B4
+  - time: 296.10
+    key: E5
+  - time: 296.28
+    key: E4
+  - time: 296.64
+    key: B4
+  - time: 297.00
+    key: E4
+  - time: 297.36
+    key: G4
+  - time: 297.54
+    key: C5
+  - time: 297.72
+    key: B4
+  - time: 298.08
+    key: G4
+  - time: 298.43
+    key: B5
+  - time: 298.43
+    key: B6
+  - time: 298.43
+    key: E4
+  - time: 298.61
+    key: B4
+  - time: 298.97
+    key: E6
+  - time: 298.97
+    key: E5
+  - time: 299.15
+    key: G5
+  - time: 299.15
+    key: G6
+  - time: 299.15
+    key: E4
+  - time: 299.51
+    key: B4
+  - time: 299.87
+    key: E4
+  - time: 300.23
+    key: G4
+  - time: 300.41
+    key: C5
+  - time: 300.59
+    key: B4
+  - time: 300.95
+    key: F#5
+  - time: 300.95
+    key: F#6
+  - time: 300.95
+    key: G4
+  - time: 301.30
+    key: G5
+  - time: 301.30
+    key: G6
+  - time: 301.30
+    key: G4
+  - time: 301.48
+    key: B4
+  - time: 301.66
+    key: B5
+  - time: 301.66
+    key: B6
+  - time: 301.84
+    key: E5
+  - time: 301.84
+    key: E6
+  - time: 301.84
+    key: E5
+  - time: 302.02
+    key: G4
+  - time: 302.38
+    key: B4
+  - time: 302.74
+    key: G4
+  - time: 303.10
+    key: G4
+  - time: 303.28
+    key: C5
+  - time: 303.46
+    key: D6
+  - time: 303.46
+    key: D7
+  - time: 303.46
+    key: B4
+  - time: 303.82
+    key: B5
+  - time: 303.82
+    key: B6
+  - time: 303.82
+    key: G4
+  - time: 304.17
+    key: F#5
+  - time: 304.17
+    key: F#6
+  - time: 304.17
+    key: D4
+  - time: 304.35
+    key: B4
+  - time: 304.71
+    key: E5
+  - time: 304.71
+    key: E6
+  - time: 304.89
+    key: D4
+  - time: 305.25
+    key: B4
+  - time: 305.61
+    key: D4
+  - time: 305.97
+    key: G4
+  - time: 306.15
+    key: C5
+  - time: 306.33
+    key: B4
+  - time: 306.68
+    key: G4
+  - time: 307.04
+    key: C4
+  - time: 307.22
+    key: B4
+  - time: 307.58
+    key: E5
+  - time: 307.76
+    key: E4
+  - time: 308.12
+    key: B4
+  - time: 308.48
+    key: E4
+  - time: 308.84
+    key: G4
+  - time: 309.02
+    key: C5
+  - time: 309.20
+    key: B4
+  - time: 309.55
+    key: G4
+  - time: 309.91
+    key: B5
+  - time: 309.91
+    key: B6
+  - time: 309.91
+    key: E4
+  - time: 310.09
+    key: B4
+  - time: 310.45
+    key: E6
+  - time: 310.45
+    key: E5
+  - time: 310.63
+    key: G5
+  - time: 310.63
+    key: G6
+  - time: 310.63
+    key: E4
+  - time: 310.99
+    key: B4
+  - time: 311.35
+    key: E4
+  - time: 311.71
+    key: G4
+  - time: 311.89
+    key: C5
+  - time: 312.07
+    key: B4
+  - time: 312.42
+    key: F#5
+  - time: 312.42
+    key: F#6
+  - time: 312.42
+    key: G4
+  - time: 312.78
+    key: G5
+  - time: 312.78
+    key: G6
+  - time: 312.78
+    key: G4
+  - time: 312.96
+    key: B4
+  - time: 313.14
+    key: B5
+  - time: 313.14
+    key: B6
+  - time: 313.32
+    key: E5
+  - time: 313.32
+    key: E6
+  - time: 313.32
+    key: E5
+  - time: 313.50
+    key: G4
+  - time: 313.86
+    key: B4
+  - time: 314.22
+    key: G4
+  - time: 314.58
+    key: G4
+  - time: 314.76
+    key: C5
+  - time: 314.93
+    key: D6
+  - time: 314.93
+    key: D7
+  - time: 314.93
+    key: B4
+  - time: 315.29
+    key: B5
+  - time: 315.29
+    key: B6
+  - time: 315.29
+    key: G4
+  - time: 315.65
+    key: F#5
+  - time: 315.65
+    key: F#6
+  - time: 315.65
+    key: D4
+  - time: 315.83
+    key: B4
+  - time: 316.19
+    key: E5
+  - time: 316.19
+    key: E6
+  - time: 316.37
+    key: D4
+  - time: 316.73
+    key: B4
+  - time: 317.09
+    key: D4
+  - time: 317.45
+    key: G4
+  - time: 317.63
+    key: C5
+  - time: 317.80
+    key: B4
+  - time: 318.16
+    key: G4
+  - time: 318.52
+    key: C4
+  - time: 318.70
+    key: B4
+  - time: 319.06
+    key: E5
+  - time: 319.24
+    key: E4
+  - time: 319.60
+    key: B4
+  - time: 319.96
+    key: E4
+  - time: 320.32
+    key: G4
+  - time: 320.49
+    key: C5
+  - time: 320.67
+    key: B4
+  - time: 321.03
+    key: G4
+  - time: 321.39
+    key: C4

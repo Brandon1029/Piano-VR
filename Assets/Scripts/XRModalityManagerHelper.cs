@@ -8,6 +8,7 @@ using UnityEngine.XR;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals;
 
 namespace PianoVR
 {
@@ -133,15 +134,16 @@ namespace PianoVR
         }
 
         /// <summary>
-        /// Desactiva permanentemente líneas de teleportación y ruedas radiales / tutoriales.
+        /// Desactiva permanentemente líneas de teleportación, ruedas radiales / tutoriales
+        /// y cualquier retícula/cursor o esfera blanca (Pinch Visual / Pinch_Pointer_LOD0 / Gaze / Reticle).
         /// </summary>
         private void LimpiarTeleportYCallouts()
         {
-            Transform[] todos = FindObjectsByType<Transform>(FindObjectsSortMode.None);
+            Transform[] todos = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (var t in todos)
             {
                 if (t == null) continue;
-                string n = t.name.ToLower();
+                string n = t.name.ToLowerInvariant();
 
                 // 1. Eliminar ruedas radiales / callouts
                 if (n.Contains("affordance callouts") || n.Contains("callout"))
@@ -160,6 +162,44 @@ namespace PianoVR
                 {
                     t.gameObject.SetActive(false);
                 }
+
+                // 4. Eliminar permanentemente la "bolita blanca" (Pinch Visual, Pinch_Pointer_LOD0, Poke Point, Gaze, Torus Cursor)
+                if (n == "pinch visual" ||
+                    n == "pinch_pointer_lod0" ||
+                    n == "poke point" ||
+                    n == "gaze interactor" ||
+                    n == "gaze stabilized" ||
+                    n == "torus cursor" ||
+                    n == "blink visuals" ||
+                    n == "handinteractoraffordances" ||
+                    n == "handpokeinteractoraffordances")
+                {
+                    Renderer[] rends = t.GetComponentsInChildren<Renderer>(true);
+                    for (int i = 0; i < rends.Length; i++)
+                    {
+                        if (rends[i] != null) rends[i].enabled = false;
+                    }
+                    t.gameObject.SetActive(false);
+                }
+            }
+
+            // 5. Limpiar referencias de Reticle en todos los XRInteractorLineVisual y XRGazeInteractor
+            XRInteractorLineVisual[] lineVisuals = FindObjectsByType<XRInteractorLineVisual>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var lv in lineVisuals)
+            {
+                if (lv == null) continue;
+                if (lv.reticle != null) lv.reticle.SetActive(false);
+                if (lv.blockedReticle != null) lv.blockedReticle.SetActive(false);
+                lv.reticle = null;
+                lv.blockedReticle = null;
+            }
+
+            XRGazeInteractor[] gazeInteractors = FindObjectsByType<XRGazeInteractor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var gaze in gazeInteractors)
+            {
+                if (gaze == null) continue;
+                gaze.enabled = false;
+                gaze.gameObject.SetActive(false);
             }
         }
 

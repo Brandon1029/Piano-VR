@@ -8,6 +8,7 @@ using UnityEngine.XR.Hands;
 using UnityEngine.XR.Management;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals;
 using Unity.XR.CoreUtils;
 using PianoVR.MainMenu;
 #if ENABLE_INPUT_SYSTEM
@@ -51,6 +52,8 @@ public class XRUIInteractionEnabler : MonoBehaviour
     public Color colorRayoNormal    = new Color(0.85f, 0.93f, 1f, 0.55f);
     public Color colorRayoHover     = new Color(0.20f, 0.90f, 1f, 0.95f);
     public Color colorRayoPellizco  = new Color(0.30f, 1f, 0.55f, 1f);
+    [Tooltip("Desactivado por defecto para evitar que aparezca cualquier esfera/bolita 3D en escena.")]
+    public bool mostrarEsferaReticula = false;
 
     private XRHandSubsystem handSubsystem;
     private XROrigin xrOrigin;
@@ -300,8 +303,9 @@ public class XRUIInteractionEnabler : MonoBehaviour
 
     /// <summary>
     /// Desactiva la interacción UI por proximidad/poke en las manos (XRPokeInteractor y
-    /// NearFar/Ray de manos) para eliminar disparos ambiguos al acercar los dedos.
-    /// Los mandos físicos conservan su raycast normal con gatillo.
+    /// NearFar/Ray de manos) para eliminar disparos ambiguos al acercar los dedos,
+    /// y elimina permanentemente cualquier esfera blanca / retícula ("Pinch Visual",
+    /// "Pinch_Pointer_LOD0", "Poke Point", "Gaze Interactor", "Reticle") en el XR Origin.
     /// </summary>
     private void DesactivarProximidadUIEnManos()
     {
@@ -310,6 +314,14 @@ public class XRUIInteractionEnabler : MonoBehaviour
         {
             if (poke == null) continue;
             poke.enableUIInteraction = false;
+
+            // Desactivar cualquier malla visual de esfera blanca (Poke Point / Pinch_Pointer_LOD0)
+            Renderer[] pokeRenderers = poke.GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < pokeRenderers.Length; i++)
+            {
+                if (pokeRenderers[i] != null) pokeRenderers[i].enabled = false;
+            }
+
             if (PerteneceAManoYNoAMando(poke.transform))
             {
                 poke.enabled = false;
@@ -326,10 +338,56 @@ public class XRUIInteractionEnabler : MonoBehaviour
             if (interactor is NearFarInteractor nearFar)
             {
                 nearFar.enableUIInteraction = false;
+                // Apagar el LineVisual de NearFarInteractor en manos para que no dibuje puntos blancos en Camera Offset
+                Transform lv = nearFar.transform.Find("LineVisual");
+                if (lv != null) lv.gameObject.SetActive(false);
             }
             else if (interactor is XRRayInteractor rayInteractor)
             {
                 rayInteractor.enableUIInteraction = false;
+            }
+        }
+
+        // Limpiar cualquier Reticle asignado en XRInteractorLineVisual y desactivar XRGazeInteractor
+        XRInteractorLineVisual[] lineVisuals = FindObjectsByType<XRInteractorLineVisual>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var lv in lineVisuals)
+        {
+            if (lv == null) continue;
+            if (lv.reticle != null) lv.reticle.SetActive(false);
+            if (lv.blockedReticle != null) lv.blockedReticle.SetActive(false);
+            lv.reticle = null;
+            lv.blockedReticle = null;
+        }
+
+        XRGazeInteractor[] gazeInteractors = FindObjectsByType<XRGazeInteractor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var gaze in gazeInteractors)
+        {
+            if (gaze == null) continue;
+            gaze.enabled = false;
+            gaze.gameObject.SetActive(false);
+        }
+
+        // Desactivar cualquier objeto o malla "Pinch Visual" / "Pinch_Pointer_LOD0" / "Poke Point" en el XR Origin
+        Transform[] todos = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < todos.Length; i++)
+        {
+            Transform t = todos[i];
+            if (t == null) continue;
+            string n = t.name.ToLowerInvariant();
+            if (n == "pinch visual" ||
+                n == "pinch_pointer_lod0" ||
+                n == "poke point" ||
+                n == "gaze interactor" ||
+                n == "gaze stabilized" ||
+                n == "torus cursor" ||
+                n == "blink visuals")
+            {
+                Renderer[] rends = t.GetComponentsInChildren<Renderer>(true);
+                for (int r = 0; r < rends.Length; r++)
+                {
+                    if (rends[r] != null) rends[r].enabled = false;
+                }
+                t.gameObject.SetActive(false);
             }
         }
     }
@@ -728,7 +786,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
             }
         }
 
-        // 6. Ejecutar clic o inicio de arrastre exactamente en el instante de cerrar el pellizco
+        // 6. Ejecutar clic o inicio de arrastre de Slider exactamente en el instante de cerrar el pellizco
         if (pinchDown && ptr.hoverActual != null && ptr.hoverActual.IsInteractable())
         {
             AsegurarPointerData(ptr);
@@ -748,7 +806,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
             }
         }
 
-        // 7. Dibujar rayo fino y retícula sobre el Canvas
+        // 7. Dibujar rayo fino sobre el Canvas (sin esfera blanca 3D si mostrarEsferaReticula == false)
         Color colorActual = ptr.estaPellizcando ? colorRayoPellizco : (ptr.hoverActual != null ? colorRayoHover : colorRayoNormal);
         ActualizarVisualesRayo(ptr, rayo.origin, puntoImpacto, canvasHit.transform.forward, colorActual, ptr.estaPellizcando);
     }
@@ -760,7 +818,7 @@ public class XRUIInteractionEnabler : MonoBehaviour
         dirMano   = Vector3.zero;
 
         // Fuente principal: XRHandSubsystem convertido con el espacio de tracking real (CameraFloorOffsetObject)
-        if (handSubsystem != null)
+        if (handSubsystem != null && handSubsystem.running)
         {
             XRHand hand = ptr.esDerecha ? handSubsystem.rightHand : handSubsystem.leftHand;
             if (hand.isTracked &&
@@ -778,9 +836,12 @@ public class XRUIInteractionEnabler : MonoBehaviour
                 }
                 return true;
             }
+
+            // Si el subsistema XRHand está activo pero la mano NO está rastreada, NO usar fallback en origen de cámara
+            return false;
         }
 
-        // Fallback: huesos Transform reales del XR Origin en coordenadas mundiales
+        // Fallback: huesos Transform reales del XR Origin en coordenadas mundiales (solo si están fuera del centro de la cámara)
         if (ptr.fallbackIndexTip == null || ptr.fallbackThumbTip == null)
         {
             BuscarHuesosFallback(ptr);
@@ -790,8 +851,21 @@ public class XRUIInteractionEnabler : MonoBehaviour
             ptr.fallbackIndexTip.gameObject.activeInHierarchy &&
             ptr.fallbackThumbTip.gameObject.activeInHierarchy)
         {
-            posIndice = ptr.fallbackIndexTip.position;
-            posPulgar = ptr.fallbackThumbTip.position;
+            Vector3 pIdx = ptr.fallbackIndexTip.position;
+            Vector3 pThm = ptr.fallbackThumbTip.position;
+
+            // Ignorar huesos en pose de reposo situados en/detrás de la cámara (Camera Offset)
+            if (cam != null && Vector3.Distance(pIdx, cam.transform.position) < 0.14f)
+            {
+                return false;
+            }
+            if ((pIdx - pThm).sqrMagnitude < 0.000004f)
+            {
+                return false;
+            }
+
+            posIndice = pIdx;
+            posPulgar = pThm;
             dirMano   = ptr.fallbackIndexTip.forward;
             return true;
         }
@@ -907,6 +981,21 @@ public class XRUIInteractionEnabler : MonoBehaviour
             if (sel == null || !sel.isActiveAndEnabled || !sel.IsInteractable()) continue;
             if (!(sel is Button || sel is Toggle || sel is Slider)) continue;
 
+            // Si el control pertenece al contenido de un ScrollRect, ignorarlo si está fuera del Viewport visible
+            ScrollRect parentScroll = sel.GetComponentInParent<ScrollRect>();
+            if (parentScroll != null && parentScroll.content != null && sel.transform.IsChildOf(parentScroll.content))
+            {
+                RectTransform vp = parentScroll.viewport != null ? parentScroll.viewport : parentScroll.GetComponent<RectTransform>();
+                if (vp != null && vp.rect.width > 5f && vp.rect.height > 5f)
+                {
+                    Vector3 ptVp = vp.InverseTransformPoint(puntoMundial);
+                    if (!vp.rect.Contains(new Vector2(ptVp.x, ptVp.y)))
+                    {
+                        continue;
+                    }
+                }
+            }
+
             RectTransform rt = sel.GetComponent<RectTransform>();
             if (rt == null) continue;
 
@@ -949,6 +1038,15 @@ public class XRUIInteractionEnabler : MonoBehaviour
         ptr.lineaRayo.SetPosition(1, impacto);
         ptr.lineaRayo.startColor = new Color(color.r, color.g, color.b, color.a * 0.45f);
         ptr.lineaRayo.endColor   = color;
+
+        if (!mostrarEsferaReticula)
+        {
+            if (ptr.reticulaObj != null && ptr.reticulaObj.activeSelf)
+            {
+                ptr.reticulaObj.SetActive(false);
+            }
+            return;
+        }
 
         ptr.reticulaObj.SetActive(true);
         ptr.reticulaObj.transform.position = impacto - normalCanvas * 0.003f;
