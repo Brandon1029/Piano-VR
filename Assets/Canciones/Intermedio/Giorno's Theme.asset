@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SongData
   songName: Giorno's Theme
   composer: Giorno Giovanna
-  difficulty: 1
+  difficulty: 2
   coverImage: {fileID: 0}
   bpm: 92
   technicalFocus: 
